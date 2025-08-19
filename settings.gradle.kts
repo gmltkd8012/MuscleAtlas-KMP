@@ -23,4 +23,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "MuscleAtlas"
 include(":app")
- 
+include(":core:data")
+include(":core:design-system")
+include(":core:domain")
+include(":core:room")
+include(":core:util")
+include(":core:ui")

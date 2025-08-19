@@ -1,13 +1,14 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    alias(libs.plugins.library)
+    alias(libs.plugins.lib.room)
+    alias(libs.plugins.kotlin.serialization)
 }
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+
+
+android {
+    namespace = "com.rebuilding.muscleatlas.room"
 }
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-    }
+
+dependencies {
+
 }

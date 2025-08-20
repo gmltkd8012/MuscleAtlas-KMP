@@ -38,7 +38,8 @@ fun ProfileChip(
         Box(
             modifier = modifier
                 .size(size)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .background(color = AppColors.onPrimary.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
         ) {
             BaseText(
@@ -54,11 +55,6 @@ fun ProfileChip(
                 ),
                 modifier = Modifier.alpha(0.2f),
                 color = AppColors.onSecondary
-            )
-
-            Box(
-                modifier = Modifier.matchParentSize() // 부모 Box 크기에 맞춤
-                    .background(AppColors.onPrimary.copy(alpha = 0.1f)) // 검은색 10% 투명도
             )
         }
     }

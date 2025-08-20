@@ -1,5 +1,7 @@
 package com.rebuilding.muscleatlas.main.screen
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -17,7 +19,7 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
 import com.rebuilding.muscleatlas.main.component.MainHeaderBar
 import com.rebuilding.muscleatlas.model.Screen
-import com.rebuilding.muscleatlas.setting.SettingScreen
+import com.rebuilding.muscleatlas.setting.screen.SettingScreen
 
 @Composable
 fun MainScreen() {
@@ -42,7 +44,9 @@ fun MainScreen() {
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = Screen.Client.route
+            startDestination = Screen.Client.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
         ) {
             composable(Screen.Client.route) {
                 headerTitle = Screen.Client.label

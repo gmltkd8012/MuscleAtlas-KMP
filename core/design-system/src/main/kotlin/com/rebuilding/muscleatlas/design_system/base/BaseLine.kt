@@ -16,7 +16,7 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 @Composable
 fun BaseLine(
     modifier: Modifier = Modifier,
-    lineColor: Color = AppColors.BorderLine,
+    lineColor: Color,
     lineThickness: Dp = 1.dp,
 ) {
     Box(modifier) {

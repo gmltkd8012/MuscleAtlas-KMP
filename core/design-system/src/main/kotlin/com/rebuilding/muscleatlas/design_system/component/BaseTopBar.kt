@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.design_system.component
 
+import android.R.attr.end
 import android.R.attr.navigationIcon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,34 +10,37 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.design_system.AppColors
 
 @Composable
 fun BaseTopBar(
     title: @Composable () -> Unit = {},
     backIcon: @Composable (() -> Unit)? = {},
     endIcon: @Composable (() -> Unit) = {},
-    backgroundColor: Color = Color.White,
-    contentColor: Color = Color.Black,
+    backgroundColor: Color = AppColors.secondary,
+    contentColor: Color = AppColors.onPrimary,
 ) {
     val startPadding = if (backIcon != null) 4.dp else 16.dp
 
     Surface(
-        modifier = Modifier.systemBarsPadding(),
+        modifier = Modifier
+            .wrapContentSize(),
         color = backgroundColor,
         contentColor = contentColor,
     ) {
         Box(
             Modifier
+                .systemBarsPadding()
                 .fillMaxWidth()
-                .height(64.dp)
-                .padding(start = startPadding, end = 16.dp)
-                .padding(vertical = 12.dp)
+                .height(72.dp)
+                .padding(start = startPadding, end = 16.dp, top = 12.dp)
         ) {
             Row(
                 modifier = Modifier.align(Alignment.CenterStart),

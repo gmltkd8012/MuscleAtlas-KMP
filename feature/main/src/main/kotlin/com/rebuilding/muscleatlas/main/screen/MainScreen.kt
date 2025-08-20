@@ -2,6 +2,9 @@ package com.rebuilding.muscleatlas.main.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -21,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -29,6 +33,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.client.ClientScreen
+import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
 import com.rebuilding.muscleatlas.main.component.BottomNavItem
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
@@ -42,6 +47,7 @@ fun MainScreen() {
     var headerTitle by remember { mutableStateOf<String>("") }
 
     Scaffold(
+        modifier = Modifier.background(AppColors.primary),
         topBar = {
             MainHeaderBar(
                 title = headerTitle,
@@ -55,7 +61,6 @@ fun MainScreen() {
             BottomNavigationBar(navController, Screen.allScreens)
         }
     ) { innerPadding ->
-
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,

@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.component.NavButton
 import com.rebuilding.muscleatlas.model.Screen
 import kotlin.collections.forEach
@@ -32,7 +33,7 @@ fun BottomNavigationBar(
     items: List<Screen>
 ) {
     NavigationBar(
-        containerColor = Color.White,
+        containerColor = AppColors.secondary,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination: NavDestination? = navBackStackEntry?.destination

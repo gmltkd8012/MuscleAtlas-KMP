@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
@@ -29,7 +30,7 @@ fun NavButton(
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
-    val contentColor: Color = if (isSelected) Color.Black else Color.Gray
+    val contentColor: Color = if (isSelected) AppColors.onPrimary else AppColors.onSecondary
 
     Column (
         modifier = Modifier

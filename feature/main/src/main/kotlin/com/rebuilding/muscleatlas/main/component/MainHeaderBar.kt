@@ -36,7 +36,7 @@ fun MainHeaderBar(
                 BaseButton(
                     modifier = Modifier,
                     icon = Icons.Default.Add,
-                    iconSize = 24.dp,
+                    iconSize = 30.dp,
                 ) {
                     onClickAdd()
                 }

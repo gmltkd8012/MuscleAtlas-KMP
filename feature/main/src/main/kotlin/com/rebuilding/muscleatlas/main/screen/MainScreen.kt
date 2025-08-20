@@ -33,17 +33,13 @@ import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
 import com.rebuilding.muscleatlas.main.component.BottomNavItem
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
 import com.rebuilding.muscleatlas.main.component.MainHeaderBar
+import com.rebuilding.muscleatlas.model.Screen
 import com.rebuilding.muscleatlas.setting.SettingScreen
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    var headerTitle by remember { mutableStateOf<String>("회원 관리") }
-
-    val menuItems = listOf(
-        BottomNavItem("client", "회원 관리", Icons.Default.AccountCircle),
-        BottomNavItem("setting", "설정", Icons.Default.Settings)
-    )
+    var headerTitle by remember { mutableStateOf<String>("") }
 
     Scaffold(
         topBar = {
@@ -56,21 +52,21 @@ fun MainScreen() {
             )
         },
         bottomBar = {
-            BottomNavigationBar(navController, menuItems)
+            BottomNavigationBar(navController, Screen.allScreens)
         }
     ) { innerPadding ->
 
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = "client"
+            startDestination = Screen.Client.route
         ) {
-            composable("client") {
-                headerTitle = "회원 관리"
+            composable(Screen.Client.route) {
+                headerTitle = Screen.Client.label
                 ClientScreen()
             }
-            composable("setting") {
-                headerTitle = "설정"
+            composable(Screen.Setting.route) {
+                headerTitle = Screen.Setting.label
                 SettingScreen()
             }
         }

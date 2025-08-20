@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
@@ -24,8 +26,11 @@ import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 fun NavButton(
     icon: ImageVector,
     title: String,
+    isSelected: Boolean,
     onClick: () -> Unit,
 ) {
+    val contentColor: Color = if (isSelected) Color.Black else Color.Gray
+
     Column (
         modifier = Modifier
             .width(54.dp)
@@ -39,6 +44,7 @@ fun NavButton(
         Image(
             imageVector = icon,
             contentDescription = null,
+            colorFilter = ColorFilter.tint(contentColor),
             contentScale = ContentScale.Fit
         )
 
@@ -47,6 +53,7 @@ fun NavButton(
         BaseText(
             text = title,
             style = MaterialTheme.typography.labelSmall,
+            color = contentColor,
             textAlign = TextAlign.Center,
         )
     }

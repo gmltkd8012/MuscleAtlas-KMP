@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.main.component
 
+import android.view.Surface
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,14 +23,17 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.rebuilding.muscleatlas.design_system.component.NavButton
+import com.rebuilding.muscleatlas.model.Screen
 import kotlin.collections.forEach
 
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
-    items: List<BottomNavItem>
+    items: List<Screen>
 ) {
-    NavigationBar {
+    NavigationBar(
+        containerColor = Color.White,
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination: NavDestination? = navBackStackEntry?.destination
 
@@ -43,6 +48,7 @@ fun BottomNavigationBar(
                 NavButton (
                     icon = item.icon,
                     title = item.label,
+                    isSelected = selected,
                 ) {
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.findStartDestination().id) {

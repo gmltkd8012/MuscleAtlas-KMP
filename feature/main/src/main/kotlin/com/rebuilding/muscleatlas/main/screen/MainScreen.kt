@@ -13,7 +13,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,13 +29,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.client.ClientScreen
+import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
 import com.rebuilding.muscleatlas.main.component.BottomNavItem
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
+import com.rebuilding.muscleatlas.main.component.MainHeaderBar
 import com.rebuilding.muscleatlas.setting.SettingScreen
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    var headerTitle by remember { mutableStateOf<String>("회원 관리") }
 
     val menuItems = listOf(
         BottomNavItem("client", "회원 관리", Icons.Default.AccountCircle),
@@ -39,6 +46,15 @@ fun MainScreen() {
     )
 
     Scaffold(
+        topBar = {
+            MainHeaderBar(
+                title = headerTitle,
+                isNeedAdd = true,
+                onClickAdd = {
+
+                }
+            )
+        },
         bottomBar = {
             BottomNavigationBar(navController, menuItems)
         }
@@ -50,9 +66,11 @@ fun MainScreen() {
             startDestination = "client"
         ) {
             composable("client") {
+                headerTitle = "회원 관리"
                 ClientScreen()
             }
             composable("setting") {
+                headerTitle = "설정"
                 SettingScreen()
             }
         }

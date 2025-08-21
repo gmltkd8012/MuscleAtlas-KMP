@@ -62,6 +62,8 @@ fun Project.configureAndroidCompose(
 
             // compose coil image url load
             add("implementation", libs.findLibrary("androidx-compose-coil").get())
+
+            add("implementation", libs.findLibrary("accompanist-systemUiController").get())
         }
     }
 }

@@ -25,9 +25,10 @@ import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 internal fun SettingMenuChip(
+    route: String = "",
     name: String,
     icon: ImageVector,
-    onClick: () -> Unit = {},
+    onClick: (String) -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -36,7 +37,7 @@ internal fun SettingMenuChip(
             .background(AppColors.primary)
             .padding(16.dp)
             .clickableWithoutIndication(
-                onClick = onClick
+                onClick = { onClick(route) }
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {

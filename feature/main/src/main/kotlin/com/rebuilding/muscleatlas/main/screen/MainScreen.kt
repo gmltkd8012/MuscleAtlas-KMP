@@ -20,6 +20,7 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
 import com.rebuilding.muscleatlas.main.component.MainHeaderBar
 import com.rebuilding.muscleatlas.model.Screen
+import com.rebuilding.muscleatlas.setting.SettingActivity
 import com.rebuilding.muscleatlas.ui.extension.startActivity
 
 @Composable
@@ -61,7 +62,13 @@ fun MainScreen() {
             }
             composable(Screen.Setting.route) {
                 headerTitle = Screen.Setting.label
-                SettingMainScreen()
+                SettingMainScreen(
+                    onClickMenu = { route ->
+                        context.startActivity<SettingActivity>(
+                            "destination" to route
+                        )
+                    }
+                )
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.main.screen
 
+import android.R.attr.name
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,11 +15,15 @@ import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.main.unit.SettingMenuChip
+import com.rebuilding.muscleatlas.model.Screen
+import com.rebuilding.muscleatlas.model.SettingScreen
 
 @Composable
-fun SettingMainScreen() {
+fun SettingMainScreen(
+    onClickMenu: (String) -> Unit = {},
+) {
     val listState = rememberLazyListState()
-    val testSize = 5 //TODO - 데이터 연동 시, 삭제 예정
+    val menuList = SettingScreen.allSettingScreens
 
     LazyColumn (
         modifier = Modifier
@@ -29,14 +34,18 @@ fun SettingMainScreen() {
         state = listState
     ) {
        items(
-           count = testSize
+           count = menuList.size
        ) { index ->
            SettingMenuChip(
-               name = "설정 메뉴 $index",
-               icon = Icons.Default.Settings,
+               route = menuList[index].route,
+               name = menuList[index].label,
+               icon = menuList[index].icon,
+               onClick = { route ->
+                   onClickMenu(route)
+               }
            )
 
-           if (index != testSize - 1) {
+           if (index != menuList.size - 1) {
                BaseLine(
                    lineColor = AppColors.secondary
                )

@@ -16,12 +16,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.client.ClientProfileActivity
-import com.rebuilding.muscleatlas.client.screen.ClientScreen
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
 import com.rebuilding.muscleatlas.main.component.MainHeaderBar
 import com.rebuilding.muscleatlas.model.Screen
-import com.rebuilding.muscleatlas.setting.screen.SettingScreen
 import com.rebuilding.muscleatlas.ui.extension.startActivity
 
 @Composable
@@ -55,7 +53,7 @@ fun MainScreen() {
         ) {
             composable(Screen.Client.route) {
                 headerTitle = Screen.Client.label
-                ClientScreen(
+                ClientMainScreen(
                     onClickProfile = {
                         context.startActivity<ClientProfileActivity>()
                     }
@@ -63,7 +61,7 @@ fun MainScreen() {
             }
             composable(Screen.Setting.route) {
                 headerTitle = Screen.Setting.label
-                SettingScreen()
+                SettingMainScreen()
             }
         }
     }

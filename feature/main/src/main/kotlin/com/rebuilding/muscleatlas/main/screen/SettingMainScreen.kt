@@ -1,25 +1,22 @@
-package com.rebuilding.muscleatlas.setting.screen
+package com.rebuilding.muscleatlas.main.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
-import com.rebuilding.muscleatlas.setting.unit.SettingMenuChip
+import com.rebuilding.muscleatlas.main.unit.SettingMenuChip
 
 @Composable
-fun SettingScreen() {
+fun SettingMainScreen() {
     val listState = rememberLazyListState()
     val testSize = 5 //TODO - 데이터 연동 시, 삭제 예정
 

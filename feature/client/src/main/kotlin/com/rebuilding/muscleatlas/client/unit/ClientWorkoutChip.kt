@@ -29,7 +29,8 @@ import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
 
 @Composable
 fun ClientWorkoutChip(
-    workoutList: List<String> = emptyList<String>()
+    workoutList: List<String> = emptyList<String>(),
+    onClickedWorkout: () -> Unit = {},
 ) {
     if (workoutList.isEmpty()) { // TODO - 등록된 운동 항목이 없는 경우
         Box(
@@ -72,7 +73,8 @@ fun ClientWorkoutChip(
                 items(workoutList.size) { index ->
                     WorkoutBox(
                         name = workoutList[index],
-                        icon = Icons.Default.Warning
+                        icon = Icons.Default.Warning,
+                        onClick = onClickedWorkout
                     )
                 }
             }

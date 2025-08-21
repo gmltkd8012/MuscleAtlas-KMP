@@ -18,12 +18,14 @@ import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
+import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun WorkoutBox(
     name: String,
     icon: ImageVector,
     size: Dp = 200.dp,
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.wrapContentSize(),
@@ -33,6 +35,9 @@ fun WorkoutBox(
         SquaredImageBox(
             icon = icon,
             size = size,
+            modifier = Modifier.clickableWithoutIndication(
+                onClick = onClick
+            )
         )
 
         Spacer(Modifier.height(8.dp))

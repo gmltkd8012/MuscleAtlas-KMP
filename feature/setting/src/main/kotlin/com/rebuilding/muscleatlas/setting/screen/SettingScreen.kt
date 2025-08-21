@@ -1,49 +1,66 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.R.attr.top
+import android.content.Intent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.design_system.AppColors
-import com.rebuilding.muscleatlas.design_system.base.BaseLine
-import com.rebuilding.muscleatlas.setting.unit.SettingMenuChip
+import com.rebuilding.muscleatlas.model.SettingScreen
+import com.rebuilding.muscleatlas.setting.SettingActivity
+import com.rebuilding.muscleatlas.setting.component.SettingTopBar
+import com.rebuilding.muscleatlas.ui.extension.startActivity
 
 @Composable
-fun SettingScreen() {
-    val listState = rememberLazyListState()
-    val testSize = 5 //TODO - 데이터 연동 시, 삭제 예정
+fun SettingScreen(
+    destination: String,
+    onClickBack: () -> Unit = {},
+) {
+    val navController = rememberNavController()
+    var headerTitle by remember { mutableStateOf<String>("") }
 
-    LazyColumn (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppColors.primary)
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        state = listState
-    ) {
-       items(
-           count = testSize
-       ) { index ->
-           SettingMenuChip(
-               name = "설정 메뉴 $index",
-               icon = Icons.Default.Settings,
-           )
-
-           if (index != testSize - 1) {
-               BaseLine(
-                   lineColor = AppColors.secondary
-               )
-           }
-       }
+    Scaffold(
+        modifier = Modifier.background(AppColors.primary),
+        topBar = {
+            SettingTopBar(
+                title = headerTitle,
+                onClickBack = onClickBack
+            )
+        },
+    ) { innerPadding ->
+        NavHost(
+            modifier = Modifier.padding(
+                PaddingValues(
+                    top = innerPadding.calculateTopPadding()
+                )
+            ),
+            navController = navController,
+            startDestination = destination,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+        ) {
+            composable(SettingScreen.WorkoutManage.route) {
+                headerTitle = SettingScreen.WorkoutManage.label
+                WorkoutManageScreen()
+            }
+            composable(SettingScreen.AppInfo.route) {
+                headerTitle = SettingScreen.AppInfo.label
+                AppInfoScreen()
+            }
+        }
     }
 }

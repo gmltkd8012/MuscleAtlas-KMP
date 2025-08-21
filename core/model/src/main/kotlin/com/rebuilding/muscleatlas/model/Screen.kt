@@ -2,6 +2,8 @@ package com.rebuilding.muscleatlas.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -24,5 +26,31 @@ sealed class Screen(
 
     companion object {
         val allScreens by lazy { listOf(Client, Setting) }
+    }
+}
+
+sealed class SettingScreen(
+    route: String,
+    label: String,
+    icon: ImageVector
+) : Screen(
+    route = route,
+    label = label,
+    icon = icon,
+) {
+    data object WorkoutManage: SettingScreen(
+        route = "workoutmanage",
+        label = "운동 종목 관리",
+        icon = Icons.Default.Build
+    )
+
+    data object AppInfo: SettingScreen(
+        route = "appinfo",
+        label = "앱 정보",
+        icon = Icons.Default.Info
+    )
+
+    companion object {
+        val allSettingScreens by lazy { listOf(WorkoutManage, AppInfo) }
     }
 }

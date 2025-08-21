@@ -11,18 +11,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.rebuilding.muscleatlas.client.ClientProfileActivity
 import com.rebuilding.muscleatlas.client.screen.ClientScreen
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.main.component.BottomNavigationBar
 import com.rebuilding.muscleatlas.main.component.MainHeaderBar
 import com.rebuilding.muscleatlas.model.Screen
 import com.rebuilding.muscleatlas.setting.screen.SettingScreen
+import com.rebuilding.muscleatlas.ui.extension.startActivity
 
 @Composable
 fun MainScreen() {
+    val context = LocalContext.current
+
     val navController = rememberNavController()
     var headerTitle by remember { mutableStateOf<String>("") }
 
@@ -50,7 +55,11 @@ fun MainScreen() {
         ) {
             composable(Screen.Client.route) {
                 headerTitle = Screen.Client.label
-                ClientScreen()
+                ClientScreen(
+                    onClickProfile = {
+                        context.startActivity<ClientProfileActivity>()
+                    }
+                )
             }
             composable(Screen.Setting.route) {
                 headerTitle = Screen.Setting.label

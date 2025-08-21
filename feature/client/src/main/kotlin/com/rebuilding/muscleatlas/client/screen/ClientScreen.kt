@@ -18,7 +18,9 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 
 @Composable
-fun ClientScreen() {
+fun ClientScreen(
+    onClickProfile: () -> Unit = {},
+) {
     val listState = rememberLazyListState()
     val testSize = 20 //TODO - 데이터 연동 시, 삭제 예정
 
@@ -36,6 +38,7 @@ fun ClientScreen() {
             ClientInfoChip(
                 name = "테스트 회원 $index",
                 memo = "체육관 $index",
+                onClick = onClickProfile,
             )
 
             if (index != testSize - 1) {

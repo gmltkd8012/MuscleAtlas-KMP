@@ -55,11 +55,26 @@ fun SettingScreen(
         ) {
             composable(SettingScreen.WorkoutManage.route) {
                 headerTitle = SettingScreen.WorkoutManage.label
-                WorkoutManageScreen()
+                WorkoutManageScreen(
+                    onClickAddWorkout = {
+                        navController.navigate(SettingScreen.AddWorkout.route)
+                    }
+                )
             }
             composable(SettingScreen.AppInfo.route) {
                 headerTitle = SettingScreen.AppInfo.label
                 AppInfoScreen()
+            }
+            composable(SettingScreen.AddWorkout.route) {
+                headerTitle = SettingScreen.AddWorkout.label
+                AddWorkoutScreen(
+                    onClickBack = {
+                        navController.navigate(SettingScreen.WorkoutManage.route)
+                    },
+                    onClickSave = {
+                        navController.navigate(SettingScreen.WorkoutManage.route)
+                    }
+                )
             }
         }
     }

@@ -35,16 +35,16 @@ import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun WorkoutManageChip(
+    modifier: Modifier = Modifier,
     name: String,
     workoutImg: ImageVector? = null,
     onClick: () -> Unit = {},
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .background(AppColors.primary)
-            .padding(16.dp)
             .clickableWithoutIndication(
                 onClick = onClick
             ),

@@ -2,6 +2,8 @@ package com.rebuilding.muscleatlas.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -48,6 +50,12 @@ sealed class SettingScreen(
         route = "appinfo",
         label = "앱 정보",
         icon = Icons.Default.Info
+    )
+
+    data object AddWorkout: SettingScreen(
+        route = "addworkout",
+        label = "운동 종목 추가",
+        icon = Icons.Default.AddCircle
     )
 
     companion object {

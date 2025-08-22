@@ -9,4 +9,7 @@ object AppColors {
 
     val onPrimary = Color.White
     val onSecondary = Color(0xFF9CA3AF)
+
+    val primaryButton = Color(0xFF311D78)
+    val warning = Color.Red
 }

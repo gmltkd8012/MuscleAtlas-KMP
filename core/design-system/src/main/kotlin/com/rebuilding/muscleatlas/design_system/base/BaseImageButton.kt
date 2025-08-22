@@ -2,69 +2,69 @@ package com.rebuilding.muscleatlas.design_system.base
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
-fun SquaredImageBox(
+fun BaseImageButton(
     modifier: Modifier = Modifier,
-    icon: ImageVector?,
-    iconColor: Color = AppColors.onSecondary,
-    size: Dp = Dp.Unspecified
+    text: String,
+    icon: ImageVector,
+    color: Color,
+    onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
-            .size(size)
-            .background(color = AppColors.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp)),
+            .background(
+                color = color,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .clickableWithoutIndication {
+                onClick()
+            },
         contentAlignment = Alignment.Center
     ) {
-        if (icon != null) {
+
+        Row {
             Image(
+                modifier = Modifier.size(24.dp),
                 imageVector = icon,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(iconColor),
+                colorFilter = ColorFilter.tint(AppColors.onPrimary),
                 contentScale = ContentScale.Fit
             )
-        } else {
+
+            Spacer(Modifier.width(4.dp))
+
             BaseText(
-                text = "No Image",
-                style = MaterialTheme.typography.labelMedium.copy(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight(500)
+                text = text,
+                style =  MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
                 ),
-                color = AppColors.onSecondary,
-                textAlign = TextAlign.Center
+                color = AppColors.onPrimary
             )
         }
+
     }
-
-}
-
-@Preview(showBackground = false)
-@Composable
-private fun SquaredImageBoxPreview() {
-    SquaredImageBox(
-        icon = Icons.Default.Add,
-        size = 100.dp
-    )
 }

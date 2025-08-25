@@ -24,18 +24,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun SquaredImageBox(
     modifier: Modifier = Modifier,
     icon: ImageVector?,
     iconColor: Color = AppColors.onSecondary,
-    size: Dp = Dp.Unspecified
+    size: Dp = Dp.Unspecified,
+    onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .size(size)
-            .background(color = AppColors.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp)),
+            .background(color = AppColors.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
+            .clickableWithoutIndication(
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         if (icon != null) {

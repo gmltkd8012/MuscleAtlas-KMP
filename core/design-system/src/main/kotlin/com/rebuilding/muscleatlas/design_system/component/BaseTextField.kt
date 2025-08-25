@@ -78,7 +78,7 @@ fun BaseTextField(
                                 BaseText(
                                     text = hint,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = AppColors.onPrimary,
+                                    color = AppColors.onSecondary,
                                 )
                             },
                             enabled = true,

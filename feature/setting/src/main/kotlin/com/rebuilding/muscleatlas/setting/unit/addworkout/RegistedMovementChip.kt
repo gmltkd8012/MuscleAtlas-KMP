@@ -1,18 +1,23 @@
 package com.rebuilding.muscleatlas.setting.unit.addworkout
 
+import android.R.attr.name
 import android.R.attr.onClick
 import android.R.attr.text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -23,13 +28,26 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseImageButton
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
+import com.rebuilding.muscleatlas.design_system.component.BaseTabRow
+import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegistedMovementChip(
     movementList: List<String> = emptyList<String>(),
-    onClick: () -> Unit = {},
+    onClickEdit: () -> Unit = {},
+    onClickAdd: () -> Unit = {},
 ) {
+    val pagerState = rememberPagerState(
+        pageCount = { Movement.allMovements.size },
+        initialPageOffsetFraction = 0f,
+        initialPage = 0,
+    )
+
+    val currentTabIndex = pagerState.currentPage
+    val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -58,16 +76,54 @@ fun RegistedMovementChip(
                 )
             }
         } else {
-            movementList.forEachIndexed { index, name ->
-                WorkoutManageChip(
-                    name = name,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
+            Spacer(Modifier.height(8.dp))
 
-                if (index != movementList.lastIndex) {
-                    BaseLine(
-                        lineColor = AppColors.secondary
-                    )
+            BaseTabRow(
+                tabList = Movement.allMovements,
+                currentTabIndex = currentTabIndex,
+                onTabSelected = { index ->
+                    scope.launch { pagerState.scrollToPage(index) }
+                }
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    userScrollEnabled = true,
+                ) {
+                    Column {
+                        Spacer(Modifier.height(16.dp))
+
+                        movementList.forEachIndexed { index, name ->
+                            WorkoutManageChip(
+                                name = "${Movement.allMovements[currentTabIndex].title} $index",
+                                modifier = Modifier.padding(vertical = 4.dp),
+                                onClick = onClickEdit
+                            )
+
+                            if (index != movementList.lastIndex) {
+                                BaseLine(
+                                    lineColor = AppColors.secondary
+                                )
+                            }
+                        }
+                    }
+
+
+
+//                    when (currentTabIndex) {
+//                        0 -> {
+//
+//                        }
+//                        1 -> {
+//
+//                        }
+//                        2 -> {
+//
+//                        }
+//
+//
+//                    }
                 }
             }
         }
@@ -76,10 +132,10 @@ fun RegistedMovementChip(
 
         BaseImageButton(
             modifier = Modifier.align(Alignment.End),
-            text = "종목 추가",
+            text = "${Movement.allMovements[currentTabIndex].title} 종목 추가",
             icon = Icons.Default.Add,
             color = AppColors.onPrimary.copy(alpha = 0.1f),
-            onClick = onClick
+            onClick = onClickAdd
         )
     }
 }

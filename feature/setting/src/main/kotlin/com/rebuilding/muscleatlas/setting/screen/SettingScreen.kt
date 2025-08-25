@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.setting.screen
 
 import android.R.attr.top
 import android.content.Intent
+import android.util.Log
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
@@ -33,12 +34,20 @@ fun SettingScreen(
     val navController = rememberNavController()
     var headerTitle by remember { mutableStateOf<String>("") }
 
+    var isAddWorkoutScreen by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = Modifier.background(AppColors.primary),
         topBar = {
             SettingTopBar(
                 title = headerTitle,
-                onClickBack = onClickBack
+                onClickBack = {
+                    if (isAddWorkoutScreen) {
+                        navController.navigate(SettingScreen.WorkoutManage.route)
+                    } else {
+                        onClickBack()
+                    }
+                }
             )
         },
     ) { innerPadding ->
@@ -55,7 +64,11 @@ fun SettingScreen(
         ) {
             composable(SettingScreen.WorkoutManage.route) {
                 headerTitle = SettingScreen.WorkoutManage.label
+                isAddWorkoutScreen = false
                 WorkoutManageScreen(
+                    onClickEditWorkout = {
+                        navController.navigate(SettingScreen.AddWorkout.route)
+                    },
                     onClickAddWorkout = {
                         navController.navigate(SettingScreen.AddWorkout.route)
                     }
@@ -67,6 +80,7 @@ fun SettingScreen(
             }
             composable(SettingScreen.AddWorkout.route) {
                 headerTitle = SettingScreen.AddWorkout.label
+                isAddWorkoutScreen = true
                 AddWorkoutScreen(
                     onClickBack = {
                         navController.navigate(SettingScreen.WorkoutManage.route)

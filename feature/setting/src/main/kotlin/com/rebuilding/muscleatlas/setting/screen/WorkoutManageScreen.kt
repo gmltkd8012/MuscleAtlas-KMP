@@ -33,6 +33,7 @@ import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
 
 @Composable
 fun WorkoutManageScreen(
+    onClickEditWorkout: () -> Unit = {},
     onClickAddWorkout: () -> Unit = {},
 ) {
     val test = listOf<String>("운동 1", "운동 2", "운동 3")
@@ -73,7 +74,9 @@ fun WorkoutManageScreen(
                 ) { index ->
                     WorkoutManageChip(
                         name = test[index],
-                        onClick = onClickAddWorkout,
+                        onClick = {
+                            onClickEditWorkout()
+                        },
                         modifier = Modifier.padding(16.dp)
                     )
 
@@ -90,7 +93,8 @@ fun WorkoutManageScreen(
 
         PrimaryButton(
             text = "운동 추가",
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onClickAddWorkout
         )
     }
 }

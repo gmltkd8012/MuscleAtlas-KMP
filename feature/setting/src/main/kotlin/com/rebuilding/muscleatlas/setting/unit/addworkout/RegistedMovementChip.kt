@@ -28,7 +28,8 @@ import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
 @Composable
 fun RegistedMovementChip(
     movementList: List<String> = emptyList<String>(),
-    onClick: () -> Unit = {},
+    onClickEdit: () -> Unit = {},
+    onClickAdd: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -61,7 +62,8 @@ fun RegistedMovementChip(
             movementList.forEachIndexed { index, name ->
                 WorkoutManageChip(
                     name = name,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                    modifier = Modifier.padding(vertical = 4.dp),
+                    onClick = onClickEdit
                 )
 
                 if (index != movementList.lastIndex) {
@@ -79,7 +81,7 @@ fun RegistedMovementChip(
             text = "종목 추가",
             icon = Icons.Default.Add,
             color = AppColors.onPrimary.copy(alpha = 0.1f),
-            onClick = onClick
+            onClick = onClickAdd
         )
     }
 }

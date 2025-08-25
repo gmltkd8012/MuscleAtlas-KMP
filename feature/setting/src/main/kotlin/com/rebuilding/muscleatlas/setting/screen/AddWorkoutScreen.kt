@@ -1,6 +1,8 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.R.attr.end
 import android.R.attr.text
+import android.R.attr.top
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,13 +20,18 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,11 +47,13 @@ import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
+import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
 import com.rebuilding.muscleatlas.setting.unit.addworkout.RegistedMovementChip
 import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWorkoutScreen(
     onClickBack: () -> Unit = {},
@@ -52,6 +61,8 @@ fun AddWorkoutScreen(
 ) {
     var textNameFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
+
+    var movementBottomSheet by remember { mutableStateOf(false) }
 
     BackHandler {
         onClickBack()
@@ -61,12 +72,13 @@ fun AddWorkoutScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = AppColors.primary)
-            .padding(horizontal = 20.dp)
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(bottom = 12.dp)
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             BaseTextField(
                 textFieldValue = textNameFieldValue.text.toString(),
@@ -78,7 +90,7 @@ fun AddWorkoutScreen(
             )
 
             RegistedMovementChip(
-                listOf(
+                movementList = listOf(
                     "자세 1",
                     "자세 2",
                     "자세 3",
@@ -87,7 +99,13 @@ fun AddWorkoutScreen(
                     "자세 6",
                     "자세 7",
                     "자세 8",
-                )
+                ),
+                onClickEdit = {
+                    movementBottomSheet = true
+                },
+                onClickAdd = {
+                    movementBottomSheet = true
+                }
             )
 
             BaseText(
@@ -114,12 +132,40 @@ fun AddWorkoutScreen(
             Spacer(Modifier.fillMaxWidth().height(100.dp))
         }
 
-        PrimaryButton(
-            text = "운동 추가",
+        Box (
             modifier = Modifier
                 .fillMaxWidth()
+                .background(AppColors.primary)
+                .padding(top = 20.dp, start = 20.dp, end = 20.dp)
                 .align(Alignment.BottomCenter),
-            onClick = onClickSave
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            PrimaryButton(
+                text = "저장",
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onClickSave
+            )
+        }
+    }
+
+    if (movementBottomSheet) {
+        BaseBottomSheet(
+            modifier = Modifier.fillMaxWidth(),
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true,
+                confirmValueChange = { state ->
+                    state != SheetValue.PartiallyExpanded
+                },
+            ),
+            onDismissRequest = {
+                movementBottomSheet = false
+            },
+        ) {
+            MovementBottomSheetScreen(
+                onDismissRequest = {
+                    movementBottomSheet = false
+                }
+            )
+        }
     }
 }

@@ -87,8 +87,6 @@ fun MainScreen() {
     }
 
     if (showClientAddBottomSheet) {
-        Spacer(Modifier.height(32.dp))
-
         BaseBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             sheetState = rememberModalBottomSheetState(

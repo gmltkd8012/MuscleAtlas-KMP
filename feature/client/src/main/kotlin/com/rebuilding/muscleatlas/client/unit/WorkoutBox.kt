@@ -35,9 +35,7 @@ fun WorkoutBox(
         SquaredImageBox(
             icon = icon,
             size = size,
-            modifier = Modifier.clickableWithoutIndication(
-                onClick = onClick
-            )
+            onClick = onClick
         )
 
         Spacer(Modifier.height(8.dp))

@@ -41,7 +41,7 @@ fun WorkoutManageScreen(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(color = AppColors.primary)
+            .background(color = AppColors.color.primary)
             .padding(horizontal = 20.dp)
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(bottom = 12.dp),
@@ -59,7 +59,7 @@ fun WorkoutManageScreen(
                         fontSize = 24.sp,
                         fontWeight = FontWeight(500)
                     ),
-                    color = AppColors.onSecondary
+                    color = AppColors.color.onSecondary
                 )
             }
         } else {
@@ -82,7 +82,7 @@ fun WorkoutManageScreen(
 
                     if (index != test.size - 1) {
                         BaseLine(
-                            lineColor = AppColors.secondary
+                            lineColor = AppColors.color.secondary
                         )
                     }
                 }

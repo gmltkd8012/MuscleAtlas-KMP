@@ -33,7 +33,7 @@ internal fun ClientInfoChip(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
             .padding(16.dp)
             .clickableWithoutIndication(
                 onClick = onClick
@@ -55,7 +55,7 @@ internal fun ClientInfoChip(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = AppColors.onPrimary
+                color = AppColors.color.onPrimary
             )
 
             Spacer(Modifier.height(6.dp))
@@ -65,7 +65,7 @@ internal fun ClientInfoChip(
                 style = MaterialTheme.typography.titleSmall.copy(
                     fontSize = 12.sp,
                 ),
-                color = AppColors.onSecondary
+                color = AppColors.color.onSecondary
             )
         }
     }

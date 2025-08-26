@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import com.rebuilding.muscleatlas.ui.theme.RootScreen
 
 open class BaseActivity : ComponentActivity() {
 
@@ -13,9 +12,7 @@ open class BaseActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            RootScreen {
-                ProvideComposableScreen()
-            }
+            ProvideComposableScreen()
         }
     }
 

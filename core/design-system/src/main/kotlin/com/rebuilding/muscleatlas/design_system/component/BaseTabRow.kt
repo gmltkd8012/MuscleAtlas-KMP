@@ -46,7 +46,7 @@ fun BaseTabRow(
     Column(
         modifier = modifier
             .wrapContentSize()
-            .background(color = AppColors.primary)
+            .background(color = AppColors.color.primary)
     ) {
         TabRow(
             selectedTabIndex =  currentTabIndex,
@@ -56,7 +56,7 @@ fun BaseTabRow(
                         .tabIndicatorOffset(tabPositions[currentTabIndex])
                         .fillMaxWidth(),
                     height = 2.dp,
-                    color = AppColors.onPrimary,
+                    color = AppColors.color.onPrimary,
                 )
             },
             divider = {}
@@ -86,7 +86,7 @@ fun BaseTab(
     Box (
         modifier = modifier
             .height(64.dp)
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
             .padding(horizontal = 20.dp, vertical = 16.dp)
             .selectableWithoutIndication(
                 selected = selected,
@@ -100,7 +100,7 @@ fun BaseTab(
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = if (selected) AppColors.onPrimary else AppColors.onSecondary,
+            color = if (selected) AppColors.color.onPrimary else AppColors.color.onSecondary,
             textAlign = TextAlign.Center
         )
     }

@@ -24,7 +24,7 @@ internal fun SettingTopBar(
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = AppColors.onPrimary
+                color = AppColors.color.onPrimary
             )
         },
         backIcon = {

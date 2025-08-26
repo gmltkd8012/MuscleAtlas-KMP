@@ -17,7 +17,7 @@ fun AppInfoScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
         , contentAlignment = Alignment.Center
     ) {
         BaseText(
@@ -26,7 +26,7 @@ fun AppInfoScreen() {
                 fontSize = 24.sp,
                 fontWeight = FontWeight(500)
             ),
-            color = AppColors.onSecondary
+            color = AppColors.color.onSecondary
         )
     }
 }

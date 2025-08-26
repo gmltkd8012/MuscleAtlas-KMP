@@ -39,7 +39,7 @@ fun ProfileChip(
             modifier = modifier
                 .size(size)
                 .clip(CircleShape)
-                .background(color = AppColors.onPrimary.copy(alpha = 0.1f)),
+                .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
         ) {
             BaseText(
@@ -54,7 +54,7 @@ fun ProfileChip(
                     fontWeight = FontWeight(800),
                 ),
                 modifier = Modifier.alpha(0.2f),
-                color = AppColors.onSecondary
+                color = AppColors.color.onSecondary
             )
         }
     }

@@ -28,7 +28,7 @@ fun SettingMainScreen(
     LazyColumn (
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         state = listState
@@ -47,7 +47,7 @@ fun SettingMainScreen(
 
            if (index != menuList.size - 1) {
                BaseLine(
-                   lineColor = AppColors.secondary
+                   lineColor = AppColors.color.secondary
                )
            }
        }

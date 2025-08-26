@@ -30,7 +30,7 @@ fun PrimaryButton(
     Box(
         modifier = modifier
             .background(
-                color = AppColors.primaryButton,
+                color = AppColors.color.primaryButton,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 20.dp, vertical = 16.dp)
@@ -45,7 +45,7 @@ fun PrimaryButton(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
             ),
-            color = AppColors.onPrimary
+            color = AppColors.color.primaryButtonText
         )
     }
 }

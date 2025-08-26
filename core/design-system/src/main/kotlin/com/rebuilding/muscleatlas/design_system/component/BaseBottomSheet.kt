@@ -59,7 +59,7 @@ fun SheetHandler(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(AppColors.secondary),
+            .background(AppColors.color.secondary),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(8.dp))
@@ -67,7 +67,7 @@ fun SheetHandler(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .width(56.dp)
                 .height(5.dp)
-                .background(AppColors.onPrimary, RoundedCornerShape(100))
+                .background(AppColors.color.onPrimary, RoundedCornerShape(100))
         )
     }
 }

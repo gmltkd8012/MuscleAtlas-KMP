@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
@@ -23,9 +25,10 @@ import com.rebuilding.muscleatlas.design_system.base.BaseTextBox
 
 @Composable
 fun MovemenetChip(
-    name: String,
+    title: String,
     icon: ImageVector,
     movemenetList: List<String> = emptyList<String>(),
+    onClick: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
 
@@ -33,11 +36,23 @@ fun MovemenetChip(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        BaseText(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = AppColors.color.onPrimary,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+
+        Spacer(Modifier.height(8.dp))
+
         LazyRow(
             state = listState,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
         ) {
             items(
                 count = movemenetList.size,
@@ -46,16 +61,9 @@ fun MovemenetChip(
                     name = movemenetList[index],
                     icon = icon,
                     size = 150.dp,
+                    onClick = onClick
                 )
             }
         }
-
-        Spacer(Modifier.height(16.dp))
-
-        BaseTextBox (
-            modifier = Modifier
-                .fillMaxSize(),
-            description = "운동종목 설명"
-        )
     }
 }

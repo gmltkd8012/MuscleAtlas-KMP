@@ -39,7 +39,7 @@ fun ClientAddScreen(
     var memoTextFiled by remember { mutableStateOf(TextFieldState("")) }
 
     Scaffold(
-        modifier = Modifier.background(AppColors.primary),
+        modifier = Modifier.background(AppColors.color.primary),
         topBar = {
             BaseTopBar(
                 title = {
@@ -48,7 +48,7 @@ fun ClientAddScreen(
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.onPrimary,
+                        color = AppColors.color.onPrimary,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 },
@@ -69,7 +69,7 @@ fun ClientAddScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AppColors.primary)
+                .background(AppColors.color.primary)
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -56,7 +56,7 @@ fun RegistedMovementChip(
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = AppColors.onPrimary,
+            color = AppColors.color.onPrimary,
             textAlign = TextAlign.Start
         )
 
@@ -72,7 +72,7 @@ fun RegistedMovementChip(
                         fontSize = 24.sp,
                         fontWeight = FontWeight(500)
                     ),
-                    color = AppColors.onSecondary
+                    color = AppColors.color.onSecondary
                 )
             }
         } else {
@@ -103,7 +103,7 @@ fun RegistedMovementChip(
 
                             if (index != movementList.lastIndex) {
                                 BaseLine(
-                                    lineColor = AppColors.secondary
+                                    lineColor = AppColors.color.secondary
                                 )
                             }
                         }
@@ -134,7 +134,7 @@ fun RegistedMovementChip(
             modifier = Modifier.align(Alignment.End),
             text = "${Movement.allMovements[currentTabIndex].title} 종목 추가",
             icon = Icons.Default.Add,
-            color = AppColors.onPrimary.copy(alpha = 0.1f),
+            color = AppColors.color.onPrimary.copy(alpha = 0.1f),
             onClick = onClickAdd
         )
     }

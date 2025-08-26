@@ -22,14 +22,14 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 fun RoundedImage(
     modifier: Modifier = Modifier,
     icon: ImageVector,
-    iconColor: Color = AppColors.onSecondary,
+    iconColor: Color = AppColors.color.onSecondary,
     size: Dp = Dp.Unspecified
 ) {
     Box(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(color = AppColors.onPrimary.copy(alpha = 0.1f)),
+            .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f)),
         contentAlignment = Alignment.Center
     ) {
         Image(

@@ -30,7 +30,7 @@ fun NavButton(
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
-    val contentColor: Color = if (isSelected) AppColors.onPrimary else AppColors.onSecondary
+    val contentColor: Color = if (isSelected) AppColors.color.onPrimary else AppColors.color.onSecondary
 
     Column (
         modifier = Modifier

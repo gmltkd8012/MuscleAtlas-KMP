@@ -53,17 +53,17 @@ fun BaseTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .background(color = AppColors.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
+                .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             value = textFieldValue,
             onValueChange = { text ->
                 if (text.length <= maxLength) onTextChanged(text)
             },
             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = AppColors.onPrimary
+                color = AppColors.color.onPrimary
             ),
             singleLine = true,
-            cursorBrush = SolidColor(AppColors.onPrimary),
+            cursorBrush = SolidColor(AppColors.color.onPrimary),
             decorationBox =
                 @Composable { innerTextField ->
                     Row(
@@ -78,7 +78,7 @@ fun BaseTextField(
                                 BaseText(
                                     text = hint,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = AppColors.onSecondary,
+                                    color = AppColors.color.onSecondary,
                                 )
                             },
                             enabled = true,
@@ -98,7 +98,7 @@ fun BaseTextField(
                                 Image(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(AppColors.onSecondary),
+                                    colorFilter = ColorFilter.tint(AppColors.color.onSecondary),
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier.clickableWithoutIndication(
                                         onClick = { onTextChanged("") }
@@ -129,7 +129,7 @@ fun BaseTextField(
             BaseText(
                 text = "${textFieldValue.length}/$maxLength",
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.onSecondary,
+                color = AppColors.color.onSecondary,
             )
         }
     }

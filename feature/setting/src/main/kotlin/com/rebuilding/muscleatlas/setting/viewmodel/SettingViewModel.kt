@@ -1,9 +1,7 @@
 package com.rebuilding.muscleatlas.setting.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rebuilding.muscleatlas.datastore.DataStoreRepository
-import com.rebuilding.muscleatlas.model.AppTheme
 import com.rebuilding.muscleatlas.model.state.ThemeState
 import com.rebuilding.muscleatlas.ui.base.StateReducerViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ThemeViewModel @Inject constructor(
+class SettingViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : StateReducerViewModel<ThemeState, Nothing>(ThemeState()) {
 
@@ -21,12 +19,6 @@ class ThemeViewModel @Inject constructor(
             dataStoreRepository.currentAppTheme.collect { mode ->
                 reduceState { copy(mode = mode) }
             }
-        }
-    }
-
-    fun setTheme(mode: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.setCurrentAppTheme(mode)
         }
     }
 }

@@ -11,88 +11,96 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode.Companion.Screen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme
 import com.rebuilding.muscleatlas.model.SettingScreen
 import com.rebuilding.muscleatlas.setting.SettingActivity
 import com.rebuilding.muscleatlas.setting.component.SettingTopBar
+import com.rebuilding.muscleatlas.setting.viewmodel.SettingViewModel
 import com.rebuilding.muscleatlas.ui.extension.startActivity
 
 @Composable
 fun SettingScreen(
+    viewModel: SettingViewModel = hiltViewModel<SettingViewModel>(),
     destination: String,
     onClickBack: () -> Unit = {},
 ) {
+    val state by viewModel.state.collectAsState()
     val navController = rememberNavController()
     var headerTitle by remember { mutableStateOf<String>("") }
 
     var isAddWorkoutScreen by remember { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = Modifier.background(AppColors.color.primary),
-        topBar = {
-            SettingTopBar(
-                title = headerTitle,
-                onClickBack = {
-                    if (isAddWorkoutScreen) {
-                        navController.navigate(SettingScreen.WorkoutManage.route)
-                    } else {
-                        onClickBack()
-                    }
-                }
-            )
-        },
-    ) { innerPadding ->
-        NavHost(
-            modifier = Modifier.padding(
-                PaddingValues(
-                    top = innerPadding.calculateTopPadding()
-                )
-            ),
-            navController = navController,
-            startDestination = destination,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-        ) {
-            composable(SettingScreen.WorkoutManage.route) {
-                headerTitle = SettingScreen.WorkoutManage.label
-                isAddWorkoutScreen = false
-                WorkoutManageScreen(
-                    onClickEditWorkout = {
-                        navController.navigate(SettingScreen.AddWorkout.route)
-                    },
-                    onClickAddWorkout = {
-                        navController.navigate(SettingScreen.AddWorkout.route)
-                    }
-                )
-            }
-            composable(SettingScreen.AppInfo.route) {
-                headerTitle = SettingScreen.AppInfo.label
-                AppInfoScreen()
-            }
-            composable(SettingScreen.Theme.route) {
-                headerTitle = SettingScreen.Theme.label
-                ThemeScreen()
-            }
-            composable(SettingScreen.AddWorkout.route) {
-                headerTitle = SettingScreen.AddWorkout.label
-                isAddWorkoutScreen = true
-                AddWorkoutScreen(
+    MuscleAtlasTheme(themeMode = state.mode) {
+        Scaffold(
+            modifier = Modifier.background(AppColors.color.primary),
+            topBar = {
+                SettingTopBar(
+                    title = headerTitle,
                     onClickBack = {
-                        navController.navigate(SettingScreen.WorkoutManage.route)
-                    },
-                    onClickSave = {
-                        navController.navigate(SettingScreen.WorkoutManage.route)
+                        if (isAddWorkoutScreen) {
+                            navController.navigate(SettingScreen.WorkoutManage.route)
+                        } else {
+                            onClickBack()
+                        }
                     }
                 )
+            },
+        ) { innerPadding ->
+            NavHost(
+                modifier = Modifier.padding(
+                    PaddingValues(
+                        top = innerPadding.calculateTopPadding()
+                    )
+                ),
+                navController = navController,
+                startDestination = destination,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+            ) {
+                composable(SettingScreen.WorkoutManage.route) {
+                    headerTitle = SettingScreen.WorkoutManage.label
+                    isAddWorkoutScreen = false
+                    WorkoutManageScreen(
+                        onClickEditWorkout = {
+                            navController.navigate(SettingScreen.AddWorkout.route)
+                        },
+                        onClickAddWorkout = {
+                            navController.navigate(SettingScreen.AddWorkout.route)
+                        }
+                    )
+                }
+                composable(SettingScreen.AppInfo.route) {
+                    headerTitle = SettingScreen.AppInfo.label
+                    AppInfoScreen()
+                }
+                composable(SettingScreen.Theme.route) {
+                    headerTitle = SettingScreen.Theme.label
+                    ThemeScreen()
+                }
+                composable(SettingScreen.AddWorkout.route) {
+                    headerTitle = SettingScreen.AddWorkout.label
+                    isAddWorkoutScreen = true
+                    AddWorkoutScreen(
+                        onClickBack = {
+                            navController.navigate(SettingScreen.WorkoutManage.route)
+                        },
+                        onClickSave = {
+                            navController.navigate(SettingScreen.WorkoutManage.route)
+                        }
+                    )
+                }
             }
         }
     }

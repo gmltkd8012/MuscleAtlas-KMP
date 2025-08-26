@@ -6,11 +6,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,13 +29,17 @@ import com.rebuilding.muscleatlas.client.unit.ClientProfileBox
 import com.rebuilding.muscleatlas.client.unit.ClientWorkoutChip
 import com.rebuilding.muscleatlas.client.unit.MovemenetChip
 import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
+import com.rebuilding.muscleatlas.model.Movement
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientProfileScreen(
     intent: Intent,
     onClickBack: () -> Unit = {},
 ) {
     var isProfileScreen by remember { mutableStateOf(true) }
+    var movementDetailBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.background(AppColors.primary),
@@ -85,7 +93,7 @@ fun ClientProfileScreen(
                 Spacer(Modifier.height(32.dp))
 
                 MovemenetChip(
-                    name = "구분 동작",
+                    title = Movement.JoinMovement.title,
                     icon = Icons.Default.Warning,
                     movemenetList = listOf(
                         "동작 1",
@@ -95,7 +103,73 @@ fun ClientProfileScreen(
                         "동작 5",
                         "동작 6",
                         "동작 7",
-                    )
+                    ),
+                    onClick = {
+                        movementDetailBottomSheet = true
+                    }
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                MovemenetChip(
+                    title = Movement.StabilizationMechanism.title,
+                    icon = Icons.Default.Warning,
+                    movemenetList = listOf(
+                        "동작 1",
+                        "동작 2",
+                        "동작 3",
+                        "동작 4",
+                        "동작 5",
+                        "동작 6",
+                        "동작 7",
+                    ),
+                    onClick = {
+                        movementDetailBottomSheet = true
+                    }
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                MovemenetChip(
+                    title = Movement.NeuromuscularRelation.title,
+                    icon = Icons.Default.Warning,
+                    movemenetList = listOf(
+                        "동작 1",
+                        "동작 2",
+                        "동작 3",
+                        "동작 4",
+                        "동작 5",
+                        "동작 6",
+                        "동작 7",
+                    ),
+                    onClick = {
+                        movementDetailBottomSheet = true
+                    }
+                )
+            }
+        }
+
+        if (movementDetailBottomSheet) {
+            BaseBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                sheetState = rememberModalBottomSheetState(
+                    skipPartiallyExpanded = true,
+                    confirmValueChange = { state ->
+                        state != SheetValue.PartiallyExpanded
+                    },
+                ),
+                isDragHandle = false,
+                onDismissRequest = {
+                    movementDetailBottomSheet = false
+                },
+            ) {
+                MovementDetailScreen(
+                    title = "ㅋㅋ",
+                    description = "세부 동작에 대한 설명",
+                    imgUrl = null,
+                    onClickBack = {
+                        movementDetailBottomSheet = false
+                    },
                 )
             }
         }

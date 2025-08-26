@@ -3,6 +3,7 @@ package com.rebuilding.muscleatlas.datastore
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.rebuilding.muscleatlas.datastore.extension.findCurrentStream
+import com.rebuilding.muscleatlas.datastore.extension.setData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Inject
@@ -15,6 +16,9 @@ class DataStoreHandler @Inject constructor(
 ) {
 
     val currentTheme = AppDataStore.Keys.CURRENT_THEME.findCurrentStream(dataStore)
+
+    suspend fun setCurrentTheme(value: String) =
+        AppDataStore.Keys.CURRENT_THEME.setData(dataStore, value)
 
     private suspend fun runThrowException(
         scope: CoroutineContext = Dispatchers.IO + SupervisorJob(),

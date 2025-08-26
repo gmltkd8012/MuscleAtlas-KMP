@@ -78,6 +78,10 @@ fun SettingScreen(
                 headerTitle = SettingScreen.AppInfo.label
                 AppInfoScreen()
             }
+            composable(SettingScreen.Theme.route) {
+                headerTitle = SettingScreen.Theme.label
+                ThemeScreen()
+            }
             composable(SettingScreen.AddWorkout.route) {
                 headerTitle = SettingScreen.AddWorkout.label
                 isAddWorkoutScreen = true

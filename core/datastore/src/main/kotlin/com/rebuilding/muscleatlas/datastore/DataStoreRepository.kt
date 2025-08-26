@@ -16,4 +16,6 @@ class DataStoreRepository @Inject constructor(
     val currentAppTheme = dataStoreHandler.currentTheme
         .map { it.nullToDefault(DataStoreUtils.ValueConst.LIGHT_THEME) }
         .distinctUntilChanged()
+
+    suspend fun setCurrentAppTheme(value: String) = dataStoreHandler.setCurrentTheme(value)
 }

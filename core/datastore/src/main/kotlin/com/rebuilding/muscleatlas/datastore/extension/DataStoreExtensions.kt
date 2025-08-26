@@ -4,6 +4,7 @@ import android.util.Log.e
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.rebuilding.muscleatlas.datastore.AppDataStore
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,15 @@ fun <T> Preferences.Key<T>.findCurrentStream(
     }
 }.map { preferences ->
     preferences[this]
+}
+
+suspend fun <T> Preferences.Key<T>.setData(
+    dataStore: DataStore<Preferences>,
+    value: T,
+) {
+    dataStore.edit { preferences ->
+        preferences[this] = value
+    }
 }
 
 

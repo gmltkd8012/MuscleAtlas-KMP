@@ -45,7 +45,7 @@ fun PrimaryButton(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
             ),
-            color = AppColors.onPrimary
+            color = AppColors.primaryButtonText
         )
     }
 }

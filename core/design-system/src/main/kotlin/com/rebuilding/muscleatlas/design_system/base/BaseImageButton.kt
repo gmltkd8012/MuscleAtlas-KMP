@@ -50,7 +50,7 @@ fun BaseImageButton(
                 modifier = Modifier.size(24.dp),
                 imageVector = icon,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(AppColors.onPrimary),
+                colorFilter = ColorFilter.tint(AppColors.color.onPrimary),
                 contentScale = ContentScale.Fit
             )
 
@@ -62,7 +62,7 @@ fun BaseImageButton(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                 ),
-                color = AppColors.onPrimary
+                color = AppColors.color.onPrimary
             )
         }
 

@@ -24,8 +24,8 @@ fun BaseTopBar(
     title: @Composable () -> Unit = {},
     backIcon: @Composable (() -> Unit)? = {},
     endIcon: @Composable (() -> Unit) = {},
-    backgroundColor: Color = AppColors.secondary,
-    contentColor: Color = AppColors.onPrimary,
+    backgroundColor: Color = AppColors.color.secondary,
+    contentColor: Color = AppColors.color.onPrimary,
 ) {
     val startPadding = if (backIcon != null) 4.dp else 16.dp
 

@@ -19,13 +19,13 @@ fun BaseTextBox(
 ) {
     Box(
         modifier = modifier
-            .background(color = AppColors.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
+            .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
             .padding(12.dp),
     ) {
         BaseText(
             text = description,
             style = MaterialTheme.typography.bodyLarge,
-            color = AppColors.onSecondary
+            color = AppColors.color.onSecondary
         )
     }
 }

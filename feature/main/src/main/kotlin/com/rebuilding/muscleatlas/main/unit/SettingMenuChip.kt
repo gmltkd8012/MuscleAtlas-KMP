@@ -34,7 +34,7 @@ internal fun SettingMenuChip(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
             .padding(16.dp)
             .clickableWithoutIndication(
                 onClick = { onClick(route) }
@@ -54,7 +54,7 @@ internal fun SettingMenuChip(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             ),
-            color = AppColors.onPrimary
+            color = AppColors.color.onPrimary
         )
     }
 }

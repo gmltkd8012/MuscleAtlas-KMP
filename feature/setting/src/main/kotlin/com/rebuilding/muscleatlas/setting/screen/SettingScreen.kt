@@ -37,7 +37,7 @@ fun SettingScreen(
     var isAddWorkoutScreen by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.background(AppColors.primary),
+        modifier = Modifier.background(AppColors.color.primary),
         topBar = {
             SettingTopBar(
                 title = headerTitle,

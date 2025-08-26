@@ -33,7 +33,7 @@ fun BottomNavigationBar(
     items: List<Screen>
 ) {
     NavigationBar(
-        containerColor = AppColors.secondary,
+        containerColor = AppColors.color.secondary,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination: NavDestination? = navBackStackEntry?.destination

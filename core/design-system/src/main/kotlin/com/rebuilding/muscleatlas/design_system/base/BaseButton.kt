@@ -21,7 +21,7 @@ fun BaseButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     iconSize: Dp,
-    iconColor: Color = AppColors.onPrimary,
+    iconColor: Color = AppColors.color.onPrimary,
     onClick: () -> Unit,
 ) {
     Box(

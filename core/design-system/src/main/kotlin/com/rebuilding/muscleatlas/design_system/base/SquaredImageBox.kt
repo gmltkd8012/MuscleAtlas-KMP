@@ -30,14 +30,14 @@ import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 fun SquaredImageBox(
     modifier: Modifier = Modifier,
     icon: ImageVector?,
-    iconColor: Color = AppColors.onSecondary,
+    iconColor: Color = AppColors.color.onSecondary,
     size: Dp = Dp.Unspecified,
     onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .size(size)
-            .background(color = AppColors.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
+            .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
             .clickableWithoutIndication(
                 onClick = onClick
             ),
@@ -57,7 +57,7 @@ fun SquaredImageBox(
                     fontSize = 12.sp,
                     fontWeight = FontWeight(500)
                 ),
-                color = AppColors.onSecondary,
+                color = AppColors.color.onSecondary,
                 textAlign = TextAlign.Center
             )
         }

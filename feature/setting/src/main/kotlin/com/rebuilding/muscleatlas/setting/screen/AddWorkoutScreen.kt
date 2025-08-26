@@ -71,7 +71,7 @@ fun AddWorkoutScreen(
     Box (
         modifier = Modifier
             .fillMaxSize()
-            .background(color = AppColors.primary)
+            .background(color = AppColors.color.primary)
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(bottom = 12.dp)
     ) {
@@ -113,7 +113,7 @@ fun AddWorkoutScreen(
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = AppColors.onPrimary,
+                color = AppColors.color.onPrimary,
                 textAlign = TextAlign.Start
             )
 
@@ -135,7 +135,7 @@ fun AddWorkoutScreen(
         Box (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(AppColors.primary)
+                .background(AppColors.color.primary)
                 .padding(top = 20.dp, start = 20.dp, end = 20.dp)
                 .align(Alignment.BottomCenter),
             contentAlignment = Alignment.Center

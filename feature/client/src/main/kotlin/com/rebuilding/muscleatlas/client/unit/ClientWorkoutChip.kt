@@ -43,7 +43,7 @@ fun ClientWorkoutChip(
                     fontSize = 24.sp,
                     fontWeight = FontWeight(500)
                 ),
-                color = AppColors.onSecondary
+                color = AppColors.color.onSecondary
             )
         }
     } else {
@@ -57,7 +57,7 @@ fun ClientWorkoutChip(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = AppColors.onPrimary,
+                color = AppColors.color.onPrimary,
                 textAlign = TextAlign.Center
             )
 

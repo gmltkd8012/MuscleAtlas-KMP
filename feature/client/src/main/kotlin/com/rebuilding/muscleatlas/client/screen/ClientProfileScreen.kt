@@ -42,7 +42,7 @@ fun ClientProfileScreen(
     var movementDetailBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.background(AppColors.primary),
+        modifier = Modifier.background(AppColors.color.primary),
         topBar = {
             ClientProfileTopBar(
                 title = if (isProfileScreen) "회원 정보" else "운동 정보",
@@ -58,7 +58,7 @@ fun ClientProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AppColors.primary)
+                .background(AppColors.color.primary)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

@@ -45,7 +45,7 @@ fun WorkoutBox(
             style = MaterialTheme.typography.titleMedium.copy(
                 fontSize = 16.sp,
             ),
-            color = AppColors.onSecondary
+            color = AppColors.color.onSecondary
         )
     }
 }

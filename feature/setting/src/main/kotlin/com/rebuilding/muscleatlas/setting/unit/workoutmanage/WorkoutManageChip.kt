@@ -44,7 +44,7 @@ fun WorkoutManageChip(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
             .clickableWithoutIndication(
                 onClick = onClick
             ),
@@ -67,7 +67,7 @@ fun WorkoutManageChip(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = AppColors.onPrimary
+                color = AppColors.color.onPrimary
             )
         }
 
@@ -79,7 +79,7 @@ fun WorkoutManageChip(
             Image(
                 imageVector = Icons.Default.Edit,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(AppColors.onSecondary),
+                colorFilter = ColorFilter.tint(AppColors.color.onSecondary),
                 contentScale = ContentScale.Fit
             )
         }

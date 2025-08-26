@@ -33,7 +33,7 @@ fun ThemeScreen(
     Box (
         modifier = Modifier
             .fillMaxSize()
-            .background(color = AppColors.primary)
+            .background(color = AppColors.color.primary)
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(bottom = 12.dp)
     ) {

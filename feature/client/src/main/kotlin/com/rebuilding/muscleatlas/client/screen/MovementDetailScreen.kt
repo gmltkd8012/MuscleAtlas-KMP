@@ -46,7 +46,7 @@ fun MovementDetailScreen(
     onClickBack: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier.background(AppColors.primary),
+        modifier = Modifier.background(AppColors.color.primary),
         topBar = {
             BaseTopBar(
                 title = {
@@ -55,7 +55,7 @@ fun MovementDetailScreen(
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.onPrimary,
+                        color = AppColors.color.onPrimary,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 },
@@ -75,13 +75,13 @@ fun MovementDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = AppColors.primary)
+                .background(color = AppColors.color.primary)
         ) {
             Box(
                 modifier = modifier
                     .fillMaxWidth()
                     .height(500.dp)
-                    .background(color = AppColors.onPrimary.copy(alpha = 0.1f))
+                    .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f))
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
@@ -98,7 +98,7 @@ fun MovementDetailScreen(
                             fontSize = 12.sp,
                             fontWeight = FontWeight(500)
                         ),
-                        color = AppColors.onSecondary,
+                        color = AppColors.color.onSecondary,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -109,7 +109,7 @@ fun MovementDetailScreen(
             BaseText(
                 text = description,
                 style = MaterialTheme.typography.bodyLarge,
-                color = AppColors.onSecondary,
+                color = AppColors.color.onSecondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)

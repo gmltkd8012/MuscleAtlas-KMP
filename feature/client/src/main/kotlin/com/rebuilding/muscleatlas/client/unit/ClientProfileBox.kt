@@ -51,7 +51,7 @@ fun ClientProfileBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(AppColors.secondary)
+                    .background(AppColors.color.secondary)
                     .padding(vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -68,7 +68,7 @@ fun ClientProfileBox(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = AppColors.onPrimary
+                    color = AppColors.color.onPrimary
                 )
 
                 Spacer(Modifier.height(6.dp))
@@ -78,7 +78,7 @@ fun ClientProfileBox(
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontSize = 16.sp,
                     ),
-                    color = AppColors.onSecondary
+                    color = AppColors.color.onSecondary
                 )
             }
         } else {
@@ -86,7 +86,7 @@ fun ClientProfileBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(AppColors.secondary)
+                    .background(AppColors.color.secondary)
                     .padding(horizontal = 12.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -109,7 +109,7 @@ fun ClientProfileBox(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
                             ),
-                            color = AppColors.onPrimary
+                            color = AppColors.color.onPrimary
                         )
 
                         Spacer(Modifier.height(6.dp))
@@ -119,7 +119,7 @@ fun ClientProfileBox(
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontSize = 14.sp,
                             ),
-                            color = AppColors.onSecondary
+                            color = AppColors.color.onSecondary
                         )
                     }
                 }
@@ -135,7 +135,7 @@ fun ClientProfileBox(
                             fontSize = 18.sp,
                             fontWeight = FontWeight(600)
                         ),
-                        color = AppColors.onPrimary
+                        color = AppColors.color.onPrimary
                     )
                 }
             }

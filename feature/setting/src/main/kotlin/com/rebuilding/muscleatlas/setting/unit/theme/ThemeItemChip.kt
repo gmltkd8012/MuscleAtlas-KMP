@@ -40,13 +40,13 @@ fun ThemeItemChip(
     onClick: (String) -> Unit = {},
 ) {
     val isSelected = mode.id == selectedMode
-    val selectedColor = if (isSelected) AppColors.onPrimary else AppColors.onSecondary.copy(alpha = 0.5f)
+    val selectedColor = if (isSelected) AppColors.color.onPrimary else AppColors.color.onSecondary.copy(alpha = 0.5f)
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(AppColors.primary)
+            .background(AppColors.color.primary)
             .padding(16.dp)
             .clickableWithoutIndication(
                 onClick = { onClick(mode.id) }

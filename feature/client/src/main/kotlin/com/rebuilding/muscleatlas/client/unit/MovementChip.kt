@@ -42,7 +42,7 @@ fun MovemenetChip(
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = AppColors.onPrimary,
+            color = AppColors.color.onPrimary,
             textAlign = TextAlign.Start,
             modifier = Modifier.padding(start = 4.dp)
         )

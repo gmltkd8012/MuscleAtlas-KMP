@@ -1,4 +1,9 @@
 [versions]
+
+# App Version
+appVersionCode = "10000"
+appVersionName = "01.00.00"
+
 # base setting
 agp = "8.5.2"
 kotlin = "2.0.0"

@@ -34,7 +34,7 @@ fun BaseBottomSheet(
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
-        modifier = Modifier,
+        modifier = modifier,
         onDismissRequest = {
             scope.launch {
                 sheetState.hide()

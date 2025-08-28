@@ -29,6 +29,7 @@ import com.rebuilding.muscleatlas.design_system.base.BaseImageButton
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseTabRow
+import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ fun RegistedMovementChip(
     movementList: List<String> = emptyList<String>(),
     onClickEdit: () -> Unit = {},
     onClickAdd: () -> Unit = {},
+    onClickDelete: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         pageCount = { Movement.allMovements.size },
@@ -95,11 +97,15 @@ fun RegistedMovementChip(
                         Spacer(Modifier.height(16.dp))
 
                         movementList.forEachIndexed { index, name ->
-                            WorkoutManageChip(
-                                name = "${Movement.allMovements[currentTabIndex].title} $index",
-                                modifier = Modifier.padding(vertical = 4.dp),
-                                onClick = onClickEdit
-                            )
+                            SwipeItemChip(
+                                onDelete = onClickDelete
+                            ) {
+                                WorkoutManageChip(
+                                    name = "${Movement.allMovements[currentTabIndex].title} $index",
+                                    //modifier = Modifier.padding(vertical = 16.dp),
+                                    onClick = onClickEdit
+                                )
+                            }
 
                             if (index != movementList.lastIndex) {
                                 BaseLine(

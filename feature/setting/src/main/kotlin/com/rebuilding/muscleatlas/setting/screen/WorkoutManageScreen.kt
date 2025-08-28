@@ -77,7 +77,6 @@ fun WorkoutManageScreen(
                         onClick = {
                             onClickEditWorkout()
                         },
-                        modifier = Modifier.padding(16.dp)
                     )
 
                     if (index != test.size - 1) {

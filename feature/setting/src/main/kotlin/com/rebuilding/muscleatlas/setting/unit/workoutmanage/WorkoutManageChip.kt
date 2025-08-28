@@ -31,6 +31,7 @@ import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
 import com.rebuilding.muscleatlas.design_system.component.ProfileChip
+import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
@@ -39,49 +40,55 @@ fun WorkoutManageChip(
     name: String,
     workoutImg: ImageVector? = null,
     onClick: () -> Unit = {},
+    onDelete: () -> Unit = {},
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(AppColors.color.primary)
-            .clickableWithoutIndication(
-                onClick = onClick
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    SwipeItemChip(
+        onDelete = onDelete
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            SquaredImageBox(
-                size = 48.dp,
-                icon = workoutImg
-            )
-
-            Spacer(Modifier.width(16.dp))
-
-            BaseText(
-                text = name,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(AppColors.color.primary)
+                .padding(16.dp)
+                .clickableWithoutIndication(
+                    onClick = onClick
                 ),
-                color = AppColors.color.onPrimary
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .size(48.dp),
-            contentAlignment = Alignment.Center
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                imageVector = Icons.Default.Edit,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(AppColors.color.onSecondary),
-                contentScale = ContentScale.Fit
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SquaredImageBox(
+                    size = 48.dp,
+                    icon = workoutImg
+                )
+
+                Spacer(Modifier.width(16.dp))
+
+                BaseText(
+                    text = name,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = AppColors.color.onPrimary
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(48.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(AppColors.color.onSecondary),
+                    contentScale = ContentScale.Fit
+                )
+            }
         }
     }
 }

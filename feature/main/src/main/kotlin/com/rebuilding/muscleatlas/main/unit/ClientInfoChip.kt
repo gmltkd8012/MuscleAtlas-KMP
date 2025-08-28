@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.ProfileChip
+import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
@@ -28,45 +29,50 @@ internal fun ClientInfoChip(
     memo: String,
     profileImg: String? = null,
     onClick: () -> Unit = {},
+    onDelete: () -> Unit = {},
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(AppColors.color.primary)
-            .padding(16.dp)
-            .clickableWithoutIndication(
-                onClick = onClick
-            ),
-        verticalAlignment = Alignment.CenterVertically,
+    SwipeItemChip(
+        onDelete = onDelete
     ) {
-        ProfileChip(
-            name = name,
-            size = 48.dp,
-            profileImg = profileImg
-        )
-
-        Spacer(Modifier.width(12.dp))
-
-        Column{
-            BaseText(
-                text = name,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(AppColors.color.primary)
+                .padding(16.dp)
+                .clickableWithoutIndication(
+                    onClick = onClick
                 ),
-                color = AppColors.color.onPrimary
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            ProfileChip(
+                name = name,
+                size = 48.dp,
+                profileImg = profileImg
             )
 
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.width(12.dp))
 
-            BaseText(
-                text = memo,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 12.sp,
-                ),
-                color = AppColors.color.onSecondary
-            )
+            Column{
+                BaseText(
+                    text = name,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = AppColors.color.onPrimary
+                )
+
+                Spacer(Modifier.height(6.dp))
+
+                BaseText(
+                    text = memo,
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontSize = 12.sp,
+                    ),
+                    color = AppColors.color.onSecondary
+                )
+            }
         }
     }
 }

@@ -49,6 +49,7 @@ fun Project.configureAndroidCompose(
 
             // androidx-compose material3
             add("implementation", libs.findLibrary("androidx-compose-material3").get())
+            add("implementation", libs.findLibrary("androidx-compose-material").get())
 
             // 아래 두 라이브러리는 bom 버전 관리 범위 밖
             // androidx-activity-compose - Activity 에서 사용 가능하도록 Compose와 연결

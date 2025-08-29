@@ -13,7 +13,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
-) : ViewModel() {
+) : StateReducerViewModel<ThemeState, Nothing>(ThemeState()) {
 
     val isDarkTheme = dataStoreRepository.currentAppTheme
+
+//    init {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            dataStoreRepository.currentAppTheme.collect { mode ->
+//                reduceState { copy(mode = mode) }
+//            }
+//        }
+//    }
 }

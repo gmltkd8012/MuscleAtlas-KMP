@@ -76,7 +76,9 @@ fun MainScreen(
                 headerTitle = Screen.Client.label
                 ClientMainScreen(
                     onClickProfile = {
-                        context.startActivity<ClientProfileActivity>()
+                        context.startActivity<ClientProfileActivity>(
+                            "theme" to isDarkTheme
+                        )
                     }
                 )
             }
@@ -87,7 +89,7 @@ fun MainScreen(
                         context.startActivity<SettingActivity>(
                             argument = arrayOf(
                                 "destination" to route,
-                                "isdarktheme" to AppTheme.Dark.id
+                                "theme" to isDarkTheme
                             )
                         )
                     }

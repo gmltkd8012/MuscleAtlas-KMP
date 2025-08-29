@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.rebuilding.muscleatlas.client.screen.ClientProfileScreen
 import com.rebuilding.muscleatlas.ui.base.BaseActivity
@@ -13,14 +14,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class ClientProfileActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
+        setContent {
+            val isDarkTheme = intent.getBooleanExtra("theme", isSystemInDarkTheme())
 
-    @Composable
-    override fun ProvideComposableScreen() {
-        super.ProvideComposableScreen()
-        ClientProfileScreen(
-            intent = intent,
-            onClickBack = { finish() }
-        )
+            ClientProfileScreen(
+                intent = intent,
+                isDarkTheme = isDarkTheme,
+                onClickBack = { finish() }
+            )
+        }
     }
 }

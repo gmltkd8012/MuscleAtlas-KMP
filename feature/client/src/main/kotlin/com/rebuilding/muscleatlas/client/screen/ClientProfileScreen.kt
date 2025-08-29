@@ -39,6 +39,7 @@ import com.rebuilding.muscleatlas.model.Movement
 @Composable
 fun ClientProfileScreen(
     viewModel: ClientViewModel = hiltViewModel<ClientViewModel>(),
+    isDarkTheme: Boolean,
     intent: Intent,
     onClickBack: () -> Unit = {},
 ) {
@@ -47,7 +48,9 @@ fun ClientProfileScreen(
     var isProfileScreen by remember { mutableStateOf(true) }
     var movementDetailBottomSheet by remember { mutableStateOf(false) }
 
-    MuscleAtlasTheme() {
+    MuscleAtlasTheme(
+        darkTheme = isDarkTheme,
+    ) {
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colorScheme.primary),
             topBar = {

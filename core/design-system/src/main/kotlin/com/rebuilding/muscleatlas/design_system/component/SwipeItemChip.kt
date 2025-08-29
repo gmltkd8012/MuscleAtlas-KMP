@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -15,16 +14,14 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -39,7 +36,7 @@ fun SwipeItemChip(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(AppColors.color.secondary)
+            .background(MaterialTheme.colorScheme.secondary)
             .swipeable(
                 state = swipeableState,
                 anchors = mapOf(0f to 0, -sizePx to 1),
@@ -51,7 +48,7 @@ fun SwipeItemChip(
         Row(
             modifier = Modifier
                 .matchParentSize()
-                .background(AppColors.color.secondary)
+                .background(MaterialTheme.colorScheme.secondary)
                 .padding(horizontal = 12.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,

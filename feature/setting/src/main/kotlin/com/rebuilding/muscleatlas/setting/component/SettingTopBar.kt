@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseButton
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
@@ -24,7 +24,7 @@ internal fun SettingTopBar(
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = AppColors.color.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary
             )
         },
         backIcon = {

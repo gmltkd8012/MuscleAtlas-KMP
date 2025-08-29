@@ -1,7 +1,5 @@
 package com.rebuilding.muscleatlas.design_system.component
 
-import android.R.attr.name
-import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -10,16 +8,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
-import com.rebuilding.muscleatlas.util.getFirstWord
 
 @Composable
 fun PrimaryButton(
@@ -30,7 +25,7 @@ fun PrimaryButton(
     Box(
         modifier = modifier
             .background(
-                color = AppColors.color.primaryButton,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 20.dp, vertical = 16.dp)
@@ -45,7 +40,7 @@ fun PrimaryButton(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
             ),
-            color = AppColors.color.primaryButtonText
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }

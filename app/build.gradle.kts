@@ -85,4 +85,6 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:datastore"))
     implementation(project(":feature:main"))
+
+    implementation(libs.android.material)
 }

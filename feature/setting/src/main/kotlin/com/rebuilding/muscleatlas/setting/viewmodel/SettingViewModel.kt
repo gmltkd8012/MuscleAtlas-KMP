@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.setting.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rebuilding.muscleatlas.datastore.DataStoreRepository
 import com.rebuilding.muscleatlas.model.state.ThemeState
@@ -12,13 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
-) : StateReducerViewModel<ThemeState, Nothing>(ThemeState()) {
+) : ViewModel() {
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.currentAppTheme.collect { mode ->
-                reduceState { copy(mode = mode) }
-            }
-        }
-    }
+    val isDarkTheme = dataStoreRepository.currentAppTheme
 }

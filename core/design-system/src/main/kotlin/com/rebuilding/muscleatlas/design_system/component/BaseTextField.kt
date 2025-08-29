@@ -1,8 +1,5 @@
 package com.rebuilding.muscleatlas.design_system.component
 
-import android.R.attr.singleLine
-import android.R.attr.text
-import android.R.attr.textStyle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,8 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
@@ -32,7 +27,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
@@ -53,17 +48,17 @@ fun BaseTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
+                .background(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             value = textFieldValue,
             onValueChange = { text ->
                 if (text.length <= maxLength) onTextChanged(text)
             },
             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = AppColors.color.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary
             ),
             singleLine = true,
-            cursorBrush = SolidColor(AppColors.color.onPrimary),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary),
             decorationBox =
                 @Composable { innerTextField ->
                     Row(
@@ -78,7 +73,7 @@ fun BaseTextField(
                                 BaseText(
                                     text = hint,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = AppColors.color.onSecondary,
+                                    color = MaterialTheme.colorScheme.onSecondary,
                                 )
                             },
                             enabled = true,
@@ -98,7 +93,7 @@ fun BaseTextField(
                                 Image(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(AppColors.color.onSecondary),
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier.clickableWithoutIndication(
                                         onClick = { onTextChanged("") }
@@ -129,7 +124,7 @@ fun BaseTextField(
             BaseText(
                 text = "${textFieldValue.length}/$maxLength",
                 style = MaterialTheme.typography.bodySmall,
-                color = AppColors.color.onSecondary,
+                color = MaterialTheme.colorScheme.onSecondary,
             )
         }
     }

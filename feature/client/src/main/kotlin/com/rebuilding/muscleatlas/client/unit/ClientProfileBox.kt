@@ -1,7 +1,5 @@
 package com.rebuilding.muscleatlas.client.unit
 
-import android.R.attr.name
-import android.app.ProgressDialog.show
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -23,13 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.ProfileChip
 
@@ -51,7 +47,7 @@ fun ClientProfileBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(AppColors.color.secondary)
+                    .background(MaterialTheme.colorScheme.secondary)
                     .padding(vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -68,7 +64,7 @@ fun ClientProfileBox(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = AppColors.color.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
 
                 Spacer(Modifier.height(6.dp))
@@ -78,7 +74,7 @@ fun ClientProfileBox(
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontSize = 16.sp,
                     ),
-                    color = AppColors.color.onSecondary
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
             }
         } else {
@@ -86,7 +82,7 @@ fun ClientProfileBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(AppColors.color.secondary)
+                    .background(MaterialTheme.colorScheme.secondary)
                     .padding(horizontal = 12.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -109,7 +105,7 @@ fun ClientProfileBox(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
                             ),
-                            color = AppColors.color.onPrimary
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
 
                         Spacer(Modifier.height(6.dp))
@@ -119,7 +115,7 @@ fun ClientProfileBox(
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontSize = 14.sp,
                             ),
-                            color = AppColors.color.onSecondary
+                            color = MaterialTheme.colorScheme.onSecondary
                         )
                     }
                 }
@@ -135,7 +131,7 @@ fun ClientProfileBox(
                             fontSize = 18.sp,
                             fontWeight = FontWeight(600)
                         ),
-                        color = AppColors.color.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

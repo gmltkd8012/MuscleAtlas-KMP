@@ -1,11 +1,9 @@
 package com.rebuilding.muscleatlas.client.unit
 
-import android.R.attr.name
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,10 +13,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
-import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun WorkoutBox(
@@ -45,7 +42,7 @@ fun WorkoutBox(
             style = MaterialTheme.typography.titleMedium.copy(
                 fontSize = 16.sp,
             ),
-            color = AppColors.color.onSecondary
+            color = MaterialTheme.colorScheme.onSecondary
         )
     }
 }

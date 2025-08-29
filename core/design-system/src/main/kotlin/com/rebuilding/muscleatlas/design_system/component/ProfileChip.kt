@@ -10,13 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.RoundedAsyncImage
 import com.rebuilding.muscleatlas.util.getFirstWord
@@ -39,7 +37,7 @@ fun ProfileChip(
             modifier = modifier
                 .size(size)
                 .clip(CircleShape)
-                .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f)),
+                .background(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f)),
             contentAlignment = Alignment.Center
         ) {
             BaseText(
@@ -54,7 +52,7 @@ fun ProfileChip(
                     fontWeight = FontWeight(800),
                 ),
                 modifier = Modifier.alpha(0.2f),
-                color = AppColors.color.onSecondary
+                color = MaterialTheme.colorScheme.onSecondary
             )
         }
     }

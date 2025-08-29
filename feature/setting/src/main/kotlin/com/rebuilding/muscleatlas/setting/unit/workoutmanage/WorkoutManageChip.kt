@@ -1,16 +1,12 @@
 package com.rebuilding.muscleatlas.setting.unit.workoutmanage
 
-import android.R.attr.name
-import android.R.attr.onClick
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,10 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
-import com.rebuilding.muscleatlas.design_system.component.ProfileChip
 import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
@@ -49,7 +44,7 @@ fun WorkoutManageChip(
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(AppColors.color.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(16.dp)
                 .clickableWithoutIndication(
                     onClick = onClick
@@ -73,7 +68,7 @@ fun WorkoutManageChip(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = AppColors.color.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -85,7 +80,7 @@ fun WorkoutManageChip(
                 Image(
                     imageVector = Icons.Default.Edit,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(AppColors.color.onSecondary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
                     contentScale = ContentScale.Fit
                 )
             }

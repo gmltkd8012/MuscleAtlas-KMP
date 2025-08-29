@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 
 @Composable
@@ -17,7 +17,7 @@ fun AppInfoScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.color.primary)
+            .background(MaterialTheme.colorScheme.primary)
         , contentAlignment = Alignment.Center
     ) {
         BaseText(
@@ -26,7 +26,7 @@ fun AppInfoScreen() {
                 fontSize = 24.sp,
                 fontWeight = FontWeight(500)
             ),
-            color = AppColors.color.onSecondary
+            color = MaterialTheme.colorScheme.onSecondary
         )
     }
 }

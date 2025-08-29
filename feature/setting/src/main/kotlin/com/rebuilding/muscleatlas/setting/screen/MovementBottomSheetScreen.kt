@@ -18,10 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
@@ -37,7 +36,7 @@ fun MovementBottomSheetScreen(
     var descriptionTextFiled by remember { mutableStateOf(TextFieldState("")) }
 
     Scaffold(
-        modifier = Modifier.background(AppColors.color.primary),
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
         topBar = {
             BaseTopBar(
                 title = {
@@ -46,7 +45,7 @@ fun MovementBottomSheetScreen(
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.color.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 },
@@ -67,7 +66,7 @@ fun MovementBottomSheetScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AppColors.color.primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -1,50 +1,49 @@
 package com.rebuilding.muscleatlas.setting.screen
 
-import android.R.attr.top
-import android.content.Intent
-import android.util.Log
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme
+import com.rebuilding.muscleatlas.model.AppTheme
 import com.rebuilding.muscleatlas.model.SettingScreen
-import com.rebuilding.muscleatlas.setting.SettingActivity
 import com.rebuilding.muscleatlas.setting.component.SettingTopBar
 import com.rebuilding.muscleatlas.setting.viewmodel.SettingViewModel
-import com.rebuilding.muscleatlas.ui.extension.startActivity
 
 @Composable
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel<SettingViewModel>(),
+    isDarkTheme: Boolean,
     destination: String,
     onClickBack: () -> Unit = {},
 ) {
-    val state by viewModel.state.collectAsState()
     val navController = rememberNavController()
     var headerTitle by remember { mutableStateOf<String>("") }
 
     var isAddWorkoutScreen by remember { mutableStateOf(false) }
 
-    MuscleAtlasTheme(themeMode = state.mode) {
+    MuscleAtlasTheme(darkTheme = isDarkTheme) {
         Scaffold(
-            modifier = Modifier.background(AppColors.color.primary),
+            modifier = Modifier.background(MaterialTheme.colorScheme.primary),
             topBar = {
                 SettingTopBar(
                     title = headerTitle,
@@ -87,7 +86,9 @@ fun SettingScreen(
                 }
                 composable(SettingScreen.Theme.route) {
                     headerTitle = SettingScreen.Theme.label
-                    ThemeScreen()
+                    ThemeScreen(
+                        onFinish = onClickBack
+                    )
                 }
                 composable(SettingScreen.AddWorkout.route) {
                     headerTitle = SettingScreen.AddWorkout.label

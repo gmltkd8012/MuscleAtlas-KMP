@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
@@ -17,15 +16,15 @@ import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
-fun PrimaryButton(
+fun DeleteButton(
     modifier: Modifier = Modifier,
-    text: String,
+    text: String = "삭제",
     onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.error,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 20.dp, vertical = 16.dp)
@@ -37,18 +36,10 @@ fun PrimaryButton(
         BaseText(
             text = text,
             style =  MaterialTheme.typography.titleMedium.copy(
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
             ),
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            color = MaterialTheme.colorScheme.primaryContainer
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun  PrimaryButtonPreview() {
-    PrimaryButton(
-        text = "버튼명"
-    )
 }

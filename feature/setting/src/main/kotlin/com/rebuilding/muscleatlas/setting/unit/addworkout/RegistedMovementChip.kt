@@ -1,16 +1,11 @@
 package com.rebuilding.muscleatlas.setting.unit.addworkout
 
-import android.R.attr.name
-import android.R.attr.onClick
-import android.R.attr.text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -24,11 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseImageButton
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseTabRow
+import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
 import kotlinx.coroutines.launch
@@ -38,6 +34,7 @@ fun RegistedMovementChip(
     movementList: List<String> = emptyList<String>(),
     onClickEdit: () -> Unit = {},
     onClickAdd: () -> Unit = {},
+    onClickDelete: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         pageCount = { Movement.allMovements.size },
@@ -56,7 +53,7 @@ fun RegistedMovementChip(
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = AppColors.color.onPrimary,
+            color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Start
         )
 
@@ -72,7 +69,7 @@ fun RegistedMovementChip(
                         fontSize = 24.sp,
                         fontWeight = FontWeight(500)
                     ),
-                    color = AppColors.color.onSecondary
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
             }
         } else {
@@ -95,15 +92,19 @@ fun RegistedMovementChip(
                         Spacer(Modifier.height(16.dp))
 
                         movementList.forEachIndexed { index, name ->
-                            WorkoutManageChip(
-                                name = "${Movement.allMovements[currentTabIndex].title} $index",
-                                modifier = Modifier.padding(vertical = 4.dp),
-                                onClick = onClickEdit
-                            )
+                            SwipeItemChip(
+                                onDelete = onClickDelete
+                            ) {
+                                WorkoutManageChip(
+                                    name = "${Movement.allMovements[currentTabIndex].title} $index",
+                                    //modifier = Modifier.padding(vertical = 16.dp),
+                                    onClick = onClickEdit
+                                )
+                            }
 
                             if (index != movementList.lastIndex) {
                                 BaseLine(
-                                    lineColor = AppColors.color.secondary
+                                    lineColor = MaterialTheme.colorScheme.secondary
                                 )
                             }
                         }
@@ -134,7 +135,7 @@ fun RegistedMovementChip(
             modifier = Modifier.align(Alignment.End),
             text = "${Movement.allMovements[currentTabIndex].title} 종목 추가",
             icon = Icons.Default.Add,
-            color = AppColors.color.onPrimary.copy(alpha = 0.1f),
+            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f),
             onClick = onClickAdd
         )
     }

@@ -1,7 +1,5 @@
 package com.rebuilding.muscleatlas.client.screen
 
-import android.R.attr.fontWeight
-import android.R.attr.onClick
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,31 +9,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseButton
 import com.rebuilding.muscleatlas.design_system.base.BaseText
-import com.rebuilding.muscleatlas.design_system.base.BaseTextBox
 import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
-import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
-import com.rebuilding.muscleatlas.design_system.component.ProfileChip
-import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun MovementDetailScreen(
@@ -46,7 +36,7 @@ fun MovementDetailScreen(
     onClickBack: () -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier.background(AppColors.color.primary),
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
         topBar = {
             BaseTopBar(
                 title = {
@@ -55,7 +45,7 @@ fun MovementDetailScreen(
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = AppColors.color.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 },
@@ -75,13 +65,13 @@ fun MovementDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = AppColors.color.primary)
+                .background(color = MaterialTheme.colorScheme.primary)
         ) {
             Box(
                 modifier = modifier
                     .fillMaxWidth()
                     .height(500.dp)
-                    .background(color = AppColors.color.onPrimary.copy(alpha = 0.1f))
+                    .background(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f))
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
@@ -98,7 +88,7 @@ fun MovementDetailScreen(
                             fontSize = 12.sp,
                             fontWeight = FontWeight(500)
                         ),
-                        color = AppColors.color.onSecondary,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -109,7 +99,7 @@ fun MovementDetailScreen(
             BaseText(
                 text = description,
                 style = MaterialTheme.typography.bodyLarge,
-                color = AppColors.color.onSecondary,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)

@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.RoundedImage
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
@@ -34,7 +34,7 @@ internal fun SettingMenuChip(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(AppColors.color.primary)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp)
             .clickableWithoutIndication(
                 onClick = { onClick(route) }
@@ -54,7 +54,7 @@ internal fun SettingMenuChip(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             ),
-            color = AppColors.color.onPrimary
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

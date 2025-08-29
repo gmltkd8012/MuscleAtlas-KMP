@@ -1,7 +1,5 @@
 package com.rebuilding.muscleatlas.setting.screen
 
-import android.R.attr.bottom
-import android.R.attr.text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
@@ -41,7 +38,7 @@ fun WorkoutManageScreen(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(color = AppColors.color.primary)
+            .background(color = MaterialTheme.colorScheme.primary)
             .padding(horizontal = 20.dp)
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(bottom = 12.dp),
@@ -59,7 +56,7 @@ fun WorkoutManageScreen(
                         fontSize = 24.sp,
                         fontWeight = FontWeight(500)
                     ),
-                    color = AppColors.color.onSecondary
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
             }
         } else {
@@ -77,12 +74,11 @@ fun WorkoutManageScreen(
                         onClick = {
                             onClickEditWorkout()
                         },
-                        modifier = Modifier.padding(16.dp)
                     )
 
                     if (index != test.size - 1) {
                         BaseLine(
-                            lineColor = AppColors.color.secondary
+                            lineColor = MaterialTheme.colorScheme.secondary
                         )
                     }
                 }

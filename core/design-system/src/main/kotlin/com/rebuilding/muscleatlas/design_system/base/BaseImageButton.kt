@@ -2,7 +2,6 @@ package com.rebuilding.muscleatlas.design_system.base
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
@@ -50,7 +49,7 @@ fun BaseImageButton(
                 modifier = Modifier.size(24.dp),
                 imageVector = icon,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(AppColors.color.onPrimary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentScale = ContentScale.Fit
             )
 
@@ -62,7 +61,7 @@ fun BaseImageButton(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                 ),
-                color = AppColors.color.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
 

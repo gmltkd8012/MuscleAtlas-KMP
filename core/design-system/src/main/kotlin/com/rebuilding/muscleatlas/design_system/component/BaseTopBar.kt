@@ -1,31 +1,29 @@
 package com.rebuilding.muscleatlas.design_system.component
 
-import android.R.attr.end
-import android.R.attr.navigationIcon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.rebuilding.muscleatlas.design_system.AppColors
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 
 @Composable
 fun BaseTopBar(
     title: @Composable () -> Unit = {},
     backIcon: @Composable (() -> Unit)? = {},
     endIcon: @Composable (() -> Unit) = {},
-    backgroundColor: Color = AppColors.color.secondary,
-    contentColor: Color = AppColors.color.onPrimary,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     val startPadding = if (backIcon != null) 4.dp else 16.dp
 

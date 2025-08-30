@@ -12,26 +12,5 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
-fun <T> Preferences.Key<T>.findCurrentStream(
-    dataStore: DataStore<Preferences>
-): Flow<T?> = dataStore.data.catch { e ->
-    if (e is IOException) {
-        emit(emptyPreferences())
-    } else {
-        throw e
-    }
-}.map { preferences ->
-    preferences[this]
-}
-
-suspend fun <T> Preferences.Key<T>.setData(
-    dataStore: DataStore<Preferences>,
-    value: T,
-) {
-    dataStore.edit { preferences ->
-        preferences[this] = value
-    }
-}
-
 
 fun String?.nullToDefault(default: String) = this ?: default

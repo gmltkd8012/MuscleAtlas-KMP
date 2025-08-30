@@ -26,7 +26,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val isDarkTheme by viewModel.isDarkTheme.collectAsStateWithLifecycle(false, this)
+            val isDarkTheme by viewModel.isDarkTheme.collectAsState(false)
 
             MuscleAtlasTheme(darkTheme = isDarkTheme == AppTheme.Dark.id) {
                 MainScreen(

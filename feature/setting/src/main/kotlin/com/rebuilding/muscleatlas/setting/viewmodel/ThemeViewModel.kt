@@ -26,7 +26,7 @@ class ThemeViewModel @Inject constructor(
 
     fun setTheme(mode: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.setCurrentAppTheme(mode)
+            dataStoreRepository.updateAppTheme(mode)
         }
     }
 }

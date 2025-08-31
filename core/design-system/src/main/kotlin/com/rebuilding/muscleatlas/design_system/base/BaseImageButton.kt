@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +20,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
@@ -66,4 +69,15 @@ fun BaseImageButton(
         }
 
     }
+}
+
+@Preview
+@Composable
+private fun BaseImageButtonPreview() {
+    BaseImageButton(
+        text = "미리 보기",
+        icon = Icons.Default.Add,
+        color = AppColors.primaryButtonDark,
+        onClick = {}
+    )
 }

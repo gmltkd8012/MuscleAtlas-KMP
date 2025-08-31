@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseButton
@@ -36,5 +37,13 @@ internal fun SettingTopBar(
                 onClickBack()
             }
         },
+    )
+}
+
+@Preview
+@Composable
+private fun SettingTopBarPreview() {
+    SettingTopBar(
+        title = "설정"
     )
 }

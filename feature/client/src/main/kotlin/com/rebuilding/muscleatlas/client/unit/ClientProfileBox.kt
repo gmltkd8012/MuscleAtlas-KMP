@@ -141,7 +141,7 @@ fun ClientProfileBox(
 
 @Preview(showBackground = true)
 @Composable
-fun ClientProfileBoxPreview() {
+private fun ClientProfileBoxPreview() {
     ClientProfileBox(
         clientName = "테스터",
         memo = "테스트",

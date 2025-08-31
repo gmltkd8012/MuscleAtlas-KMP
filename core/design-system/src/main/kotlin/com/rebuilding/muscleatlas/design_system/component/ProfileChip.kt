@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
@@ -56,4 +57,14 @@ fun ProfileChip(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun ProfileChipPreview() {
+    ProfileChip(
+        name = "회원",
+        profileImg = null,
+        size = Dp.Unspecified
+    )
 }

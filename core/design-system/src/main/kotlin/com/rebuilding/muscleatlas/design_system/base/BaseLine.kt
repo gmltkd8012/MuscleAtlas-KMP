@@ -9,8 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.design_system.theme.AppColors
 
 @Composable
 fun BaseLine(
@@ -33,4 +35,12 @@ fun BaseLine(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun BaseLinePreview() {
+    BaseLine(
+        lineColor = AppColors.primaryDark
+    )
 }

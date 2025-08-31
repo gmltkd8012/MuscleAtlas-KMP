@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
@@ -75,4 +76,18 @@ fun ClientWorkoutChip(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun ClientWorkoutChipPreview() {
+    ClientWorkoutChip(
+        workoutList = listOf("스쿼트", "벤치프레스", "렛풀다운")
+    )
+}
+
+@Preview
+@Composable
+private fun ClientWorkoutChipEmptyPreview() {
+    ClientWorkoutChip()
 }

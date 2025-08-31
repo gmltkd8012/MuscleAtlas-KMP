@@ -61,7 +61,7 @@ internal fun SettingMenuChip(
 
 @Preview(showBackground = true)
 @Composable
-fun SettingMenuChipPreview() {
+private fun SettingMenuChipPreview() {
     SettingMenuChip(
         name = "메뉴",
         icon = Icons.Default.Settings

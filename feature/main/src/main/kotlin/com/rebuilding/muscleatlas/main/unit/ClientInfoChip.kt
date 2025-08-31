@@ -79,7 +79,7 @@ internal fun ClientInfoChip(
 
 @Preview(showBackground = true)
 @Composable
-fun ClientInfoChipPreview() {
+private fun ClientInfoChipPreview() {
     ClientInfoChip(
         name = "테스트",
         memo = "평화체육관 고객",

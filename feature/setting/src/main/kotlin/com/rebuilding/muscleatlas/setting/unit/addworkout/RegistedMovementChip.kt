@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
@@ -139,4 +140,26 @@ fun RegistedMovementChip(
             onClick = onClickAdd
         )
     }
+}
+
+@Preview
+@Composable
+private fun RegistedMovementChipPreview() {
+    RegistedMovementChip(
+        movementList = listOf(
+            "세부 동작 1",
+            "세부 동작 1",
+            "세부 동작 1",
+        )
+    )
+}
+
+@Preview
+@Composable
+private fun RegistedMovementChipEmptyPreview() {
+    RegistedMovementChip(
+        movementList = listOf(
+
+        )
+    )
 }

@@ -47,7 +47,7 @@ fun PrimaryButton(
 
 @Preview(showBackground = true)
 @Composable
-fun  PrimaryButtonPreview() {
+private fun  PrimaryButtonPreview() {
     PrimaryButton(
         text = "버튼명"
     )

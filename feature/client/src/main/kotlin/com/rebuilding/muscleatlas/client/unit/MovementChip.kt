@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
@@ -61,4 +64,23 @@ fun MovemenetChip(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun MovementChipPreview() {
+    MovemenetChip(
+        title = "Movement",
+        icon = Icons.Default.Warning,
+        movemenetList = listOf("스쿼트", "벤치프레스", "렛풀다운")
+    )
+}
+
+@Preview
+@Composable
+private fun MovementChipEmptyPreview() {
+    MovemenetChip(
+        title = "Movement",
+        icon = Icons.Default.Warning,
+    )
 }

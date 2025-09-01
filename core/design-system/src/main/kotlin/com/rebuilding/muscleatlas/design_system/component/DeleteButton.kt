@@ -40,7 +40,7 @@ fun DeleteButton(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
             ),
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }

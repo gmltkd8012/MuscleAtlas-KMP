@@ -8,7 +8,7 @@ class UpdateClientUseCase @Inject constructor(
     private val clientRepository: ClientRepository
 ) {
 
-    operator suspend fun invoke(client: Client) {
+    suspend operator fun invoke(client: Client) {
         clientRepository.updateClient(client)
     }
 }

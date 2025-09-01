@@ -16,6 +16,7 @@ import androidx.compose.material.swipeable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -27,11 +28,24 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun SwipeItemChip(
+    itemId: String = "",
+    swipedItemId: String? = null,
+    onSwipe: (String) -> Unit = {},
     onDelete: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     val swipeableState = rememberSwipeableState(initialValue = 0)
     val sizePx = with(LocalDensity.current) { 92.dp.toPx() }
+
+    LaunchedEffect(swipedItemId) {
+        if (swipedItemId != itemId && swipeableState.currentValue != 0) {
+            swipeableState.animateTo(0)
+        }
+    }
+
+    LaunchedEffect(swipeableState.currentValue) {
+        if (swipeableState.currentValue == 1)  onSwipe(itemId)
+    }
 
     Box(
         modifier = Modifier

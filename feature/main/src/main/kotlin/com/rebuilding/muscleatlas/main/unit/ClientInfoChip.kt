@@ -25,14 +25,22 @@ import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 internal fun ClientInfoChip(
+    id: String,
     name: String,
     memo: String,
     profileImg: String? = null,
+    swipedItemId: String? = null,
     onClick: () -> Unit = {},
-    onDelete: () -> Unit = {},
+    onDelete: (String) -> Unit = {},
+    onSwipe: (String) -> Unit = {},
 ) {
     SwipeItemChip(
-        onDelete = onDelete
+        itemId = id,
+        swipedItemId = swipedItemId,
+        onSwipe = onSwipe,
+        onDelete = {
+            onDelete(id)
+        }
     ) {
         Row(
             modifier = Modifier
@@ -81,6 +89,7 @@ internal fun ClientInfoChip(
 @Composable
 private fun ClientInfoChipPreview() {
     ClientInfoChip(
+        id = "",
         name = "테스트",
         memo = "평화체육관 고객",
         profileImg = null

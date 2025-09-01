@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +17,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +65,8 @@ fun ClientMainScreen(
             )
         }
     } else {
+        var swipeItemId by remember { mutableStateOf<String?>(null) }
+
         LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
@@ -68,13 +75,20 @@ fun ClientMainScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState
         ) {
-            items(
-                count = state.clients.size,
-            ) { index ->
+            itemsIndexed(
+                items = state.clients,
+                key = { _, client -> client.id }
+            ) { index, client ->
                 ClientInfoChip(
-                    name = state.clients[index].name,
-                    memo = state.clients[index].memo,
+                    id = client.id,
+                    name = client.name,
+                    memo = client.memo,
+                    swipedItemId = swipeItemId,
+                    onSwipe = { id -> swipeItemId = id },
                     onClick = onClickProfile,
+                    onDelete = { id ->
+                        viewModel.deleteClient(id)
+                    }
                 )
 
                 if (index != state.clients.size - 1) {

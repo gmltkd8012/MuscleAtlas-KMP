@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.main.unit
 
+import android.R.attr.name
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,28 +22,25 @@ import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.ProfileChip
 import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
+import com.rebuilding.muscleatlas.model.Client
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 internal fun ClientInfoChip(
-    id: String,
-    name: String,
-    memo: String,
+    client: Client,
     profileImg: String? = null,
     swipedItemId: String? = null,
     onClick: () -> Unit = {},
     onDelete: (String) -> Unit = {},
-    onEdit: () -> Unit = {},
+    onEdit: (Client) -> Unit = {},
     onSwipe: (String) -> Unit = {},
 ) {
     SwipeItemChip(
-        itemId = id,
+        itemId = client.id,
         swipedItemId = swipedItemId,
         onSwipe = onSwipe,
-        onDelete = {
-            onDelete(id)
-        },
-        onEdit = onEdit
+        onDelete = { onDelete(client.id) },
+        onEdit = { onEdit(client) }
     ) {
         Row(
             modifier = Modifier
@@ -56,7 +54,7 @@ internal fun ClientInfoChip(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             ProfileChip(
-                name = name,
+                name = client.name,
                 size = 48.dp,
                 profileImg = profileImg
             )
@@ -65,7 +63,7 @@ internal fun ClientInfoChip(
 
             Column{
                 BaseText(
-                    text = name,
+                    text = client.name,
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
@@ -76,7 +74,7 @@ internal fun ClientInfoChip(
                 Spacer(Modifier.height(6.dp))
 
                 BaseText(
-                    text = memo,
+                    text = client.memo,
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontSize = 12.sp,
                     ),
@@ -91,9 +89,11 @@ internal fun ClientInfoChip(
 @Composable
 private fun ClientInfoChipPreview() {
     ClientInfoChip(
-        id = "",
-        name = "테스트",
-        memo = "평화체육관 고객",
+        client = Client(
+            id = "",
+            name = "테스트",
+            memo = "평화체육관 고객",
+        ),
         profileImg = null
     )
 }

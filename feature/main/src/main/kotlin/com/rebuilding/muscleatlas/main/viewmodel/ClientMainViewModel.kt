@@ -1,7 +1,5 @@
 package com.rebuilding.muscleatlas.main.viewmodel
 
-import androidx.compose.runtime.State
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rebuilding.muscleatlas.domain.client.DeleteClientUseCase
 import com.rebuilding.muscleatlas.domain.client.GetClientUseCase
@@ -19,7 +17,7 @@ class ClientMainViewModel @Inject constructor(
     private val getClientsUseCase: GetClientUseCase,
     private val updateClientUseCase: UpdateClientUseCase,
     private val deleteClientUseCase: DeleteClientUseCase,
-) : StateReducerViewModel<ClientState, Nothing>(ClientState()) {
+) : StateReducerViewModel<ClientState, ClientMainSideEffect>(ClientState()) {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,4 +40,14 @@ class ClientMainViewModel @Inject constructor(
             deleteClientUseCase(id)
         }
     }
+
+    fun showBottomSheet(client: Client? = null) {
+        viewModelScope.launch {
+            sendSideEffect(ClientMainSideEffect.ShowClientAddBottomSheet(client))
+        }
+    }
+}
+
+sealed interface ClientMainSideEffect {
+    data class ShowClientAddBottomSheet(val client: Client? = null) : ClientMainSideEffect
 }

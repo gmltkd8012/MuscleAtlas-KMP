@@ -1,13 +1,11 @@
 package com.rebuilding.muscleatlas.main.screen
 
-import android.R.attr.name
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,16 +25,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rebuilding.muscleatlas.client.screen.ClientAddScreen
+import com.rebuilding.muscleatlas.client.screen.ClientBottomSheetScreen
 import com.rebuilding.muscleatlas.main.unit.ClientInfoChip
-import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.main.component.MainHeaderBar
+import com.rebuilding.muscleatlas.main.viewmodel.ClientMainSideEffect
 import com.rebuilding.muscleatlas.main.viewmodel.ClientMainViewModel
-import com.rebuilding.muscleatlas.model.Client
 import com.rebuilding.muscleatlas.model.Screen
+import com.rebuilding.muscleatlas.ui.extension.hide
+import com.rebuilding.muscleatlas.ui.extension.isShown
+import com.rebuilding.muscleatlas.ui.extension.rememberClientBottomSheetState
+import com.rebuilding.muscleatlas.ui.extension.show
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,16 +47,25 @@ fun ClientMainScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val listState = rememberLazyListState()
-    var showClientAddBottomSheet by remember { mutableStateOf(false) }
+
+    val bottomSheetState = rememberClientBottomSheetState<ClientMainSideEffect.ShowClientAddBottomSheet>()
+
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is ClientMainSideEffect.ShowClientAddBottomSheet -> {
+                bottomSheetState.show(
+                    client = sideEffect.client
+                )
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
             MainHeaderBar(
                 title = Screen.Client.label,
                 isNeedAdd = true,
-                onClickAdd = {
-                    showClientAddBottomSheet = true
-                }
+                onClickAdd = viewModel::showBottomSheet
             )
         },
     ) { innerPadding ->
@@ -99,14 +109,15 @@ fun ClientMainScreen(
                         key = { _, client -> client.id }
                     ) { index, client ->
                         ClientInfoChip(
-                            id = client.id,
-                            name = client.name,
-                            memo = client.memo,
+                            client = client,
                             swipedItemId = swipeItemId,
                             onSwipe = { id -> swipeItemId = id },
                             onClick = onClickProfile,
                             onDelete = { id ->
                                 viewModel.deleteClient(id)
+                            },
+                            onEdit = { client ->
+                                bottomSheetState.show(client)
                             }
                         )
 
@@ -121,7 +132,7 @@ fun ClientMainScreen(
         }
     }
 
-    if (showClientAddBottomSheet) {
+    if (bottomSheetState.isShown) {
         BaseBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             sheetState = rememberModalBottomSheetState(
@@ -131,21 +142,17 @@ fun ClientMainScreen(
                 },
             ),
             onDismissRequest = {
-                showClientAddBottomSheet = false
+                bottomSheetState.hide()
             },
         ) {
-            ClientAddScreen(
-                onSave = { (name, memo) ->
-                    viewModel.updateClient(
-                        Client(
-                            name = name,
-                            memo = memo
-                        )
-                    )
-                    showClientAddBottomSheet = false
+            ClientBottomSheetScreen(
+                client = bottomSheetState.value,
+                onSave = { client ->
+                    viewModel.updateClient(client)
+                    bottomSheetState.hide()
                 },
                 onDismissRequest = {
-                    showClientAddBottomSheet = false
+                    bottomSheetState.hide()
                 }
             )
         }

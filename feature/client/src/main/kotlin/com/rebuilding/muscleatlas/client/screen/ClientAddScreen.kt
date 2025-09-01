@@ -1,5 +1,7 @@
 package com.rebuilding.muscleatlas.client.screen
 
+import android.R.attr.name
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,15 +27,19 @@ import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
 import com.rebuilding.muscleatlas.model.Client
+import com.rebuilding.muscleatlas.model.ClientBottomSheetData
+import java.util.UUID
 
 @Composable
-fun ClientAddScreen(
-    client: Client? = null,
-    onSave: (Pair<String, String>) -> Unit,
+fun ClientBottomSheetScreen(
+    client: ClientBottomSheetData,
+    onSave: (Client) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var nameTextFiled by remember { mutableStateOf(TextFieldState(client?.name ?: "")) }
-    var memoTextFiled by remember { mutableStateOf(TextFieldState(client?.memo ?: "")) }
+    Log.e("heesang", "[ClientAddBottomSheet] id: ${client.id} | name: ${client.name} | memo: ${client.memo} ")
+
+    var nameTextFiled by remember { mutableStateOf(TextFieldState(client.name ?: "")) }
+    var memoTextFiled by remember { mutableStateOf(TextFieldState(client.memo ?: "")) }
 
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.primary),
@@ -58,7 +64,13 @@ fun ClientAddScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 25.dp),
                 onClick = {
-                    onSave(nameTextFiled.text.toString() to memoTextFiled.text.toString())
+                    onSave(
+                        Client(
+                            id = client.id ?: UUID.randomUUID().toString(),
+                            name = nameTextFiled.text.toString(),
+                            memo = memoTextFiled.text.toString(),
+                        )
+                    )
                 }
             )
         }

@@ -23,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.client.ClientProfileActivity
-import com.rebuilding.muscleatlas.client.screen.ClientAddScreen
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme

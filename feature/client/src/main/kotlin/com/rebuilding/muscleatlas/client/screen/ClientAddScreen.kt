@@ -24,14 +24,16 @@ import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
+import com.rebuilding.muscleatlas.model.Client
 
 @Composable
 fun ClientAddScreen(
+    client: Client? = null,
     onSave: (Pair<String, String>) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var nameTextFiled by remember { mutableStateOf(TextFieldState("")) }
-    var memoTextFiled by remember { mutableStateOf(TextFieldState("")) }
+    var nameTextFiled by remember { mutableStateOf(TextFieldState(client?.name ?: "")) }
+    var memoTextFiled by remember { mutableStateOf(TextFieldState(client?.memo ?: "")) }
 
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.primary),

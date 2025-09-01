@@ -32,6 +32,7 @@ internal fun ClientInfoChip(
     swipedItemId: String? = null,
     onClick: () -> Unit = {},
     onDelete: (String) -> Unit = {},
+    onEdit: () -> Unit = {},
     onSwipe: (String) -> Unit = {},
 ) {
     SwipeItemChip(
@@ -40,7 +41,8 @@ internal fun ClientInfoChip(
         onSwipe = onSwipe,
         onDelete = {
             onDelete(id)
-        }
+        },
+        onEdit = onEdit
     ) {
         Row(
             modifier = Modifier

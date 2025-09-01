@@ -36,7 +36,7 @@ fun ClientBottomSheetScreen(
     onSave: (Client) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    Log.e("heesang", "[ClientAddBottomSheet] id: ${client.id} | name: ${client.name} | memo: ${client.memo} ")
+    Log.e("heesang", "[ClientAddBottomSheet] id: ${client.id} | name: ${client.name} | memo: ${client.memo} | currentMills: ${client.currentMills} ")
 
     var nameTextFiled by remember { mutableStateOf(TextFieldState(client.name ?: "")) }
     var memoTextFiled by remember { mutableStateOf(TextFieldState(client.memo ?: "")) }
@@ -67,8 +67,10 @@ fun ClientBottomSheetScreen(
                     onSave(
                         Client(
                             id = client.id ?: UUID.randomUUID().toString(),
+                            imgUrl = null,
                             name = nameTextFiled.text.toString(),
                             memo = memoTextFiled.text.toString(),
+                            currentMills = client.currentMills ?: System.currentTimeMillis(),
                         )
                     )
                 }

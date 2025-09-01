@@ -11,18 +11,24 @@ import java.util.UUID
 data class ClientEntity(
     @PrimaryKey
     val id: String,
+    val imgUrl: String?,
     val name: String,
     val memo: String,
+    val currentMills: Long,
 )
 
 fun ClientEntity.asExternalModel() = Client(
     id = id,
+    imgUrl = imgUrl,
     name = name,
     memo = memo,
+    currentMills = currentMills,
 )
 
 fun Client.asEntity() = ClientEntity(
     id = id,
+    imgUrl = imgUrl,
     name = name,
     memo = memo,
+    currentMills = currentMills,
 )

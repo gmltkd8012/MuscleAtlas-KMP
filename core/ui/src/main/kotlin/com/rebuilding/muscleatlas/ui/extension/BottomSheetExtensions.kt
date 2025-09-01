@@ -17,15 +17,17 @@ fun <SideEffect> rememberClientBottomSheetState(
 ): ClientBottomSheetState = rememberSaveable(
     saver = Saver<MutableState<ClientBottomSheetData>, List<Any?>>(
         save = {
-            listOf(it.value.isShown, it.value.id, it.value.name, it.value.memo)
+            listOf(it.value.isShown, it.value.imgUrl, it.value.id, it.value.name, it.value.memo, it.value.currentMills)
         },
         restore = { list ->
             mutableStateOf(
                 ClientBottomSheetData(
                     isShown = list[0] as Boolean,
-                    id = list[1] as String?,
-                    name = list[2] as String?,
-                    memo = list[3] as String?,
+                    imgUrl = list[1] as String?,
+                    id = list[2] as String?,
+                    name = list[3] as String?,
+                    memo = list[4] as String?,
+                    currentMills = list[5] as Long?,
                 )
             )
         }
@@ -41,17 +43,21 @@ fun ClientBottomSheetState.show(
 ) {
     this.value = this.value.copy(
         isShown = true,
+        imgUrl = client?.imgUrl,
         id = client?.id,
         name = client?.name ?: "",
         memo = client?.memo ?: "",
+        currentMills = client?.currentMills,
     )
 }
 
 fun ClientBottomSheetState.hide() {
     this.value = this.value.copy(
         isShown = false,
+        imgUrl = null,
         id = null,
         name = null,
         memo = null,
+        currentMills = null,
     )
 }

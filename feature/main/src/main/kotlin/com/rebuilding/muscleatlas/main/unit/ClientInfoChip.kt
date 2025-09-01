@@ -91,8 +91,10 @@ private fun ClientInfoChipPreview() {
     ClientInfoChip(
         client = Client(
             id = "",
+            imgUrl = null,
             name = "테스트",
             memo = "평화체육관 고객",
+            currentMills = System.currentTimeMillis(),
         ),
         profileImg = null
     )

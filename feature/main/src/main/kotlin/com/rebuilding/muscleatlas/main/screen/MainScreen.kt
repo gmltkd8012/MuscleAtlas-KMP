@@ -42,55 +42,30 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel<MainViewModel>()
 ) {
     val context = LocalContext.current
-    val state by viewModel.state.collectAsState()
-
     val navController = rememberNavController()
-    var headerTitle by remember { mutableStateOf<String>("") }
-
-    var showScreen by remember { mutableStateOf<Screen>(Screen.Client) }
-    var showClientAddBottomSheet by remember { mutableStateOf(false) }
-
 
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.primary),
-        topBar = {
-            MainHeaderBar(
-                title = headerTitle,
-                isNeedAdd = showScreen == Screen.Client,
-                onClickAdd = {
-                    showClientAddBottomSheet = true
-                }
-            )
-        },
         bottomBar = {
             BottomNavigationBar(navController, Screen.allScreens)
         }
-    ) { innerPadding ->
+    ) { _ ->
         NavHost(
-            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = Screen.Client.route,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
         ) {
             composable(Screen.Client.route) {
-                headerTitle = Screen.Client.label
-                showScreen = Screen.Client
                 ClientMainScreen(
-                    isShowBottomSheet = showClientAddBottomSheet,
                     onClickProfile = {
                         context.startActivity<ClientProfileActivity>(
                             "theme" to isDarkTheme
                         )
                     },
-                    onDismissBottomSheet = {
-                        showClientAddBottomSheet = false
-                    }
                 )
             }
             composable(Screen.Setting.route) {
-                headerTitle = Screen.Setting.label
-                showScreen = Screen.Setting
                 SettingMainScreen(
                     onClickMenu = { route ->
                         context.startActivity<SettingActivity>(

@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -32,75 +33,95 @@ import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
+import com.rebuilding.muscleatlas.main.component.MainHeaderBar
 import com.rebuilding.muscleatlas.main.viewmodel.ClientMainViewModel
 import com.rebuilding.muscleatlas.model.Client
+import com.rebuilding.muscleatlas.model.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientMainScreen(
     viewModel: ClientMainViewModel = hiltViewModel(),
-    isShowBottomSheet: Boolean = false,
     onClickProfile: () -> Unit = {},
-    onDismissBottomSheet: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
-
     val listState = rememberLazyListState()
+    var showClientAddBottomSheet by remember { mutableStateOf(false) }
 
-    if (state.clients.isEmpty()) {
+    Scaffold(
+        topBar = {
+            MainHeaderBar(
+                title = Screen.Client.label,
+                isNeedAdd = true,
+                onClickAdd = {
+                    showClientAddBottomSheet = true
+                }
+            )
+        },
+    ) { innerPadding ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(horizontal = 16.dp),
-            contentAlignment = Alignment.Center
         ) {
-            BaseText(
-                text = "회원을 등록해 주세요.",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight(500)
-                ),
-                color = MaterialTheme.colorScheme.onSecondary
-            )
-        }
-    } else {
-        var swipeItemId by remember { mutableStateOf<String?>(null) }
-
-        LazyColumn (
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = listState
-        ) {
-            itemsIndexed(
-                items = state.clients,
-                key = { _, client -> client.id }
-            ) { index, client ->
-                ClientInfoChip(
-                    id = client.id,
-                    name = client.name,
-                    memo = client.memo,
-                    swipedItemId = swipeItemId,
-                    onSwipe = { id -> swipeItemId = id },
-                    onClick = onClickProfile,
-                    onDelete = { id ->
-                        viewModel.deleteClient(id)
-                    }
-                )
-
-                if (index != state.clients.size - 1) {
-                    BaseLine(
-                        lineColor = MaterialTheme.colorScheme.secondary
+            if (state.clients.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    BaseText(
+                        text = "회원을 등록해 주세요.",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight(500)
+                        ),
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
+                }
+            } else {
+                var swipeItemId by remember { mutableStateOf<String?>(null) }
+
+                LazyColumn (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    state = listState
+                ) {
+                    itemsIndexed(
+                        items = state.clients,
+                        key = { _, client -> client.id }
+                    ) { index, client ->
+                        ClientInfoChip(
+                            id = client.id,
+                            name = client.name,
+                            memo = client.memo,
+                            swipedItemId = swipeItemId,
+                            onSwipe = { id -> swipeItemId = id },
+                            onClick = onClickProfile,
+                            onDelete = { id ->
+                                viewModel.deleteClient(id)
+                            }
+                        )
+
+                        if (index != state.clients.size - 1) {
+                            BaseLine(
+                                lineColor = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 
-    if (isShowBottomSheet) {
+    if (showClientAddBottomSheet) {
         BaseBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             sheetState = rememberModalBottomSheetState(
@@ -109,7 +130,9 @@ fun ClientMainScreen(
                     state != SheetValue.PartiallyExpanded
                 },
             ),
-            onDismissRequest = onDismissBottomSheet,
+            onDismissRequest = {
+                showClientAddBottomSheet = false
+            },
         ) {
             ClientAddScreen(
                 onSave = { (name, memo) ->
@@ -119,9 +142,11 @@ fun ClientMainScreen(
                             memo = memo
                         )
                     )
-                    onDismissBottomSheet()
+                    showClientAddBottomSheet = false
                 },
-                onDismissRequest = onDismissBottomSheet
+                onDismissRequest = {
+                    showClientAddBottomSheet = false
+                }
             )
         }
     }

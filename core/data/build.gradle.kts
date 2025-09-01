@@ -1,13 +1,19 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    alias(libs.plugins.library)
+    alias(libs.plugins.lib.flavor)
+    alias(libs.plugins.lib.compose)
+    alias(libs.plugins.all.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+
+
+android {
+    namespace = "com.rebuilding.muscleatlas.data"
 }
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-    }
+
+dependencies {
+    implementation(project(":core:util"))
+    implementation(project(":core:model"))
+    implementation(project(":core:room"))
+    implementation(project(":core:datastore"))
 }

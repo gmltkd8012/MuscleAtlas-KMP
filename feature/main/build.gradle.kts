@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:client"))
     implementation(project(":feature:setting"))
 }

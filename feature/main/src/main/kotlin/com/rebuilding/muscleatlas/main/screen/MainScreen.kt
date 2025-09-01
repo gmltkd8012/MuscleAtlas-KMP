@@ -23,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.client.ClientProfileActivity
-import com.rebuilding.muscleatlas.client.screen.ClientAddScreen
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme
@@ -42,48 +41,30 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel<MainViewModel>()
 ) {
     val context = LocalContext.current
-    val state by viewModel.state.collectAsState()
-
     val navController = rememberNavController()
-    var headerTitle by remember { mutableStateOf<String>("") }
-
-    var showClientAddBottomSheet by remember { mutableStateOf(false) }
-
 
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.primary),
-        topBar = {
-            MainHeaderBar(
-                title = headerTitle,
-                isNeedAdd = true,
-                onClickAdd = {
-                    showClientAddBottomSheet = true
-                }
-            )
-        },
         bottomBar = {
             BottomNavigationBar(navController, Screen.allScreens)
         }
-    ) { innerPadding ->
+    ) { _ ->
         NavHost(
-            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = Screen.Client.route,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
         ) {
             composable(Screen.Client.route) {
-                headerTitle = Screen.Client.label
                 ClientMainScreen(
                     onClickProfile = {
                         context.startActivity<ClientProfileActivity>(
                             "theme" to isDarkTheme
                         )
-                    }
+                    },
                 )
             }
             composable(Screen.Setting.route) {
-                headerTitle = Screen.Setting.label
                 SettingMainScreen(
                     onClickMenu = { route ->
                         context.startActivity<SettingActivity>(
@@ -97,28 +78,5 @@ fun MainScreen(
             }
         }
     }
-
-    if (showClientAddBottomSheet) {
-        BaseBottomSheet(
-            modifier = Modifier.fillMaxWidth(),
-            sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true,
-                confirmValueChange = { state ->
-                    state != SheetValue.PartiallyExpanded
-                },
-            ),
-            onDismissRequest = {
-                showClientAddBottomSheet = false
-
-            },
-        ) {
-            ClientAddScreen(
-                onDismissRequest = {
-                    showClientAddBottomSheet = false
-                }
-            )
-        }
-    }
-
 }
 

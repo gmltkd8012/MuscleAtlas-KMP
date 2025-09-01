@@ -47,6 +47,7 @@ fun MainScreen(
     val navController = rememberNavController()
     var headerTitle by remember { mutableStateOf<String>("") }
 
+    var showScreen by remember { mutableStateOf<Screen>(Screen.Client) }
     var showClientAddBottomSheet by remember { mutableStateOf(false) }
 
 
@@ -55,7 +56,7 @@ fun MainScreen(
         topBar = {
             MainHeaderBar(
                 title = headerTitle,
-                isNeedAdd = true,
+                isNeedAdd = showScreen == Screen.Client,
                 onClickAdd = {
                     showClientAddBottomSheet = true
                 }
@@ -74,16 +75,22 @@ fun MainScreen(
         ) {
             composable(Screen.Client.route) {
                 headerTitle = Screen.Client.label
+                showScreen = Screen.Client
                 ClientMainScreen(
+                    isShowBottomSheet = showClientAddBottomSheet,
                     onClickProfile = {
                         context.startActivity<ClientProfileActivity>(
                             "theme" to isDarkTheme
                         )
+                    },
+                    onDismissBottomSheet = {
+                        showClientAddBottomSheet = false
                     }
                 )
             }
             composable(Screen.Setting.route) {
                 headerTitle = Screen.Setting.label
+                showScreen = Screen.Setting
                 SettingMainScreen(
                     onClickMenu = { route ->
                         context.startActivity<SettingActivity>(
@@ -97,28 +104,5 @@ fun MainScreen(
             }
         }
     }
-
-    if (showClientAddBottomSheet) {
-        BaseBottomSheet(
-            modifier = Modifier.fillMaxWidth(),
-            sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true,
-                confirmValueChange = { state ->
-                    state != SheetValue.PartiallyExpanded
-                },
-            ),
-            onDismissRequest = {
-                showClientAddBottomSheet = false
-
-            },
-        ) {
-            ClientAddScreen(
-                onDismissRequest = {
-                    showClientAddBottomSheet = false
-                }
-            )
-        }
-    }
-
 }
 

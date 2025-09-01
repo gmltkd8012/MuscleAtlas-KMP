@@ -6,6 +6,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.rebuilding.muscleatlas.room.dao.ClientDao
+import com.rebuilding.muscleatlas.room.model.ClientEntity
 
 /**************************************************************************************************
 * title : App Database
@@ -18,37 +20,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [
-
+        ClientEntity::class,
     ],
     version = 1
 )
-
-abstract class AppDatabase : RoomDatabase() {
-
-    companion object {
-        const val ROOM_DB_NAME = "muscle_atlas_db"
-
-        @Volatile
-        private var instance: AppDatabase? = null
-
-        private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context, AppDatabase::class.java, ROOM_DB_NAME)
-                .addCallback(roomDatabaseCallBack)
-                .build()
-
-        private val roomDatabaseCallBack = object : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                instance?.let { database ->
-
-                }
-            }
-        }
-
-        private fun getDatabase(context: Context): AppDatabase =
-            instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
-            }
-    }
-
+internal abstract class MuscleAtlasDatabase : RoomDatabase() {
+    abstract fun clientDao(): ClientDao
 }

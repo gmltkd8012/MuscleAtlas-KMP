@@ -27,6 +27,7 @@ import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
 
 @Composable
 fun ClientAddScreen(
+    onSave: (Pair<String, String>) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     var nameTextFiled by remember { mutableStateOf(TextFieldState("")) }
@@ -55,7 +56,7 @@ fun ClientAddScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 25.dp),
                 onClick = {
-                    onDismissRequest()
+                    onSave(nameTextFiled.text.toString() to memoTextFiled.text.toString())
                 }
             )
         }

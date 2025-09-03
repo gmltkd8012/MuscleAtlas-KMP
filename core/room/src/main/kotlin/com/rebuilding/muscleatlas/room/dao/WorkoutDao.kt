@@ -18,4 +18,17 @@ interface WorkoutDao {
 
     @Query("DELETE FROM workouts WHERE id = :workoutId")
     suspend fun deleteWorkout(workoutId: String)
+
+
+//    @Query("""
+//        SELECT  w.id AS workout_id,
+//                w.title AS workout_title,
+//                m.id AS movement_id,
+//                m.title AS movement_title,
+//                m.type
+//        FROM workouts w
+//        JOIN movements m ON w.id = m.workoutId
+//        WHERE w.id = :workoutId
+//    """)
+//    suspend fun getWorkoutWithMovement(): Flow<List<WorkoutEntity>>
 }

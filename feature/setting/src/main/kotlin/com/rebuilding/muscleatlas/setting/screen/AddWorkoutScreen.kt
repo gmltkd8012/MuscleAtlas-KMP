@@ -20,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,19 +31,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
 import com.rebuilding.muscleatlas.setting.unit.addworkout.RegistedMovementChip
+import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWorkoutScreen(
+    viewModel: WorkoutAddViewModel = hiltViewModel(),
     onClickBack: () -> Unit = {},
     onClickSave: () -> Unit = {},
 ) {
+    val state by viewModel.state.collectAsState()
+
     var textNameFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
 
@@ -49,6 +56,10 @@ fun AddWorkoutScreen(
 
     BackHandler {
         onClickBack()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getMovement(null)
     }
 
     Box (
@@ -73,16 +84,9 @@ fun AddWorkoutScreen(
             )
 
             RegistedMovementChip(
-                movementList = listOf(
-                    "자세 1",
-                    "자세 2",
-                    "자세 3",
-                    "자세 4",
-                    "자세 5",
-                    "자세 6",
-                    "자세 7",
-                    "자세 8",
-                ),
+                joinMovementList = state.joinMovementList,
+                stabilizationMechanismList = state.stabilizationMechanismList,
+                muscularRelationList = state.joinMovementList,
                 onClickEdit = {
                     movementBottomSheet = true
                 },

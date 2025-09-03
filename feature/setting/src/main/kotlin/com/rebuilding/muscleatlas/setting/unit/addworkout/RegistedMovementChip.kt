@@ -27,12 +27,16 @@ import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseTabRow
 import com.rebuilding.muscleatlas.design_system.component.SwipeItemChip
 import com.rebuilding.muscleatlas.model.Movement
+import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
+import com.rebuilding.muscleatlas.util.MovementUtils
 import kotlinx.coroutines.launch
 
 @Composable
 fun RegistedMovementChip(
-    movementList: List<String> = emptyList<String>(),
+    joinMovementList: List<MovementData> = emptyList<MovementData>(),
+    stabilizationMechanismList: List<MovementData> = emptyList<MovementData>(),
+    muscularRelationList: List<MovementData> = emptyList<MovementData>(),
     onClickEdit: () -> Unit = {},
     onClickAdd: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -58,74 +62,139 @@ fun RegistedMovementChip(
             textAlign = TextAlign.Start
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(16.dp))
 
-        if (movementList.isEmpty()) {
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                BaseText(
-                    text = "세부 동작을 등록해 주세요.",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight(500)
-                    ),
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
+        BaseTabRow(
+            tabList = Movement.allMovements,
+            currentTabIndex = currentTabIndex,
+            onTabSelected = { index ->
+                scope.launch { pagerState.scrollToPage(index) }
             }
-        } else {
-            Spacer(Modifier.height(8.dp))
-
-            BaseTabRow(
-                tabList = Movement.allMovements,
-                currentTabIndex = currentTabIndex,
-                onTabSelected = { index ->
-                    scope.launch { pagerState.scrollToPage(index) }
-                }
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxSize(),
+                userScrollEnabled = true,
             ) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    userScrollEnabled = true,
-                ) {
-                    Column {
-                        Spacer(Modifier.height(16.dp))
+                Column {
+                    Spacer(Modifier.height(16.dp))
 
-                        movementList.forEachIndexed { index, name ->
-                            SwipeItemChip(
-                                onDelete = onClickDelete
-                            ) {
-                                WorkoutManageChip(
-                                    name = "${Movement.allMovements[currentTabIndex].title} $index",
-                                    //modifier = Modifier.padding(vertical = 16.dp),
-                                    onClick = onClickEdit
-                                )
+                    when(currentTabIndex) {
+                        MovementUtils.TYPE_JOIN_MOVEMENT -> {
+                            if (joinMovementList.isEmpty()) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .height(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    BaseText(
+                                        text = "${Movement.JoinMovement.title}을 등록해 주세요.",
+                                        style = MaterialTheme.typography.titleLarge.copy(
+                                            fontSize = 24.sp,
+                                            fontWeight = FontWeight(500)
+                                        ),
+                                        color = MaterialTheme.colorScheme.onSecondary
+                                    )
+                                }
+                            } else {
+                                joinMovementList.forEachIndexed { index, data ->
+                                    SwipeItemChip(
+                                        onDelete = onClickDelete
+                                    ) {
+                                        WorkoutManageChip(
+                                            name = data.title,
+                                            //modifier = Modifier.padding(vertical = 16.dp),
+                                            onClick = onClickEdit
+                                        )
+                                    }
+
+                                    if (index != joinMovementList.lastIndex) {
+                                        BaseLine(
+                                            lineColor = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                }
                             }
+                        }
 
-                            if (index != movementList.lastIndex) {
-                                BaseLine(
-                                    lineColor = MaterialTheme.colorScheme.secondary
-                                )
+                        MovementUtils.TYPE_STABILIZATION_MECHANISM -> {
+                            if (stabilizationMechanismList.isEmpty()) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .height(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    BaseText(
+                                        text = "${Movement.StabilizationMechanism.title}을 등록해 주세요.",
+                                        style = MaterialTheme.typography.titleLarge.copy(
+                                            fontSize = 24.sp,
+                                            fontWeight = FontWeight(500)
+                                        ),
+                                        color = MaterialTheme.colorScheme.onSecondary
+                                    )
+                                }
+                            } else {
+                                stabilizationMechanismList.forEachIndexed { index, data ->
+                                    SwipeItemChip(
+                                        onDelete = onClickDelete
+                                    ) {
+                                        WorkoutManageChip(
+                                            name = data.title,
+                                            //modifier = Modifier.padding(vertical = 16.dp),
+                                            onClick = onClickEdit
+                                        )
+                                    }
+
+                                    if (index != stabilizationMechanismList.lastIndex) {
+                                        BaseLine(
+                                            lineColor = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        MovementUtils.TYPE_MUSCULAR_RELATION -> {
+                            if (stabilizationMechanismList.isEmpty()) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .height(200.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    BaseText(
+                                        text = "${Movement.NeuromuscularRelation.title}을 등록해 주세요.",
+                                        style = MaterialTheme.typography.titleLarge.copy(
+                                            fontSize = 24.sp,
+                                            fontWeight = FontWeight(500)
+                                        ),
+                                        color = MaterialTheme.colorScheme.onSecondary
+                                    )
+                                }
+                            } else {
+                                muscularRelationList.forEachIndexed { index, data ->
+                                    SwipeItemChip(
+                                        onDelete = onClickDelete
+                                    ) {
+                                        WorkoutManageChip(
+                                            name = data.title,
+                                            //modifier = Modifier.padding(vertical = 16.dp),
+                                            onClick = onClickEdit
+                                        )
+                                    }
+
+                                    if (index != muscularRelationList.lastIndex) {
+                                        BaseLine(
+                                            lineColor = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
-
-
-
-//                    when (currentTabIndex) {
-//                        0 -> {
-//
-//                        }
-//                        1 -> {
-//
-//                        }
-//                        2 -> {
-//
-//                        }
-//
-//
-//                    }
                 }
             }
         }
@@ -145,21 +214,11 @@ fun RegistedMovementChip(
 @Preview
 @Composable
 private fun RegistedMovementChipPreview() {
-    RegistedMovementChip(
-        movementList = listOf(
-            "세부 동작 1",
-            "세부 동작 1",
-            "세부 동작 1",
-        )
-    )
+    RegistedMovementChip()
 }
 
 @Preview
 @Composable
 private fun RegistedMovementChipEmptyPreview() {
-    RegistedMovementChip(
-        movementList = listOf(
-
-        )
-    )
+    RegistedMovementChip()
 }

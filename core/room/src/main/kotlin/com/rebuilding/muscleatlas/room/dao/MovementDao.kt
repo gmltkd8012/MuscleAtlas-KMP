@@ -14,7 +14,7 @@ interface MovementDao {
     fun getAllMovements(): Flow<List<MovementEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovement(movement: MovementEntity)
+    suspend fun insertMovement(movement: List<MovementEntity>)
 
     @Query("DELETE FROM movements WHERE id = :movementId")
     suspend fun deleteMovement(movementId: String)

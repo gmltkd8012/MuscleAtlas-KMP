@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.text.TextUtils.isEmpty
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,26 +15,32 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseLine
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
 import com.rebuilding.muscleatlas.setting.unit.workoutmanage.WorkoutManageChip
+import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutManageViewModel
 
 @Composable
 fun WorkoutManageScreen(
+    viewModel: WorkoutManageViewModel = hiltViewModel(),
     onClickEditWorkout: () -> Unit = {},
     onClickAddWorkout: () -> Unit = {},
 ) {
-    val test = listOf<String>("운동 1", "운동 2", "운동 3")
+    val state by viewModel.state.collectAsState()
 
     Column (
         modifier = Modifier
@@ -45,7 +52,7 @@ fun WorkoutManageScreen(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (test.isEmpty()) {
+        if (state.workouts.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxWidth().weight(1f),
                 contentAlignment = Alignment.Center
@@ -66,17 +73,18 @@ fun WorkoutManageScreen(
                 state = listState,
                 contentPadding = PaddingValues(bottom = 20.dp)
             ) {
-                items(
-                    count = test.size
-                ) { index ->
+                itemsIndexed(
+                    items = state.workouts,
+                    key = { _, workout -> workout.id }
+                ) { index, workout ->
                     WorkoutManageChip(
-                        name = test[index],
+                        name = workout.title,
                         onClick = {
                             onClickEditWorkout()
                         },
                     )
 
-                    if (index != test.size - 1) {
+                    if (index != state.workouts.size - 1) {
                         BaseLine(
                             lineColor = MaterialTheme.colorScheme.secondary
                         )

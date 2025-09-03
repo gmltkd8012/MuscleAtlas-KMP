@@ -1,5 +1,7 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.R.attr.type
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,14 +28,18 @@ import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.BaseTopBar
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
+import com.rebuilding.muscleatlas.model.MovementData
+import com.rebuilding.muscleatlas.model.MovmentBottomSheetData
+import com.rebuilding.muscleatlas.ui.extension.MovementBottomSheetState
+import java.util.UUID
 
 @Composable
 fun MovementBottomSheetScreen(
-    onDismissRequest: () -> Unit,
+    state: MovementBottomSheetState,
+    onSaveMovement: (MovementData) -> Unit,
 ) {
-
-    var titleTextFiled by remember { mutableStateOf(TextFieldState("")) }
-    var descriptionTextFiled by remember { mutableStateOf(TextFieldState("")) }
+    var titleTextFiled by remember { mutableStateOf(TextFieldState(state.value.title ?: "")) }
+    var descriptionTextFiled by remember { mutableStateOf(TextFieldState(state.value.description ?: "")) }
 
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.primary),
@@ -58,7 +64,19 @@ fun MovementBottomSheetScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 25.dp),
                 onClick = {
-                    onDismissRequest()
+                    if (titleTextFiled.text.length > 0 && descriptionTextFiled.text.length > 0) {
+                        onSaveMovement(
+                            MovementData(
+                                id = UUID.randomUUID().toString(),
+                                workoutId = state.value.workoutId ?: "ERROR",
+                                type = state.value.type ?: -1,
+                                imgUrl = null,
+                                title = titleTextFiled.text.toString(),
+                                description = descriptionTextFiled.text.toString(),
+                                currentMills = System.currentTimeMillis(),
+                            )
+                        )
+                    }
                 }
             )
         }

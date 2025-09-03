@@ -38,7 +38,7 @@ fun RegistedMovementChip(
     stabilizationMechanismList: List<MovementData> = emptyList<MovementData>(),
     muscularRelationList: List<MovementData> = emptyList<MovementData>(),
     onClickEdit: () -> Unit = {},
-    onClickAdd: () -> Unit = {},
+    onClickAdd: (Int) -> Unit = {},
     onClickDelete: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
@@ -158,7 +158,7 @@ fun RegistedMovementChip(
                         }
 
                         MovementUtils.TYPE_MUSCULAR_RELATION -> {
-                            if (stabilizationMechanismList.isEmpty()) {
+                            if (muscularRelationList.isEmpty()) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -206,7 +206,9 @@ fun RegistedMovementChip(
             text = "${Movement.allMovements[currentTabIndex].title} 종목 추가",
             icon = Icons.Default.Add,
             color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f),
-            onClick = onClickAdd
+            onClick = {
+                onClickAdd(currentTabIndex)
+            }
         )
     }
 }

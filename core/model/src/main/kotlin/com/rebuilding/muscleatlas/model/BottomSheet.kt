@@ -10,3 +10,13 @@ data class ClientBottomSheetData(
     val memo: String? = null,
     val currentMills: Long? = null,
 )
+
+data class MovmentBottomSheetData(
+    val isShown: Boolean = false,
+    val imgUrl: String? = null,
+    val type: Int? = null,
+    val id: String? = null,
+    val title: String? = null,
+    val description: String? = null,
+    val currentMills: Long? = null,
+)

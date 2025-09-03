@@ -37,8 +37,14 @@ import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
+import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.setting.unit.addworkout.RegistedMovementChip
+import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddSdieEffect
 import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddViewModel
+import com.rebuilding.muscleatlas.ui.extension.hide
+import com.rebuilding.muscleatlas.ui.extension.isShown
+import com.rebuilding.muscleatlas.ui.extension.rememberMovementBottomSheetState
+import com.rebuilding.muscleatlas.ui.extension.show
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +58,7 @@ fun AddWorkoutScreen(
     var textNameFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
 
-    var movementBottomSheet by remember { mutableStateOf(false) }
+    val movementAddBottomSheet = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
 
     BackHandler {
         onClickBack()
@@ -60,6 +66,16 @@ fun AddWorkoutScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getMovement(null)
+    }
+
+    viewModel.collectSideEffect { sideEffect ->
+        when(sideEffect) {
+            is WorkoutAddSdieEffect.ShowMovementAddBottomSheet -> {
+                movementAddBottomSheet.show(
+                    movement = sideEffect.movement
+                )
+            }
+        }
     }
 
     Box (
@@ -86,12 +102,21 @@ fun AddWorkoutScreen(
             RegistedMovementChip(
                 joinMovementList = state.joinMovementList,
                 stabilizationMechanismList = state.stabilizationMechanismList,
-                muscularRelationList = state.joinMovementList,
+                muscularRelationList = state.neuromuscularRelationList,
                 onClickEdit = {
-                    movementBottomSheet = true
                 },
-                onClickAdd = {
-                    movementBottomSheet = true
+                onClickAdd = { type ->
+                    viewModel.showMovementBottomSheet(
+                        MovementData(
+                            id = "",
+                            workoutId = "test_id_0001",
+                            type = type,
+                            imgUrl = null,
+                            title = "",
+                            description = "",
+                            currentMills = 0L,
+                        )
+                    )
                 }
             )
 
@@ -135,7 +160,7 @@ fun AddWorkoutScreen(
         }
     }
 
-    if (movementBottomSheet) {
+    if (movementAddBottomSheet.isShown) {
         BaseBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             sheetState = rememberModalBottomSheetState(
@@ -145,12 +170,16 @@ fun AddWorkoutScreen(
                 },
             ),
             onDismissRequest = {
-                movementBottomSheet = false
+                movementAddBottomSheet.hide()
             },
         ) {
             MovementBottomSheetScreen(
-                onDismissRequest = {
-                    movementBottomSheet = false
+                type = movementAddBottomSheet.value.type ?: -1,
+                workoutId = "test_id_0001",
+                onSaveMovement = { movement ->
+                    // TODO - UI 변경 사항 반영
+                    viewModel.updateMovementUI(movement)
+                    movementAddBottomSheet.hide()
                 }
             )
         }

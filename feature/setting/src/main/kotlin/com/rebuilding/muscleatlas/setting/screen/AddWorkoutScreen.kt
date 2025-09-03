@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.R.attr.type
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -58,7 +59,7 @@ fun AddWorkoutScreen(
     var textNameFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
 
-    val movementAddBottomSheet = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
+    val movementAddBottomSheetState = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
 
     BackHandler {
         onClickBack()
@@ -71,7 +72,7 @@ fun AddWorkoutScreen(
     viewModel.collectSideEffect { sideEffect ->
         when(sideEffect) {
             is WorkoutAddSdieEffect.ShowMovementAddBottomSheet -> {
-                movementAddBottomSheet.show(
+                movementAddBottomSheetState.show(
                     movement = sideEffect.movement
                 )
             }
@@ -103,7 +104,8 @@ fun AddWorkoutScreen(
                 joinMovementList = state.joinMovementList,
                 stabilizationMechanismList = state.stabilizationMechanismList,
                 muscularRelationList = state.neuromuscularRelationList,
-                onClickEdit = {
+                onClickEdit = { movement ->
+                    viewModel.showMovementBottomSheet(movement)
                 },
                 onClickAdd = { type ->
                     viewModel.showMovementBottomSheet(
@@ -160,7 +162,7 @@ fun AddWorkoutScreen(
         }
     }
 
-    if (movementAddBottomSheet.isShown) {
+    if (movementAddBottomSheetState.isShown) {
         BaseBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             sheetState = rememberModalBottomSheetState(
@@ -170,16 +172,14 @@ fun AddWorkoutScreen(
                 },
             ),
             onDismissRequest = {
-                movementAddBottomSheet.hide()
+                movementAddBottomSheetState.hide()
             },
         ) {
             MovementBottomSheetScreen(
-                type = movementAddBottomSheet.value.type ?: -1,
-                workoutId = "test_id_0001",
+                state = movementAddBottomSheetState,
                 onSaveMovement = { movement ->
-                    // TODO - UI 변경 사항 반영
                     viewModel.updateMovementUI(movement)
-                    movementAddBottomSheet.hide()
+                    movementAddBottomSheetState.hide()
                 }
             )
         }

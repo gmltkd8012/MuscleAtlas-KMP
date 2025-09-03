@@ -71,7 +71,6 @@ class WorkoutAddViewModel @Inject constructor(
                     }
                 }
                 MovementUtils.TYPE_MUSCULAR_RELATION -> {
-                    Log.d("heesang", "updateMovementUI: $movement")
                     reduceState {
                         copy(
                             neuromuscularRelationList = state.value.neuromuscularRelationList + movement

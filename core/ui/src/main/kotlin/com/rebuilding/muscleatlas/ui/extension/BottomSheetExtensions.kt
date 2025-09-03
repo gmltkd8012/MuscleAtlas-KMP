@@ -46,18 +46,19 @@ fun <SideEffect> rememberMovementBottomSheetState(
 ): MovementBottomSheetState = rememberSaveable(
     saver = Saver<MutableState<MovmentBottomSheetData>, List<Any?>>(
         save = {
-            listOf(it.value.isShown, it.value.imgUrl, it.value.type, it.value.id, it.value.title, it.value.description, it.value.currentMills)
+            listOf(it.value.isShown, it.value.id, it.value.workoutId, it.value.imgUrl, it.value.type, it.value.title, it.value.description, it.value.currentMills)
         },
         restore = {
             mutableStateOf(
                 MovmentBottomSheetData(
                     isShown = it[0] as Boolean,
-                    imgUrl = it[1] as String?,
-                    type = it[2] as Int?,
-                    id = it[3] as String?,
-                    title = it[4] as String?,
-                    description = it[5] as String?,
-                    currentMills = it[6] as Long
+                    id = it[1] as String?,
+                    workoutId = it[2] as String?,
+                    imgUrl = it[3] as String?,
+                    type = it[4] as Int?,
+                    title = it[5] as String?,
+                    description = it[6] as String?,
+                    currentMills = it[7] as Long
                 )
             )
         }
@@ -92,9 +93,10 @@ fun MovementBottomSheetState.show(
 ) {
     this.value = this.value.copy(
         isShown = true,
+        id = movement?.id,
+        workoutId = movement?.workoutId,
         imgUrl = movement?.imgUrl,
         type = movement?.type,
-        id = movement?.id,
         title = movement?.title ?: "",
         description = movement?.description ?: "",
         currentMills = movement?.currentMills,
@@ -117,9 +119,10 @@ fun ClientBottomSheetState.hide() {
 fun MovementBottomSheetState.hide() {
     this.value = this.value.copy(
         isShown = false,
+        id = null,
+        workoutId = null,
         imgUrl = null,
         type = null,
-        id = null,
         title = null,
         description = null,
         currentMills = null,

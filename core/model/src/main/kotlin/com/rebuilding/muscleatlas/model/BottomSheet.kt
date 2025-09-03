@@ -13,9 +13,10 @@ data class ClientBottomSheetData(
 
 data class MovmentBottomSheetData(
     val isShown: Boolean = false,
+    val id: String? = null,
+    val workoutId: String? = null,
     val imgUrl: String? = null,
     val type: Int? = null,
-    val id: String? = null,
     val title: String? = null,
     val description: String? = null,
     val currentMills: Long? = null,

@@ -37,7 +37,7 @@ fun RegistedMovementChip(
     joinMovementList: List<MovementData> = emptyList<MovementData>(),
     stabilizationMechanismList: List<MovementData> = emptyList<MovementData>(),
     muscularRelationList: List<MovementData> = emptyList<MovementData>(),
-    onClickEdit: () -> Unit = {},
+    onClickEdit: (MovementData) -> Unit = {},
     onClickAdd: (Int) -> Unit = {},
     onClickDelete: () -> Unit = {},
 ) {
@@ -106,7 +106,7 @@ fun RegistedMovementChip(
                                         WorkoutManageChip(
                                             name = data.title,
                                             //modifier = Modifier.padding(vertical = 16.dp),
-                                            onClick = onClickEdit
+                                            onClick = { onClickEdit(data) }
                                         )
                                     }
 
@@ -144,7 +144,7 @@ fun RegistedMovementChip(
                                         WorkoutManageChip(
                                             name = data.title,
                                             //modifier = Modifier.padding(vertical = 16.dp),
-                                            onClick = onClickEdit
+                                            onClick = { onClickEdit(data) }
                                         )
                                     }
 
@@ -182,7 +182,7 @@ fun RegistedMovementChip(
                                         WorkoutManageChip(
                                             name = data.title,
                                             //modifier = Modifier.padding(vertical = 16.dp),
-                                            onClick = onClickEdit
+                                            onClick = { onClickEdit(data) }
                                         )
                                     }
 

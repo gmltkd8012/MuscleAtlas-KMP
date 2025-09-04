@@ -37,7 +37,7 @@ import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutManageViewModel
 @Composable
 fun WorkoutManageScreen(
     viewModel: WorkoutManageViewModel = hiltViewModel(),
-    onClickEditWorkout: () -> Unit = {},
+    onClickEditWorkout: (String) -> Unit = {},
     onClickAddWorkout: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
@@ -80,7 +80,7 @@ fun WorkoutManageScreen(
                     WorkoutManageChip(
                         name = workout.title,
                         onClick = {
-                            onClickEditWorkout()
+                            onClickEditWorkout(workout.id)
                         },
                     )
 

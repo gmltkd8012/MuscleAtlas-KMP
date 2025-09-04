@@ -13,6 +13,9 @@ interface MovementDao {
     @Query("SELECT * FROM movements ORDER BY currentMills ASC")
     fun getAllMovements(): Flow<List<MovementEntity>>
 
+    @Query("SELECT * FROM movements WHERE workoutId = :workoutId ORDER BY currentMills ASC")
+    fun getAllMovementsByWorkoutId(workoutId: String): Flow<List<MovementEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovement(movement: List<MovementEntity>)
 

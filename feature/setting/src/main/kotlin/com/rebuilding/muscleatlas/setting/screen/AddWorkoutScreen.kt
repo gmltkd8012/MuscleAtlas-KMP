@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.setting.screen
 
 import android.R.attr.type
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
 import com.rebuilding.muscleatlas.model.MovementData
+import com.rebuilding.muscleatlas.model.WorkoutData
 import com.rebuilding.muscleatlas.setting.unit.addworkout.RegistedMovementChip
 import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddSdieEffect
 import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddViewModel
@@ -46,11 +48,13 @@ import com.rebuilding.muscleatlas.ui.extension.hide
 import com.rebuilding.muscleatlas.ui.extension.isShown
 import com.rebuilding.muscleatlas.ui.extension.rememberMovementBottomSheetState
 import com.rebuilding.muscleatlas.ui.extension.show
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWorkoutScreen(
     viewModel: WorkoutAddViewModel = hiltViewModel(),
+    workoutId: String,
     onClickBack: () -> Unit = {},
     onClickSave: () -> Unit = {},
 ) {
@@ -58,6 +62,7 @@ fun AddWorkoutScreen(
 
     var textNameFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
+    val uuid by remember { mutableStateOf<UUID>(UUID.randomUUID()) }
 
     val movementAddBottomSheetState = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
 
@@ -66,7 +71,14 @@ fun AddWorkoutScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getMovement(null)
+        if (workoutId.isNotEmpty()) {
+            viewModel.initData(workoutId)
+        }
+    }
+
+    LaunchedEffect(state.workout) {
+        textNameFieldValue = TextFieldState(state.workout.title)
+        textDescriptionFieldValue = TextFieldState(state.workout.description)
     }
 
     viewModel.collectSideEffect { sideEffect ->
@@ -111,7 +123,7 @@ fun AddWorkoutScreen(
                     viewModel.showMovementBottomSheet(
                         MovementData(
                             id = "",
-                            workoutId = "test_id_0001",
+                            workoutId = uuid.toString(),
                             type = type,
                             imgUrl = null,
                             title = "",
@@ -143,7 +155,9 @@ fun AddWorkoutScreen(
                 modifier = Modifier.height(400.dp)
             )
 
-            Spacer(Modifier.fillMaxWidth().height(100.dp))
+            Spacer(Modifier
+                .fillMaxWidth()
+                .height(100.dp))
         }
 
         Box (
@@ -157,7 +171,27 @@ fun AddWorkoutScreen(
             PrimaryButton(
                 text = "저장",
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onClickSave
+                onClick = {
+                    if (textNameFieldValue.text.length > 0 && textDescriptionFieldValue.text.length > 0) {
+                        viewModel.updateWorkout(
+                            WorkoutData(
+                                id = uuid.toString(),
+                                imgUrl = null,
+                                title = textNameFieldValue.text.toString(),
+                                description = textDescriptionFieldValue.text.toString(),
+                                currentMills = System.currentTimeMillis(),
+                            )
+                        )
+
+                        Log.e("heesang", "List >> ${state.joinMovementList + state.stabilizationMechanismList + state.neuromuscularRelationList}", )
+
+                        viewModel.updateMovements(
+                            state.joinMovementList + state.stabilizationMechanismList + state.neuromuscularRelationList
+                        )
+
+                        onClickSave()
+                    }
+                }
             )
         }
     }

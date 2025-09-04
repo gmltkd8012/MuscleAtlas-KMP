@@ -19,6 +19,10 @@ class WorkoutRepositoryImpl @Inject constructor(
         workoutDao.getAllWorkouts()
             .map { it.map(WorkoutEntity::asExternalModel) }
 
+    override suspend fun getWorkoutById(workoutId: String): Flow<WorkoutData> =
+        workoutDao.getWorkoutById(workoutId)
+            .map { it.asExternalModel() }
+
     override suspend fun updateWorkout(workout: WorkoutData) {
         workoutDao.insertWorkout(workout.asEntity())
     }

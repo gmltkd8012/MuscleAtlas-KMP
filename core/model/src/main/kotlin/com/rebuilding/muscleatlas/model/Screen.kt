@@ -64,7 +64,11 @@ sealed class SettingScreen(
         route = "addworkout",
         label = "운동 종목 추가",
         icon = Icons.Default.AddCircle
-    )
+    ) {
+        fun createRoute(workoutId: String): String {
+            return "${SettingScreen.AddWorkout.route}/$workoutId"
+        }
+    }
 
     companion object {
         val allSettingScreens by lazy { listOf(WorkoutManage, Theme, AppInfo) }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.rebuilding.muscleatlas.domain.movement.GetMovementUseCase
 import com.rebuilding.muscleatlas.domain.movement.UpdateMovementUseCase
 import com.rebuilding.muscleatlas.domain.workout.GetWorkoutUseCase
+import com.rebuilding.muscleatlas.domain.workout.GetWorkoutWithMovementUseCase
 import com.rebuilding.muscleatlas.domain.workout.UpdateWorkoutUseCase
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.model.MovementData
@@ -23,14 +24,14 @@ class WorkoutAddViewModel @Inject constructor(
     private val getMovementUseCase: GetMovementUseCase,
     private val updateWorkoutUseCase: UpdateWorkoutUseCase,
     private val updateMovementUseCase: UpdateMovementUseCase,
+    private val getWorkoutWithMovementUseCase: GetWorkoutWithMovementUseCase,
 ) : StateReducerViewModel<WorkoutAddState, WorkoutAddSdieEffect>(WorkoutAddState()) {
 
-    suspend fun getMovement(workoutId: String?) {
+    suspend fun initData(workoutId: String?) {
         withContext(Dispatchers.IO) {
-            getMovementUseCase(workoutId).collect { movement ->
-                reduceState {
-                    copy(joinMovementList = movement)
-                }
+            getWorkoutWithMovementUseCase(workoutId ?: "").collect { data ->
+                initWorkoutData(data.workoutData)
+                data.movementList.map { updateMovementUI(it) }
             }
         }
     }
@@ -50,6 +51,16 @@ class WorkoutAddViewModel @Inject constructor(
     fun showMovementBottomSheet(movement: MovementData?) {
         viewModelScope.launch {
             sendSideEffect(WorkoutAddSdieEffect.ShowMovementAddBottomSheet(movement))
+        }
+    }
+
+    fun initWorkoutData(workoutData: WorkoutData) {
+        viewModelScope.launch {
+            reduceState {
+                copy(
+                    workout = workoutData
+                )
+            }
         }
     }
 

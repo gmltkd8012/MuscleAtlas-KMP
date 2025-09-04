@@ -16,9 +16,10 @@ class ClientProfileActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val isDarkTheme = intent.getBooleanExtra("theme", isSystemInDarkTheme())
+            val clientId = intent.getStringExtra("clientId") ?: ""
 
             ClientProfileScreen(
-                intent = intent,
+                clientId = clientId,
                 isDarkTheme = isDarkTheme,
                 onClickBack = { finish() }
             )

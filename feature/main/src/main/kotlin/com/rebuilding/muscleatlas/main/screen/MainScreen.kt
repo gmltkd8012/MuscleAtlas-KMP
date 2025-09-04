@@ -57,9 +57,12 @@ fun MainScreen(
         ) {
             composable(Screen.Client.route) {
                 ClientMainScreen(
-                    onClickProfile = {
+                    onClickProfile = { clientId ->
                         context.startActivity<ClientProfileActivity>(
-                            "theme" to isDarkTheme
+                            argument = arrayOf(
+                                "clientId" to clientId,
+                                "theme" to isDarkTheme
+                            )
                         )
                     },
                 )

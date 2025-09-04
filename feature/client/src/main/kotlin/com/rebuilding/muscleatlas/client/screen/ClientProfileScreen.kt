@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.client.screen
 
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +41,22 @@ import com.rebuilding.muscleatlas.model.Movement
 @Composable
 fun ClientProfileScreen(
     viewModel: ClientViewModel = hiltViewModel<ClientViewModel>(),
+    clientId: String = "",
     isDarkTheme: Boolean,
-    intent: Intent,
     onClickBack: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
 
     var isProfileScreen by remember { mutableStateOf(true) }
     var movementDetailBottomSheet by remember { mutableStateOf(false) }
+
+    BackHandler { onClickBack }
+
+    LaunchedEffect(Unit) {
+        if (clientId.isNotEmpty()) {
+            viewModel.getClientWithWorkouts(clientId)
+        }
+    }
 
     MuscleAtlasTheme(
         darkTheme = isDarkTheme,
@@ -72,9 +82,9 @@ fun ClientProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ClientProfileBox(
-                    clientName = "테스터",
-                    memo = "테스트 체육관",
-                    workoutName = "벤치 프레스",
+                    clientName = state.client.name,
+                    memo = state.client.memo,
+                    workoutName = state.selectedWorkout.title,
                     isColumn = isProfileScreen
                 )
 
@@ -82,19 +92,9 @@ fun ClientProfileScreen(
                     Spacer(Modifier.height(16.dp))
 
                     ClientWorkoutChip(
-                        workoutList = listOf(
-                            "벤치프레스",
-                            "스쿼트",
-                            "데드리프트",
-                            "밀리터리프레스",
-                            "인클라인벤치프레스",
-                            "덤벨숄더프레스",
-                            "런지",
-                            "레그컬",
-                            "트라이셉스익스텐션",
-                            "바벨컬",
-                        ),
-                        onClickedWorkout = {
+                        workoutList = state.workoutList,
+                        onClickedWorkout = { selectedWorkout ->
+                            viewModel.selectedWorkout(selectedWorkout)
                             isProfileScreen = false
                         }
                     )

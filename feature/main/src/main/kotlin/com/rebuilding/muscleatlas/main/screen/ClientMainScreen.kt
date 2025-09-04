@@ -43,7 +43,7 @@ import com.rebuilding.muscleatlas.ui.extension.show
 @Composable
 fun ClientMainScreen(
     viewModel: ClientMainViewModel = hiltViewModel(),
-    onClickProfile: () -> Unit = {},
+    onClickProfile: (String) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
     val listState = rememberLazyListState()
@@ -112,7 +112,9 @@ fun ClientMainScreen(
                             client = client,
                             swipedItemId = swipeItemId,
                             onSwipe = { id -> swipeItemId = id },
-                            onClick = onClickProfile,
+                            onClick = {
+                                onClickProfile(client.id)
+                            },
                             onDelete = { id ->
                                 viewModel.deleteClient(id)
                             },

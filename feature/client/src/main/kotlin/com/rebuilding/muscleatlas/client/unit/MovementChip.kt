@@ -30,7 +30,7 @@ fun MovemenetChip(
     title: String,
     icon: ImageVector,
     movemenetList: List<MovementData> = emptyList<MovementData>(),
-    onClick: () -> Unit = {},
+    onClick: (MovementData) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
 
@@ -80,7 +80,9 @@ fun MovemenetChip(
                         name = movemenetList[index].title,
                         icon = icon,
                         size = 150.dp,
-                        onClick = onClick
+                        onClick = {
+                            onClick(movemenetList[index])
+                        }
                     )
                 }
             }

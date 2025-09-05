@@ -34,11 +34,16 @@ import com.rebuilding.muscleatlas.client.component.ClientProfileTopBar
 import com.rebuilding.muscleatlas.client.unit.ClientProfileBox
 import com.rebuilding.muscleatlas.client.unit.ClientWorkoutChip
 import com.rebuilding.muscleatlas.client.unit.MovemenetChip
+import com.rebuilding.muscleatlas.client.viewmodel.ClientSideEffect
 import com.rebuilding.muscleatlas.client.viewmodel.ClientViewModel
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme
 import com.rebuilding.muscleatlas.model.Movement
+import com.rebuilding.muscleatlas.ui.extension.hide
+import com.rebuilding.muscleatlas.ui.extension.isShown
+import com.rebuilding.muscleatlas.ui.extension.rememberMovementBottomSheetState
+import com.rebuilding.muscleatlas.ui.extension.show
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,13 +56,21 @@ fun ClientProfileScreen(
     val state by viewModel.state.collectAsState()
 
     var isProfileScreen by remember { mutableStateOf(true) }
-    var movementDetailBottomSheet by remember { mutableStateOf(false) }
+    val movementDetailBottomSheet = rememberMovementBottomSheetState<ClientSideEffect>()
 
     BackHandler { onClickBack }
 
     LaunchedEffect(Unit) {
         if (clientId.isNotEmpty()) {
             viewModel.getClientWithWorkouts(clientId)
+        }
+    }
+
+    viewModel.collectSideEffect { sideEffect ->
+        when(sideEffect) {
+            is ClientSideEffect.ShowMovementDetailBottomSheet -> {
+                movementDetailBottomSheet.show(sideEffect.movement)
+            }
         }
     }
 
@@ -111,8 +124,8 @@ fun ClientProfileScreen(
                             title = Movement.JoinMovement.title,
                             icon = Icons.Default.Warning,
                             movemenetList = state.joinMovementList,
-                            onClick = {
-                                movementDetailBottomSheet = true
+                            onClick = { movement ->
+                                viewModel.showMovementDetailBottomSheet(movement)
                             }
                         )
 
@@ -122,8 +135,8 @@ fun ClientProfileScreen(
                             title = Movement.StabilizationMechanism.title,
                             icon = Icons.Default.Warning,
                             movemenetList = state.stabilizationMechanismList,
-                            onClick = {
-                                movementDetailBottomSheet = true
+                            onClick = { movement ->
+                                viewModel.showMovementDetailBottomSheet(movement)
                             }
                         )
 
@@ -133,8 +146,8 @@ fun ClientProfileScreen(
                             title = Movement.NeuromuscularRelation.title,
                             icon = Icons.Default.Warning,
                             movemenetList = state.neuromuscularRelationList,
-                            onClick = {
-                                movementDetailBottomSheet = true
+                            onClick = { movement ->
+                                viewModel.showMovementDetailBottomSheet(movement)
                             }
                         )
 
@@ -142,32 +155,31 @@ fun ClientProfileScreen(
                     }
                 }
             }
+        }
 
-            if (movementDetailBottomSheet) {
-                BaseBottomSheet(
-                    modifier = Modifier.fillMaxWidth(),
-                    sheetState = rememberModalBottomSheetState(
-                        skipPartiallyExpanded = true,
-                        confirmValueChange = { state ->
-                            state != SheetValue.PartiallyExpanded
-                        },
-                    ),
-                    isDragHandle = false,
-                    onDismissRequest = {
-                        movementDetailBottomSheet = false
+        if (movementDetailBottomSheet.isShown) {
+            BaseBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                sheetState = rememberModalBottomSheetState(
+                    skipPartiallyExpanded = true,
+                    confirmValueChange = { state ->
+                        state != SheetValue.PartiallyExpanded
                     },
-                ) {
-                    MovementDetailScreen(
-                        title = "ㅋㅋ",
-                        description = "세부 동작에 대한 설명",
-                        imgUrl = null,
-                        onClickBack = {
-                            movementDetailBottomSheet = false
-                        },
-                    )
-                }
+                ),
+                isDragHandle = false,
+                onDismissRequest = {
+                    movementDetailBottomSheet.hide()
+                },
+            ) {
+                MovementDetailBottomSheetScreen(
+                    title = movementDetailBottomSheet.value.title ?: "No Title",
+                    description = movementDetailBottomSheet.value.description ?: "No Description",
+                    imgUrl = null,
+                    onClickBack = {
+                        movementDetailBottomSheet.hide()
+                    },
+                )
             }
-
         }
     }
 }

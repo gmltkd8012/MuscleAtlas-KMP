@@ -6,6 +6,7 @@ import com.rebuilding.muscleatlas.datastore.DataStoreRepository
 import com.rebuilding.muscleatlas.domain.client.GetClientWithWorkoutsUseCase
 import com.rebuilding.muscleatlas.domain.movement.GetFilteredMovementsByWorkoutUseCase
 import com.rebuilding.muscleatlas.model.ClientWithWorkout
+import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.WorkoutData
 import com.rebuilding.muscleatlas.model.state.ClientDetailState
 import com.rebuilding.muscleatlas.model.state.ThemeState
@@ -21,7 +22,7 @@ import javax.inject.Inject
 class ClientViewModel @Inject constructor(
     private val getFilteredMovementsByWorkoutUseCase: GetFilteredMovementsByWorkoutUseCase,
     private val getClientWithWorkoutsUseCase: GetClientWithWorkoutsUseCase,
-): StateReducerViewModel<ClientDetailState, Nothing>(ClientDetailState()) {
+): StateReducerViewModel<ClientDetailState, ClientSideEffect>(ClientDetailState()) {
 
 
     suspend fun getClientWithWorkouts(clientId: String) {
@@ -52,4 +53,16 @@ class ClientViewModel @Inject constructor(
                 }
         }
     }
+
+    fun showMovementDetailBottomSheet(movement: MovementData) {
+        viewModelScope.launch() {
+            sendSideEffect(ClientSideEffect.ShowMovementDetailBottomSheet(
+                movement = movement,
+            ))
+        }
+    }
+}
+
+sealed interface ClientSideEffect {
+    data class ShowMovementDetailBottomSheet(val movement: MovementData): ClientSideEffect
 }

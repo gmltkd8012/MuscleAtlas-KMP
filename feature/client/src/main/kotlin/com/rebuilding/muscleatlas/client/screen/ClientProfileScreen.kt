@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.client.screen
 
+import android.R.attr.onClick
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -101,60 +104,42 @@ fun ClientProfileScreen(
                 } else {
                     Spacer(Modifier.height(32.dp))
 
-                    MovemenetChip(
-                        title = Movement.JoinMovement.title,
-                        icon = Icons.Default.Warning,
-                        movemenetList = listOf(
-                            "동작 1",
-                            "동작 2",
-                            "동작 3",
-                            "동작 4",
-                            "동작 5",
-                            "동작 6",
-                            "동작 7",
-                        ),
-                        onClick = {
-                            movementDetailBottomSheet = true
-                        }
-                    )
+                    Column(
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    ) {
+                        MovemenetChip(
+                            title = Movement.JoinMovement.title,
+                            icon = Icons.Default.Warning,
+                            movemenetList = state.joinMovementList,
+                            onClick = {
+                                movementDetailBottomSheet = true
+                            }
+                        )
 
-                    Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(16.dp))
 
-                    MovemenetChip(
-                        title = Movement.StabilizationMechanism.title,
-                        icon = Icons.Default.Warning,
-                        movemenetList = listOf(
-                            "동작 1",
-                            "동작 2",
-                            "동작 3",
-                            "동작 4",
-                            "동작 5",
-                            "동작 6",
-                            "동작 7",
-                        ),
-                        onClick = {
-                            movementDetailBottomSheet = true
-                        }
-                    )
+                        MovemenetChip(
+                            title = Movement.StabilizationMechanism.title,
+                            icon = Icons.Default.Warning,
+                            movemenetList = state.stabilizationMechanismList,
+                            onClick = {
+                                movementDetailBottomSheet = true
+                            }
+                        )
 
-                    Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(16.dp))
 
-                    MovemenetChip(
-                        title = Movement.NeuromuscularRelation.title,
-                        icon = Icons.Default.Warning,
-                        movemenetList = listOf(
-                            "동작 1",
-                            "동작 2",
-                            "동작 3",
-                            "동작 4",
-                            "동작 5",
-                            "동작 6",
-                            "동작 7",
-                        ),
-                        onClick = {
-                            movementDetailBottomSheet = true
-                        }
-                    )
+                        MovemenetChip(
+                            title = Movement.NeuromuscularRelation.title,
+                            icon = Icons.Default.Warning,
+                            movemenetList = state.neuromuscularRelationList,
+                            onClick = {
+                                movementDetailBottomSheet = true
+                            }
+                        )
+
+                        Spacer(Modifier.height(100.dp))
+                    }
                 }
             }
 

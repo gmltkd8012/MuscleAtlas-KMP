@@ -7,6 +7,8 @@ interface MovementRepository {
 
     suspend fun getAllMovements(): Flow<List<MovementData>>
 
+    suspend fun getMovementsByType(type: Int): Flow<List<MovementData>>
+
     suspend fun getMovementByWorkoutId(workoutId: String): Flow<List<MovementData>>
 
     suspend fun updateMovement(movement: List<MovementData>)

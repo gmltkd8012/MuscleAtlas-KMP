@@ -19,6 +19,10 @@ class MovementRepositoryImpl @Inject constructor(
         movementDao.getAllMovements()
             .map { it.map(MovementEntity::asExternalModel) }
 
+    override suspend fun getMovementsByType(type: Int): Flow<List<MovementData>> =
+        movementDao.getMovementsByType(type)
+            .map { it.map(MovementEntity::asExternalModel) }
+
     override suspend fun getMovementByWorkoutId(workoutId: String): Flow<List<MovementData>> =
         movementDao.getAllMovementsByWorkoutId(workoutId)
             .map { it.map(MovementEntity::asExternalModel) }

@@ -20,6 +20,9 @@ class ClientRepositoryImpl @Inject constructor(
         clientDao.getAllClients()
             .map { it.map(ClientEntity::asExternalModel) }
 
+    override suspend fun getClientById(id: String): Flow<Client> =
+        clientDao.getClientById(id)
+            .map(ClientEntity::asExternalModel)
 
     override suspend fun updateClient(client: Client) {
         clientDao.insertClient(client.asEntity())

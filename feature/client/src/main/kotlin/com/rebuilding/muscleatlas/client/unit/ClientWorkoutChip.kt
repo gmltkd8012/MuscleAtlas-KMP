@@ -22,11 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
+import com.rebuilding.muscleatlas.model.WorkoutData
 
 @Composable
 fun ClientWorkoutChip(
-    workoutList: List<String> = emptyList<String>(),
-    onClickedWorkout: () -> Unit = {},
+    workoutList: List<WorkoutData> = emptyList<WorkoutData>(),
+    onClickedWorkout: (WorkoutData) -> Unit = {},
 ) {
     if (workoutList.isEmpty()) { // TODO - 등록된 운동 항목이 없는 경우
         Box(
@@ -68,9 +69,11 @@ fun ClientWorkoutChip(
             ) {
                 items(workoutList.size) { index ->
                     WorkoutBox(
-                        name = workoutList[index],
+                        name = workoutList[index].title,
                         icon = Icons.Default.Warning,
-                        onClick = onClickedWorkout
+                        onClick = {
+                            onClickedWorkout(workoutList[index])
+                        }
                     )
                 }
             }
@@ -82,7 +85,11 @@ fun ClientWorkoutChip(
 @Composable
 private fun ClientWorkoutChipPreview() {
     ClientWorkoutChip(
-        workoutList = listOf("스쿼트", "벤치프레스", "렛풀다운")
+        workoutList = listOf(
+            WorkoutData(title = "벤치프레스"),
+            WorkoutData(title = "스쿼트"),
+            WorkoutData(title = "데드리프트"),
+        )
     )
 }
 

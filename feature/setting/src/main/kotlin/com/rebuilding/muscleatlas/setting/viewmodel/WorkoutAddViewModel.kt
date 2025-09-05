@@ -2,7 +2,6 @@ package com.rebuilding.muscleatlas.setting.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.rebuilding.muscleatlas.domain.movement.GetMovementUseCase
 import com.rebuilding.muscleatlas.domain.movement.UpdateMovementUseCase
 import com.rebuilding.muscleatlas.domain.workout.GetWorkoutUseCase
 import com.rebuilding.muscleatlas.domain.workout.GetWorkoutWithMovementUseCase
@@ -21,7 +20,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutAddViewModel @Inject constructor(
-    private val getMovementUseCase: GetMovementUseCase,
     private val updateWorkoutUseCase: UpdateWorkoutUseCase,
     private val updateMovementUseCase: UpdateMovementUseCase,
     private val getWorkoutWithMovementUseCase: GetWorkoutWithMovementUseCase,

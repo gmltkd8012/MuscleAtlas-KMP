@@ -13,6 +13,9 @@ interface ClientDao {
     @Query("SELECT * FROM clients ORDER BY currentMills ASC")
     fun getAllClients(): Flow<List<ClientEntity>>
 
+    @Query("SELECT * FROM clients WHERE id = :clientId")
+    fun getClientById(clientId: String): Flow<ClientEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertClient(client: ClientEntity)
 

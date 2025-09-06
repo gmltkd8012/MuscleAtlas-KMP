@@ -23,10 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
+import com.rebuilding.muscleatlas.model.Constraction
 import com.rebuilding.muscleatlas.model.MovementData
+import com.rebuilding.muscleatlas.model.state.ContractionTypeList
 
 @Composable
-fun MovemenetChip(
+fun MovementChip(
     title: String,
     icon: ImageVector,
     movemenetList: List<MovementData> = emptyList<MovementData>(),
@@ -93,7 +95,7 @@ fun MovemenetChip(
 @Preview
 @Composable
 fun MovementChipPreview() {
-    MovemenetChip(
+    MovementChip(
         title = "Movement",
         icon = Icons.Default.Warning,
         movemenetList = listOf(
@@ -113,7 +115,7 @@ fun MovementChipPreview() {
 @Preview
 @Composable
 private fun MovementChipEmptyPreview() {
-    MovemenetChip(
+    MovementChip(
         title = "Movement",
         icon = Icons.Default.Warning,
     )

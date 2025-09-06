@@ -20,7 +20,8 @@ data class MovementEntity(
     @PrimaryKey
     val id: String, // PK
     val workoutId: String, // FK
-    val type: Int,
+    val contraction: Int, // 수축 유형
+    val type: Int, // 세부 유형
     val imgUrl: String?,
     val title: String,
     val description: String,
@@ -30,6 +31,7 @@ data class MovementEntity(
 fun MovementEntity.asExternalModel() = MovementData(
     id = id,
     workoutId = workoutId,
+    contraction = contraction,
     type = type,
     imgUrl = imgUrl,
     title = title,
@@ -40,6 +42,7 @@ fun MovementEntity.asExternalModel() = MovementData(
 fun MovementData.asEntity() = MovementEntity(
     id = id,
     workoutId = workoutId,
+    contraction = contraction,
     type = type,
     imgUrl = imgUrl,
     title = title,

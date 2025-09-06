@@ -3,6 +3,7 @@ package com.rebuilding.muscleatlas.design_system.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,7 +28,7 @@ import kotlin.collections.forEachIndexed
 @Composable
 fun BaseTabRow(
     modifier: Modifier = Modifier,
-    tabList: List<Movement>,
+    tabList: List<String>,
     onTabSelected:(Int) -> Unit,
     currentTabIndex: Int,
     content: @Composable () -> Unit,
@@ -52,7 +53,7 @@ fun BaseTabRow(
         ) {
             tabList.forEachIndexed { index, title ->
                 BaseTab (
-                    text = tabList[index].title,
+                    text = tabList[index],
                     selected = currentTabIndex == index,
                     onTabSelected = {
                         onTabSelected(index)
@@ -61,6 +62,7 @@ fun BaseTabRow(
             }
         }
 
+        Spacer(Modifier.height(16.dp))
         content()
     }
 }

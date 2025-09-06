@@ -2,5 +2,6 @@ package com.rebuilding.muscleatlas.model
 
 data class WorkoutWithMovement(
     val workoutData: WorkoutData,
-    val movementList: List<MovementData>
+    val concentricMovementList: List<MovementData>,
+    val eccentricMovementList: List<MovementData>,
 )

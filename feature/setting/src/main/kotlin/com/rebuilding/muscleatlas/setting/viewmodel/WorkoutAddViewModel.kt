@@ -1,15 +1,21 @@
 package com.rebuilding.muscleatlas.setting.viewmodel
 
 import android.util.Log
+import androidx.compose.ui.unit.Constraints
 import androidx.lifecycle.viewModelScope
 import com.rebuilding.muscleatlas.domain.movement.UpdateMovementUseCase
 import com.rebuilding.muscleatlas.domain.workout.GetWorkoutUseCase
 import com.rebuilding.muscleatlas.domain.workout.GetWorkoutWithMovementUseCase
 import com.rebuilding.muscleatlas.domain.workout.UpdateWorkoutUseCase
+import com.rebuilding.muscleatlas.model.Contraction
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.WorkoutData
+import com.rebuilding.muscleatlas.model.state.ContractionTypeList
 import com.rebuilding.muscleatlas.model.state.WorkoutAddState
+import com.rebuilding.muscleatlas.model.state.initWith
+import com.rebuilding.muscleatlas.model.state.saveWith
+import com.rebuilding.muscleatlas.model.state.updateWith
 import com.rebuilding.muscleatlas.ui.base.StateReducerViewModel
 import com.rebuilding.muscleatlas.util.MovementUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,21 +34,29 @@ class WorkoutAddViewModel @Inject constructor(
     suspend fun initData(workoutId: String?) {
         withContext(Dispatchers.IO) {
             getWorkoutWithMovementUseCase(workoutId ?: "").collect { data ->
-                initWorkoutData(data.workoutData)
-                data.movementList.map { updateMovementUI(it) }
+                reduceState {
+                    copy(
+                        workout = data.workoutData,
+                        concentric = state.value.concentric.initWith(data.concentricMovementList),
+                        eccentric = state.value.eccentric.initWith(data.eccentricMovementList),
+                    )
+                }
             }
         }
     }
 
-    fun updateWorkout(workoutData: WorkoutData) {
+    fun updateMovementsWithWorkout(
+        workoutData: WorkoutData,
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            updateWorkoutUseCase(workoutData)
-        }
-    }
-
-    fun updateMovements(movementData: List<MovementData>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateMovementUseCase(movementData)
+            launch {
+                updateWorkoutUseCase(workoutData)
+            }
+            launch {
+                updateMovementUseCase(
+                    state.value.eccentric.saveWith() + state.value.concentric.saveWith()
+                )
+            }
         }
     }
 
@@ -52,40 +66,18 @@ class WorkoutAddViewModel @Inject constructor(
         }
     }
 
-    fun initWorkoutData(workoutData: WorkoutData) {
-        viewModelScope.launch {
-            reduceState {
-                copy(
-                    workout = workoutData
-                )
-            }
-        }
-    }
-
     fun updateMovementUI(movement: MovementData) {
-        viewModelScope.launch {
-            when(movement.type) {
-                MovementUtils.TYPE_JOIN_MOVEMENT -> {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (movement.contraction) {
+                Contraction.CONCENTRIC.value ->
                     reduceState {
-                        copy(
-                            joinMovementList = state.value.joinMovementList + movement
-                        )
+                        copy(concentric = state.value.concentric.updateWith(movement))
                     }
-                }
-                MovementUtils.TYPE_STABILIZATION_MECHANISM -> {
+
+                Contraction.ECCENTRIC.value ->
                     reduceState {
-                        copy(
-                            stabilizationMechanismList = state.value.stabilizationMechanismList + movement
-                        )
+                        copy(eccentric = state.value.eccentric.updateWith(movement))
                     }
-                }
-                MovementUtils.TYPE_MUSCULAR_RELATION -> {
-                    reduceState {
-                        copy(
-                            neuromuscularRelationList = state.value.neuromuscularRelationList + movement
-                        )
-                    }
-                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.data.movement
 
+import com.rebuilding.muscleatlas.model.Contraction
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.room.dao.MovementDao
 import com.rebuilding.muscleatlas.room.model.MovementEntity
@@ -21,6 +22,10 @@ class MovementRepositoryImpl @Inject constructor(
 
     override suspend fun getMovementsByType(type: Int): Flow<List<MovementData>> =
         movementDao.getMovementsByType(type)
+            .map { it.map(MovementEntity::asExternalModel) }
+
+    override suspend fun getMovementsByContraction(contraction: Contraction): Flow<List<MovementData>> =
+        movementDao.getMovementsByContraction(contraction.value)
             .map { it.map(MovementEntity::asExternalModel) }
 
     override suspend fun getMovementByWorkoutId(workoutId: String): Flow<List<MovementData>> =

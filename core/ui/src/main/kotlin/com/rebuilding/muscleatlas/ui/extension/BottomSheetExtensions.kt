@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.ui.extension
 
 import android.R.attr.name
+import android.R.attr.type
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +47,17 @@ fun <SideEffect> rememberMovementBottomSheetState(
 ): MovementBottomSheetState = rememberSaveable(
     saver = Saver<MutableState<MovmentBottomSheetData>, List<Any?>>(
         save = {
-            listOf(it.value.isShown, it.value.id, it.value.workoutId, it.value.imgUrl, it.value.type, it.value.title, it.value.description, it.value.currentMills)
+            listOf(
+                it.value.isShown,
+                it.value.id,
+                it.value.workoutId,
+                it.value.imgUrl,
+                it.value.contraction,
+                it.value.type,
+                it.value.title,
+                it.value.description,
+                it.value.currentMills
+            )
         },
         restore = {
             mutableStateOf(
@@ -96,6 +107,7 @@ fun MovementBottomSheetState.show(
         id = movement?.id,
         workoutId = movement?.workoutId,
         imgUrl = movement?.imgUrl,
+        contraction = movement?.contraction,
         type = movement?.type,
         title = movement?.title ?: "",
         description = movement?.description ?: "",
@@ -122,6 +134,7 @@ fun MovementBottomSheetState.hide() {
         id = null,
         workoutId = null,
         imgUrl = null,
+        contraction = null,
         type = null,
         title = null,
         description = null,

@@ -39,6 +39,7 @@ import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
+import com.rebuilding.muscleatlas.model.Contraction
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.WorkoutData
 import com.rebuilding.muscleatlas.setting.unit.addworkout.RegistedMovementChip
@@ -113,9 +114,8 @@ fun AddWorkoutScreen(
             )
 
             RegistedMovementChip(
-                joinMovementList = state.joinMovementList,
-                stabilizationMechanismList = state.stabilizationMechanismList,
-                muscularRelationList = state.neuromuscularRelationList,
+                title = "단축성 수축",
+                contractionList = state.concentric,
                 onClickEdit = { movement ->
                     viewModel.showMovementBottomSheet(movement)
                 },
@@ -124,6 +124,29 @@ fun AddWorkoutScreen(
                         MovementData(
                             id = "",
                             workoutId = uuid.toString(),
+                            contraction = Contraction.CONCENTRIC.value,
+                            type = type,
+                            imgUrl = null,
+                            title = "",
+                            description = "",
+                            currentMills = 0L,
+                        )
+                    )
+                }
+            )
+
+            RegistedMovementChip(
+                title = "신장성 수축",
+                contractionList = state.eccentric,
+                onClickEdit = { movement ->
+                    viewModel.showMovementBottomSheet(movement)
+                },
+                onClickAdd = { type ->
+                    viewModel.showMovementBottomSheet(
+                        MovementData(
+                            id = "",
+                            workoutId = uuid.toString(),
+                            contraction = Contraction.ECCENTRIC.value,
                             type = type,
                             imgUrl = null,
                             title = "",
@@ -173,20 +196,14 @@ fun AddWorkoutScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (textNameFieldValue.text.length > 0 && textDescriptionFieldValue.text.length > 0) {
-                        viewModel.updateWorkout(
-                            WorkoutData(
+                        viewModel.updateMovementsWithWorkout(
+                            workoutData = WorkoutData(
                                 id = uuid.toString(),
                                 imgUrl = null,
                                 title = textNameFieldValue.text.toString(),
                                 description = textDescriptionFieldValue.text.toString(),
                                 currentMills = System.currentTimeMillis(),
-                            )
-                        )
-
-                        Log.e("heesang", "List >> ${state.joinMovementList + state.stabilizationMechanismList + state.neuromuscularRelationList}", )
-
-                        viewModel.updateMovements(
-                            state.joinMovementList + state.stabilizationMechanismList + state.neuromuscularRelationList
+                            ),
                         )
 
                         onClickSave()

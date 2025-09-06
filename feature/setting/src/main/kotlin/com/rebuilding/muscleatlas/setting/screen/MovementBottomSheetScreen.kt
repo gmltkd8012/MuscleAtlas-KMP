@@ -69,6 +69,7 @@ fun MovementBottomSheetScreen(
                             MovementData(
                                 id = UUID.randomUUID().toString(),
                                 workoutId = state.value.workoutId ?: "ERROR",
+                                contraction = state.value.contraction ?: -1,
                                 type = state.value.type ?: -1,
                                 imgUrl = null,
                                 title = titleTextFiled.text.toString(),

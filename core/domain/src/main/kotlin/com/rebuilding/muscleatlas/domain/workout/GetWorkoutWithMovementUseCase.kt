@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.domain.workout
 
 import com.rebuilding.muscleatlas.data.movement.MovementRepository
 import com.rebuilding.muscleatlas.data.workout.WorkoutRepository
+import com.rebuilding.muscleatlas.model.Contraction
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.WorkoutWithMovement
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,11 @@ class GetWorkoutWithMovementUseCase @Inject constructor(
     suspend operator fun invoke(workoutId: String): Flow<WorkoutWithMovement> = combine(
             workRepository.getWorkoutById(workoutId),
             movementRepository.getMovementByWorkoutId(workoutId)
-        ) { workout, movement ->
-            WorkoutWithMovement(workout, movement)
+        ) { workout, movements ->
+            WorkoutWithMovement(
+                workoutData = workout,
+                concentricMovementList = movements.filter { it.contraction == Contraction.CONCENTRIC.value },
+                eccentricMovementList = movements.filter { it.contraction == Contraction.ECCENTRIC.value },
+            )
         }
 }

@@ -16,6 +16,7 @@ data class MovmentBottomSheetData(
     val id: String? = null,
     val workoutId: String? = null,
     val imgUrl: String? = null,
+    val contraction: Int? = null,
     val type: Int? = null,
     val title: String? = null,
     val description: String? = null,

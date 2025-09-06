@@ -43,7 +43,7 @@ fun RegistedMovementChip(
     onClickDelete: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
-        pageCount = { Movement.allMovements.size },
+        pageCount = { Movement.allMovementTabs.size },
         initialPageOffsetFraction = 0f,
         initialPage = 0,
     )
@@ -66,7 +66,7 @@ fun RegistedMovementChip(
         Spacer(Modifier.height(16.dp))
 
         BaseTabRow(
-            tabList = Movement.allMovements,
+            tabList = Movement.allMovementTabs,
             currentTabIndex = currentTabIndex,
             onTabSelected = { index ->
                 scope.launch { pagerState.scrollToPage(index) }
@@ -204,7 +204,7 @@ fun RegistedMovementChip(
 
         BaseImageButton(
             modifier = Modifier.align(Alignment.End),
-            text = "${Movement.allMovements[currentTabIndex].title} 종목 추가",
+            text = "${Movement.allMovementTabs[currentTabIndex]} 종목 추가",
             icon = Icons.Default.Add,
             color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f),
             onClick = {

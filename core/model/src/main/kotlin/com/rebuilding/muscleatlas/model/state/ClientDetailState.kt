@@ -8,7 +8,6 @@ data class ClientDetailState(
     val client: Client = Client(),
     val workoutList: List<WorkoutData> = emptyList<WorkoutData>(),
     val selectedWorkout: WorkoutData = WorkoutData(),
-    val joinMovementList: List<MovementData> = emptyList<MovementData>(),
-    val stabilizationMechanismList: List<MovementData> = emptyList<MovementData>(),
-    val neuromuscularRelationList: List<MovementData> = emptyList<MovementData>(),
+    val concentric: ContractionTypeList = ContractionTypeList(),
+    val eccentric: ContractionTypeList = ContractionTypeList(),
 )

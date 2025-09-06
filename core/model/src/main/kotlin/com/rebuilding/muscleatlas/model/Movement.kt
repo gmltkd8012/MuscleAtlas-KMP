@@ -20,7 +20,7 @@ sealed class Movement (
     )
 
     companion object {
-        val allMovements by lazy { listOf(JoinMovement, StabilizationMechanism, NeuromuscularRelation) }
+        val allMovementTabs by lazy { listOf(JoinMovement.title, StabilizationMechanism.title, NeuromuscularRelation.title) }
     }
 }
 

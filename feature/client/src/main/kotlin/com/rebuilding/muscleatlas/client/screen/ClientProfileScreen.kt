@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -25,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,17 +36,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.rebuilding.muscleatlas.client.component.ClientProfileTopBar
 import com.rebuilding.muscleatlas.client.unit.ClientProfileBox
 import com.rebuilding.muscleatlas.client.unit.ClientWorkoutChip
-import com.rebuilding.muscleatlas.client.unit.MovemenetChip
+import com.rebuilding.muscleatlas.client.unit.MovementListChip
 import com.rebuilding.muscleatlas.client.viewmodel.ClientSideEffect
 import com.rebuilding.muscleatlas.client.viewmodel.ClientViewModel
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
+import com.rebuilding.muscleatlas.design_system.component.BaseTabRow
 import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme
+import com.rebuilding.muscleatlas.model.Constraction
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.ui.extension.hide
 import com.rebuilding.muscleatlas.ui.extension.isShown
 import com.rebuilding.muscleatlas.ui.extension.rememberMovementBottomSheetState
 import com.rebuilding.muscleatlas.ui.extension.show
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,41 +123,50 @@ fun ClientProfileScreen(
                 } else {
                     Spacer(Modifier.height(32.dp))
 
+                    val pagerState = rememberPagerState(
+                        pageCount = { Constraction.allConstrationTabs.size },
+                        initialPageOffsetFraction = 0f,
+                        initialPage = 0,
+                    )
+
+                    val currentTabIndex = pagerState.currentPage
+                    val scope = rememberCoroutineScope()
+
                     Column(
-                        modifier = Modifier.verticalScroll(rememberScrollState())
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        MovemenetChip(
-                            title = Movement.JoinMovement.title,
-                            icon = Icons.Default.Warning,
-                            movemenetList = state.joinMovementList,
-                            onClick = { movement ->
-                                viewModel.showMovementDetailBottomSheet(movement)
+                        BaseTabRow(
+                            tabList = Constraction.allConstrationTabs,
+                            currentTabIndex = currentTabIndex,
+                            onTabSelected = { index ->
+                                scope.launch { pagerState.scrollToPage(index) }
                             }
-                        )
-
-                        Spacer(Modifier.height(16.dp))
-
-                        MovemenetChip(
-                            title = Movement.StabilizationMechanism.title,
-                            icon = Icons.Default.Warning,
-                            movemenetList = state.stabilizationMechanismList,
-                            onClick = { movement ->
-                                viewModel.showMovementDetailBottomSheet(movement)
+                        ) {
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier.fillMaxSize(),
+                                userScrollEnabled = true,
+                            ) {
+                                when (currentTabIndex) {
+                                    Constraction.Concentric.value -> {
+                                        MovementListChip(
+                                            contractions = state.concentric,
+                                            onClick = { movement ->
+                                                viewModel.showMovementDetailBottomSheet(movement)
+                                            }
+                                        )
+                                    }
+                                    Constraction.Eccentric.value -> {
+                                        MovementListChip(
+                                            contractions = state.eccentric,
+                                            onClick = { movement ->
+                                                viewModel.showMovementDetailBottomSheet(movement)
+                                            }
+                                        )
+                                    }
+                                }
                             }
-                        )
-
-                        Spacer(Modifier.height(16.dp))
-
-                        MovemenetChip(
-                            title = Movement.NeuromuscularRelation.title,
-                            icon = Icons.Default.Warning,
-                            movemenetList = state.neuromuscularRelationList,
-                            onClick = { movement ->
-                                viewModel.showMovementDetailBottomSheet(movement)
-                            }
-                        )
-
-                        Spacer(Modifier.height(100.dp))
+                        }
                     }
                 }
             }

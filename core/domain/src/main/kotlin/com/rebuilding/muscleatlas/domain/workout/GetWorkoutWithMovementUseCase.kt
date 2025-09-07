@@ -21,8 +21,8 @@ class GetWorkoutWithMovementUseCase @Inject constructor(
         ) { workout, movements ->
             WorkoutWithMovement(
                 workoutData = workout,
-                concentricMovementList = movements.filter { it.contraction == Contraction.CONCENTRIC.value },
-                eccentricMovementList = movements.filter { it.contraction == Contraction.ECCENTRIC.value },
+                concentricMovementList = movements.filter { it.contraction == Contraction.Concentric.value },
+                eccentricMovementList = movements.filter { it.contraction == Contraction.Eccentric.value },
             )
         }
 }

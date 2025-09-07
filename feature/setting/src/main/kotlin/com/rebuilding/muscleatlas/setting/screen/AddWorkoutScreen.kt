@@ -124,7 +124,7 @@ fun AddWorkoutScreen(
                         MovementData(
                             id = "",
                             workoutId = uuid.toString(),
-                            contraction = Contraction.CONCENTRIC.value,
+                            contraction = Contraction.Concentric.value,
                             type = type,
                             imgUrl = null,
                             title = "",
@@ -146,7 +146,7 @@ fun AddWorkoutScreen(
                         MovementData(
                             id = "",
                             workoutId = uuid.toString(),
-                            contraction = Contraction.ECCENTRIC.value,
+                            contraction = Contraction.Eccentric.value,
                             type = type,
                             imgUrl = null,
                             title = "",

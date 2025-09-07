@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
-import com.rebuilding.muscleatlas.model.Constraction
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.state.ContractionTypeList
 

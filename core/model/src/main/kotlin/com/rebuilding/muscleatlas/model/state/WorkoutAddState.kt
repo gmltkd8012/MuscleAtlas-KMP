@@ -18,11 +18,11 @@ data class ContractionTypeList(
 
 fun ContractionTypeList.initWith(movements: List<MovementData>): ContractionTypeList {
    return copy(
-       joinMovementList = joinMovementList + movements
+       joinMovementList = movements
            .filter { it.type == MovementUtils.TYPE_JOIN_MOVEMENT },
-       stabilizationMechanismList = stabilizationMechanismList + movements
+       stabilizationMechanismList = movements
            .filter { it.type == MovementUtils.TYPE_STABILIZATION_MECHANISM },
-       neuromuscularRelationList = neuromuscularRelationList + movements
+       neuromuscularRelationList = movements
            .filter { it.type == MovementUtils.TYPE_MUSCULAR_RELATION }
    )
 }

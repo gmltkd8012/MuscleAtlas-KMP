@@ -43,7 +43,7 @@ import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTabRow
 import com.rebuilding.muscleatlas.design_system.theme.MuscleAtlasTheme
-import com.rebuilding.muscleatlas.model.Constraction
+import com.rebuilding.muscleatlas.model.Contraction
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.ui.extension.hide
 import com.rebuilding.muscleatlas.ui.extension.isShown
@@ -124,7 +124,7 @@ fun ClientProfileScreen(
                     Spacer(Modifier.height(32.dp))
 
                     val pagerState = rememberPagerState(
-                        pageCount = { Constraction.allConstrationTabs.size },
+                        pageCount = { Contraction.allConstrationTabs.size },
                         initialPageOffsetFraction = 0f,
                         initialPage = 0,
                     )
@@ -136,7 +136,7 @@ fun ClientProfileScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         BaseTabRow(
-                            tabList = Constraction.allConstrationTabs,
+                            tabList = Contraction.allConstrationTabs,
                             currentTabIndex = currentTabIndex,
                             onTabSelected = { index ->
                                 scope.launch { pagerState.scrollToPage(index) }
@@ -148,7 +148,7 @@ fun ClientProfileScreen(
                                 userScrollEnabled = true,
                             ) {
                                 when (currentTabIndex) {
-                                    Constraction.Concentric.value -> {
+                                    Contraction.Concentric.value -> {
                                         MovementListChip(
                                             contractions = state.concentric,
                                             onClick = { movement ->
@@ -156,7 +156,7 @@ fun ClientProfileScreen(
                                             }
                                         )
                                     }
-                                    Constraction.Eccentric.value -> {
+                                    Contraction.Eccentric.value -> {
                                         MovementListChip(
                                             contractions = state.eccentric,
                                             onClick = { movement ->

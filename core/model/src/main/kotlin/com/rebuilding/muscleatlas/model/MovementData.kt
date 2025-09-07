@@ -10,8 +10,3 @@ data class MovementData(
     val description: String = "",
     val currentMills: Long = 0L,
 )
-
-enum class Contraction(val value: Int) {
-    CONCENTRIC(0), // 단축성 수축
-    ECCENTRIC(1) // 신장성 수축
-}

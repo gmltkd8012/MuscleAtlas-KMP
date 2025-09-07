@@ -69,12 +69,12 @@ class WorkoutAddViewModel @Inject constructor(
     fun updateMovementUI(movement: MovementData) {
         viewModelScope.launch(Dispatchers.IO) {
             when (movement.contraction) {
-                Contraction.CONCENTRIC.value ->
+                Contraction.Concentric.value ->
                     reduceState {
                         copy(concentric = state.value.concentric.updateWith(movement))
                     }
 
-                Contraction.ECCENTRIC.value ->
+                Contraction.Eccentric.value ->
                     reduceState {
                         copy(eccentric = state.value.eccentric.updateWith(movement))
                     }

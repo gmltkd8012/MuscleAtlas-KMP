@@ -225,12 +225,16 @@ fun AddWorkoutScreen(
                     state != SheetValue.PartiallyExpanded
                 },
             ),
+            sheetGesturesEnabled = false,
             onDismissRequest = {
                 movementAddBottomSheetState.hide()
             },
         ) {
             MovementBottomSheetScreen(
                 state = movementAddBottomSheetState,
+                onClickedClose = {
+                    movementAddBottomSheetState.hide()
+                },
                 onSaveMovement = { movement ->
                     viewModel.updateMovementUI(movement)
                     movementAddBottomSheetState.hide()

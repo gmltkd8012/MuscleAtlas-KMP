@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -28,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.design_system.base.BaseButton
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
@@ -43,6 +47,7 @@ import java.util.UUID
 @Composable
 fun MovementBottomSheetScreen(
     state: MovementBottomSheetState,
+    onClickedClose: () -> Unit,
     onSaveMovement: (MovementData) -> Unit,
 ) {
     var titleTextFiled by remember { mutableStateOf(TextFieldState(state.value.title ?: "")) }
@@ -63,7 +68,16 @@ fun MovementBottomSheetScreen(
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
-            }
+            },
+            backIcon = {
+                BaseButton(
+                    modifier = Modifier,
+                    icon = Icons.Default.Close,
+                    iconSize = 30.dp,
+                ) {
+                    onClickedClose()
+                }
+            },
         )
 
         Box(

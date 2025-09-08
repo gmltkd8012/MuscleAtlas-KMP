@@ -29,6 +29,7 @@ fun BaseBottomSheet(
     shape: RoundedCornerShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
     onDismissRequest: () -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState(),
+    sheetGesturesEnabled: Boolean = true,
     isDragHandle: Boolean = true,
     content: @Composable () -> Unit,
 ) {
@@ -43,6 +44,7 @@ fun BaseBottomSheet(
             }
         },
         sheetState = sheetState,
+        sheetGesturesEnabled = sheetGesturesEnabled,
         shape = shape,
         dragHandle = {
             if (isDragHandle) {

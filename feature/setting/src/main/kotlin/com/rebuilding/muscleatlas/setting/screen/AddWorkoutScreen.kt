@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.R.attr.bottom
 import android.R.attr.type
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -102,6 +104,7 @@ fun AddWorkoutScreen(
         Column(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
             BaseTextField(
@@ -180,7 +183,7 @@ fun AddWorkoutScreen(
 
             Spacer(Modifier
                 .fillMaxWidth()
-                .height(100.dp))
+                .height(48.dp))
         }
 
         Box (

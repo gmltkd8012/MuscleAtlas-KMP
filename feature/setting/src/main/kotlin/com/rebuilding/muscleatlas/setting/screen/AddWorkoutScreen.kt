@@ -207,11 +207,11 @@ fun AddWorkoutScreen(
                     if (textNameFieldValue.text.length > 0 && textDescriptionFieldValue.text.length > 0) {
                         viewModel.updateMovementsWithWorkout(
                             workoutData = WorkoutData(
-                                id = uuid.toString(),
+                                id = if (state.workout.id.isNotEmpty()) state.workout.id else uuid.toString(),
                                 imgUrl = null,
                                 title = textNameFieldValue.text.toString(),
                                 description = textDescriptionFieldValue.text.toString(),
-                                currentMills = System.currentTimeMillis(),
+                                currentMills = if (state.workout.currentMills > 0L) state.workout.currentMills else System.currentTimeMillis(),
                             ),
                         )
 

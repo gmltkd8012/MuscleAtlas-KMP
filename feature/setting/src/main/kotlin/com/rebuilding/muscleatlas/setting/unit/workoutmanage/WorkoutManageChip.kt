@@ -39,6 +39,7 @@ fun WorkoutManageChip(
     onDelete: () -> Unit = {},
 ) {
     SwipeItemChip(
+        onEdit = onClick,
         onDelete = onDelete
     ) {
         Row(

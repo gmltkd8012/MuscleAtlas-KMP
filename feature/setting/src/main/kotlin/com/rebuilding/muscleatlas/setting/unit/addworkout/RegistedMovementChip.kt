@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.setting.unit.addworkout
 
 import android.text.TextUtils.isEmpty
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -40,7 +41,7 @@ fun RegistedMovementChip(
     contractionList: ContractionTypeList = ContractionTypeList(),
     onClickEdit: (MovementData) -> Unit = {},
     onClickAdd: (Int) -> Unit = {},
-    onClickDelete: () -> Unit = {},
+    onClickDelete: (MovementData) -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         pageCount = { Movement.allMovementTabs.size },
@@ -102,12 +103,15 @@ fun RegistedMovementChip(
                             } else {
                                 contractionList.joinMovementList.forEachIndexed { index, data ->
                                     SwipeItemChip(
-                                        onDelete = onClickDelete
+                                        onDelete = {
+                                            Log.e("heesang", "RegistedMovementChip: 안눌 ? ", )
+                                            onClickDelete(data)
+                                        }
                                     ) {
                                         WorkoutManageChip(
                                             name = data.title,
-                                            //modifier = Modifier.padding(vertical = 16.dp),
-                                            onClick = { onClickEdit(data) }
+                                            onClick = { onClickEdit(data) },
+                                            onDelete = { onClickDelete(data) }
                                         )
                                     }
 
@@ -139,15 +143,11 @@ fun RegistedMovementChip(
                                 }
                             } else {
                                 contractionList.stabilizationMechanismList.forEachIndexed { index, data ->
-                                    SwipeItemChip(
-                                        onDelete = onClickDelete
-                                    ) {
-                                        WorkoutManageChip(
-                                            name = data.title,
-                                            //modifier = Modifier.padding(vertical = 16.dp),
-                                            onClick = { onClickEdit(data) }
-                                        )
-                                    }
+                                    WorkoutManageChip(
+                                        name = data.title,
+                                        onClick = { onClickEdit(data) },
+                                        onDelete = { onClickDelete(data) }
+                                    )
 
                                     if (index != contractionList.stabilizationMechanismList.lastIndex) {
                                         BaseLine(
@@ -177,15 +177,11 @@ fun RegistedMovementChip(
                                 }
                             } else {
                                 contractionList.neuromuscularRelationList.forEachIndexed { index, data ->
-                                    SwipeItemChip(
-                                        onDelete = onClickDelete
-                                    ) {
-                                        WorkoutManageChip(
-                                            name = data.title,
-                                            //modifier = Modifier.padding(vertical = 16.dp),
-                                            onClick = { onClickEdit(data) }
-                                        )
-                                    }
+                                    WorkoutManageChip(
+                                        name = data.title,
+                                        onClick = { onClickEdit(data) },
+                                        onDelete = { onClickDelete(data) }
+                                    )
 
                                     if (index != contractionList.neuromuscularRelationList.lastIndex) {
                                         BaseLine(

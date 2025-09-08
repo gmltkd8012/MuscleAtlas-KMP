@@ -25,4 +25,7 @@ interface MovementDao {
     @Query("DELETE FROM movements WHERE id = :movementId")
     suspend fun deleteMovement(movementId: String)
 
+    @Query("DELETE FROM movements")
+    suspend fun clearMovemenets()
+
 }

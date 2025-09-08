@@ -42,3 +42,15 @@ fun ContractionTypeList.updateWith(movement: MovementData): ContractionTypeList 
 fun ContractionTypeList.saveWith(): List<MovementData> {
     return joinMovementList + stabilizationMechanismList + neuromuscularRelationList
 }
+
+fun ContractionTypeList.deleteWith(movement: MovementData): ContractionTypeList {
+    return when(movement.type) {
+        MovementUtils.TYPE_JOIN_MOVEMENT ->
+            copy(joinMovementList = joinMovementList - movement)
+        MovementUtils.TYPE_STABILIZATION_MECHANISM ->
+            copy(stabilizationMechanismList = stabilizationMechanismList - movement)
+        MovementUtils.TYPE_MUSCULAR_RELATION ->
+            copy(neuromuscularRelationList = neuromuscularRelationList - movement)
+        else -> this
+    }
+}

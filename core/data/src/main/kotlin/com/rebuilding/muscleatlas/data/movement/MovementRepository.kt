@@ -14,4 +14,6 @@ interface MovementRepository {
     suspend fun updateMovement(movement: List<MovementData>)
 
     suspend fun deleteMovement(id: String)
+
+    suspend fun clearMovements()
 }

@@ -135,6 +135,9 @@ fun AddWorkoutScreen(
                             currentMills = 0L,
                         )
                     )
+                },
+                onClickDelete = { movement ->
+                    viewModel.deleteMovementUI(movement)
                 }
             )
 
@@ -157,6 +160,9 @@ fun AddWorkoutScreen(
                             currentMills = 0L,
                         )
                     )
+                },
+                onClickDelete = { movement ->
+                    viewModel.deleteMovementUI(movement)
                 }
             )
 

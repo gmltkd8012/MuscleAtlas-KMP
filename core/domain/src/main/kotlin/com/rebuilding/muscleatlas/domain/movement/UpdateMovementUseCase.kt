@@ -9,6 +9,7 @@ class UpdateMovementUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(movement: List<MovementData>) {
+        movementRepository.clearMovements()
         movementRepository.updateMovement(movement)
     }
 }

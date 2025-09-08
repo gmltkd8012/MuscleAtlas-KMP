@@ -13,6 +13,7 @@ import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.WorkoutData
 import com.rebuilding.muscleatlas.model.state.ContractionTypeList
 import com.rebuilding.muscleatlas.model.state.WorkoutAddState
+import com.rebuilding.muscleatlas.model.state.deleteWith
 import com.rebuilding.muscleatlas.model.state.initWith
 import com.rebuilding.muscleatlas.model.state.saveWith
 import com.rebuilding.muscleatlas.model.state.updateWith
@@ -77,6 +78,22 @@ class WorkoutAddViewModel @Inject constructor(
                 Contraction.Eccentric.value ->
                     reduceState {
                         copy(eccentric = state.value.eccentric.updateWith(movement))
+                    }
+            }
+        }
+    }
+
+    fun deleteMovementUI(movement: MovementData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (movement.contraction) {
+                Contraction.Concentric.value ->
+                    reduceState {
+                        copy(concentric = state.value.concentric.deleteWith(movement))
+                    }
+
+                Contraction.Eccentric.value ->
+                    reduceState {
+                        copy(eccentric = state.value.eccentric.deleteWith(movement))
                     }
             }
         }

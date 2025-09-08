@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.setting.screen
 
+import android.R.attr.bottom
 import android.R.attr.type
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -102,6 +104,7 @@ fun AddWorkoutScreen(
         Column(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
             BaseTextField(
@@ -132,6 +135,9 @@ fun AddWorkoutScreen(
                             currentMills = 0L,
                         )
                     )
+                },
+                onClickDelete = { movement ->
+                    viewModel.deleteMovementUI(movement)
                 }
             )
 
@@ -154,6 +160,9 @@ fun AddWorkoutScreen(
                             currentMills = 0L,
                         )
                     )
+                },
+                onClickDelete = { movement ->
+                    viewModel.deleteMovementUI(movement)
                 }
             )
 
@@ -180,7 +189,7 @@ fun AddWorkoutScreen(
 
             Spacer(Modifier
                 .fillMaxWidth()
-                .height(100.dp))
+                .height(48.dp))
         }
 
         Box (
@@ -198,11 +207,11 @@ fun AddWorkoutScreen(
                     if (textNameFieldValue.text.length > 0 && textDescriptionFieldValue.text.length > 0) {
                         viewModel.updateMovementsWithWorkout(
                             workoutData = WorkoutData(
-                                id = uuid.toString(),
+                                id = if (state.workout.id.isNotEmpty()) state.workout.id else uuid.toString(),
                                 imgUrl = null,
                                 title = textNameFieldValue.text.toString(),
                                 description = textDescriptionFieldValue.text.toString(),
-                                currentMills = System.currentTimeMillis(),
+                                currentMills = if (state.workout.currentMills > 0L) state.workout.currentMills else System.currentTimeMillis(),
                             ),
                         )
 
@@ -222,12 +231,16 @@ fun AddWorkoutScreen(
                     state != SheetValue.PartiallyExpanded
                 },
             ),
+            sheetGesturesEnabled = false,
             onDismissRequest = {
                 movementAddBottomSheetState.hide()
             },
         ) {
             MovementBottomSheetScreen(
                 state = movementAddBottomSheetState,
+                onClickedClose = {
+                    movementAddBottomSheetState.hide()
+                },
                 onSaveMovement = { movement ->
                     viewModel.updateMovementUI(movement)
                     movementAddBottomSheetState.hide()

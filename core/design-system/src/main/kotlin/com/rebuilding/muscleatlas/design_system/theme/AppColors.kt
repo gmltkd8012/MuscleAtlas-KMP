@@ -26,7 +26,9 @@ object AppColors {
     val primaryButtonDark = Color(0xFF311D78)
     val primaryButtonTextDark = Color.White
 
+    val clear = Color.Green
     val warning = Color.Red
+    val fixedWithe = Color.White
 
 
     object Shadow {

@@ -2,11 +2,14 @@ package com.rebuilding.muscleatlas.data.di
 
 import com.rebuilding.muscleatlas.data.client.ClientRepository
 import com.rebuilding.muscleatlas.data.client.ClientRepositoryImpl
+import com.rebuilding.muscleatlas.data.clientmovement.ClientMovementRepository
+import com.rebuilding.muscleatlas.data.clientmovement.ClientMovementRepositoryImpl
 import com.rebuilding.muscleatlas.data.movement.MovementRepository
 import com.rebuilding.muscleatlas.data.movement.MovementRepositoryImpl
 import com.rebuilding.muscleatlas.data.workout.WorkoutRepository
 import com.rebuilding.muscleatlas.data.workout.WorkoutRepositoryImpl
 import com.rebuilding.muscleatlas.room.dao.ClientDao
+import com.rebuilding.muscleatlas.room.dao.ClientMovementDao
 import com.rebuilding.muscleatlas.room.dao.MovementDao
 import com.rebuilding.muscleatlas.room.dao.WorkoutDao
 import dagger.Module
@@ -37,5 +40,12 @@ object RepositoryModule {
         movementDao: MovementDao
     ): MovementRepository {
         return MovementRepositoryImpl(movementDao)
+    }
+
+    @Provides
+    fun provideClientMovementRepository(
+        clientMovementDao: ClientMovementDao
+    ): ClientMovementRepository {
+        return ClientMovementRepositoryImpl(clientMovementDao)
     }
 }

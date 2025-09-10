@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rebuilding.muscleatlas.room.dao.ClientDao
+import com.rebuilding.muscleatlas.room.dao.ClientMovementDao
 import com.rebuilding.muscleatlas.room.dao.MovementDao
 import com.rebuilding.muscleatlas.room.dao.WorkoutDao
 import com.rebuilding.muscleatlas.room.model.ClientEntity
@@ -34,4 +35,5 @@ internal abstract class MuscleAtlasDatabase : RoomDatabase() {
     abstract fun clientDao(): ClientDao
     abstract fun workoutDao(): WorkoutDao
     abstract fun movementDao(): MovementDao
+    abstract fun clientMovementDao(): ClientMovementDao
 }

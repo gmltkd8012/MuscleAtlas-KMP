@@ -11,6 +11,7 @@ import com.rebuilding.muscleatlas.room.dao.ClientMovementDao
 import com.rebuilding.muscleatlas.room.dao.MovementDao
 import com.rebuilding.muscleatlas.room.dao.WorkoutDao
 import com.rebuilding.muscleatlas.room.model.ClientEntity
+import com.rebuilding.muscleatlas.room.model.ClientMovementEntity
 import com.rebuilding.muscleatlas.room.model.MovementEntity
 import com.rebuilding.muscleatlas.room.model.WorkoutEntity
 
@@ -28,6 +29,7 @@ import com.rebuilding.muscleatlas.room.model.WorkoutEntity
         ClientEntity::class,
         WorkoutEntity::class,
         MovementEntity::class,
+        ClientMovementEntity::class,
     ],
     version = 1
 )

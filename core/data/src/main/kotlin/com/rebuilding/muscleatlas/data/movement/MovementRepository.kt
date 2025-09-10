@@ -15,5 +15,5 @@ interface MovementRepository {
 
     suspend fun deleteMovement(id: String)
 
-    suspend fun clearMovements()
+    suspend fun deleteMovementsByWorkoutId(workoutId: String)
 }

@@ -77,9 +77,8 @@ fun MovementChip(
                 items(
                     count = movemenetList.size,
                 ) { index ->
-                    WorkoutBox(
+                    MovementBox(
                         name = movemenetList[index].title,
-                        icon = icon,
                         size = 150.dp,
                         onClick = {
                             onClick(movemenetList[index])

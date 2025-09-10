@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.room.di
 
 import com.rebuilding.muscleatlas.room.MuscleAtlasDatabase
 import com.rebuilding.muscleatlas.room.dao.ClientDao
+import com.rebuilding.muscleatlas.room.dao.ClientMovementDao
 import com.rebuilding.muscleatlas.room.dao.MovementDao
 import com.rebuilding.muscleatlas.room.dao.WorkoutDao
 import dagger.Module
@@ -26,4 +27,9 @@ internal object DaoModule {
     fun providesMovementDao(
         database: MuscleAtlasDatabase
     ): MovementDao = database.movementDao()
+
+    @Provides
+    fun providesClientMovementDao(
+        database: MuscleAtlasDatabase
+    ): ClientMovementDao = database.clientMovementDao()
 }

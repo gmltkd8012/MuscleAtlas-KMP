@@ -55,7 +55,8 @@ class WorkoutAddViewModel @Inject constructor(
             }
             launch {
                 updateMovementUseCase(
-                    state.value.eccentric.saveWith() + state.value.concentric.saveWith()
+                    workoutId = workoutData.id,
+                    movement = state.value.eccentric.saveWith() + state.value.concentric.saveWith()
                 )
             }
         }
@@ -67,9 +68,9 @@ class WorkoutAddViewModel @Inject constructor(
         }
     }
 
-    fun showMovementDeleteDialog() {
+    fun showMovementDeleteDialog(movement: MovementData) {
         viewModelScope.launch {
-            sendSideEffect(WorkoutAddSdieEffect.ShowMovementDeleteDialog)
+            sendSideEffect(WorkoutAddSdieEffect.ShowMovementDeleteDialog(movement))
         }
     }
 
@@ -89,8 +90,10 @@ class WorkoutAddViewModel @Inject constructor(
         }
     }
 
-    fun deleteMovementUI(movement: MovementData) {
+    fun deleteMovementUI(movement: MovementData?) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (movement == null) return@launch
+
             when (movement.contraction) {
                 Contraction.Concentric.value ->
                     reduceState {
@@ -108,5 +111,5 @@ class WorkoutAddViewModel @Inject constructor(
 
 sealed interface WorkoutAddSdieEffect {
     data class ShowMovementAddBottomSheet(val movement: MovementData? = null) : WorkoutAddSdieEffect
-    data object ShowMovementDeleteDialog : WorkoutAddSdieEffect
+    data class ShowMovementDeleteDialog(val movement: MovementData) : WorkoutAddSdieEffect
 }

@@ -50,6 +50,7 @@ import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddSdieEffect
 import com.rebuilding.muscleatlas.setting.viewmodel.WorkoutAddViewModel
 import com.rebuilding.muscleatlas.ui.extension.hide
 import com.rebuilding.muscleatlas.ui.extension.isShown
+import com.rebuilding.muscleatlas.ui.extension.rememberDeleteMovementDialogState
 import com.rebuilding.muscleatlas.ui.extension.rememberMovementBottomSheetState
 import com.rebuilding.muscleatlas.ui.extension.show
 import java.util.UUID
@@ -68,7 +69,7 @@ fun AddWorkoutScreen(
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     val uuid by remember { mutableStateOf<UUID>(UUID.randomUUID()) }
 
-    var movementDeleteDialogState by remember { mutableStateOf<Boolean>(false) }
+    var movementDeleteDialogState = rememberDeleteMovementDialogState<WorkoutAddSdieEffect>()
     val movementAddBottomSheetState = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
 
     BackHandler {
@@ -94,7 +95,9 @@ fun AddWorkoutScreen(
                 )
             }
             is WorkoutAddSdieEffect.ShowMovementDeleteDialog -> {
-                movementDeleteDialogState = true
+                movementDeleteDialogState.show(
+                    movement = sideEffect.movement
+                )
             }
         }
     }
@@ -142,7 +145,7 @@ fun AddWorkoutScreen(
                     )
                 },
                 onClickDelete = { movement ->
-                    viewModel.showMovementDeleteDialog()
+                    viewModel.showMovementDeleteDialog(movement)
                 }
             )
 
@@ -167,7 +170,7 @@ fun AddWorkoutScreen(
                     )
                 },
                 onClickDelete = { movement ->
-                    viewModel.showMovementDeleteDialog()
+                    viewModel.showMovementDeleteDialog(movement)
                 }
             )
 
@@ -254,18 +257,19 @@ fun AddWorkoutScreen(
         }
     }
 
-    if (movementDeleteDialogState) {
+    if (movementDeleteDialogState.isShown) {
         VerticalDialog(
             title = "운동을 삭제하시겠습니까?",
             description = "삭제된 운동은 복구할 수 없습니다.",
             leftButton = {
-                movementDeleteDialogState = false
+                movementDeleteDialogState.hide()
             },
             rightButton = {
-                movementDeleteDialogState = false
+                viewModel.deleteMovementUI(movementDeleteDialogState.value.movement)
+                movementDeleteDialogState.hide()
             },
             onDismiss = {
-                movementDeleteDialogState = false
+                movementDeleteDialogState.hide()
             }
         )
     }

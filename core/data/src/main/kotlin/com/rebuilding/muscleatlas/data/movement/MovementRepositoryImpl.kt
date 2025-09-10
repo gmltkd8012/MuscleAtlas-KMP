@@ -37,7 +37,7 @@ class MovementRepositoryImpl @Inject constructor(
         movementDao.deleteMovement(id)
     }
 
-    override suspend fun clearMovements() {
-        movementDao.clearMovemenets()
+    override suspend fun deleteMovementsByWorkoutId(workoutId: String) {
+        movementDao.deleteMovemenetsByWorkoutId(workoutId)
     }
 }

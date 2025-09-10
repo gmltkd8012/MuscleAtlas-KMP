@@ -27,4 +27,9 @@ object AppColors {
     val primaryButtonTextDark = Color.White
 
     val warning = Color.Red
+
+
+    object Shadow {
+        val Dialog = Color(0x1F000000)
+    }
 }

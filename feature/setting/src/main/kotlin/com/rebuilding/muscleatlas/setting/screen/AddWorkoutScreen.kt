@@ -41,6 +41,7 @@ import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.component.BaseBottomSheet
 import com.rebuilding.muscleatlas.design_system.component.BaseTextField
 import com.rebuilding.muscleatlas.design_system.component.PrimaryButton
+import com.rebuilding.muscleatlas.design_system.component.VerticalDialog
 import com.rebuilding.muscleatlas.model.Contraction
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.WorkoutData
@@ -67,6 +68,7 @@ fun AddWorkoutScreen(
     var textDescriptionFieldValue by remember { mutableStateOf<TextFieldState>(TextFieldState("")) }
     val uuid by remember { mutableStateOf<UUID>(UUID.randomUUID()) }
 
+    var movementDeleteDialogState by remember { mutableStateOf<Boolean>(false) }
     val movementAddBottomSheetState = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
 
     BackHandler {
@@ -90,6 +92,9 @@ fun AddWorkoutScreen(
                 movementAddBottomSheetState.show(
                     movement = sideEffect.movement
                 )
+            }
+            is WorkoutAddSdieEffect.ShowMovementDeleteDialog -> {
+                movementDeleteDialogState = true
             }
         }
     }
@@ -137,7 +142,7 @@ fun AddWorkoutScreen(
                     )
                 },
                 onClickDelete = { movement ->
-                    viewModel.deleteMovementUI(movement)
+                    viewModel.showMovementDeleteDialog()
                 }
             )
 
@@ -162,7 +167,7 @@ fun AddWorkoutScreen(
                     )
                 },
                 onClickDelete = { movement ->
-                    viewModel.deleteMovementUI(movement)
+                    viewModel.showMovementDeleteDialog()
                 }
             )
 
@@ -247,5 +252,21 @@ fun AddWorkoutScreen(
                 }
             )
         }
+    }
+
+    if (movementDeleteDialogState) {
+        VerticalDialog(
+            title = "운동을 삭제하시겠습니까?",
+            description = "삭제된 운동은 복구할 수 없습니다.",
+            leftButton = {
+                movementDeleteDialogState = false
+            },
+            rightButton = {
+                movementDeleteDialogState = false
+            },
+            onDismiss = {
+                movementDeleteDialogState = false
+            }
+        )
     }
 }

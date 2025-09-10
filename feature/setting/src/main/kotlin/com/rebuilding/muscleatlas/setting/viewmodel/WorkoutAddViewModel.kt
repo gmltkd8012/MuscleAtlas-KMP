@@ -67,6 +67,12 @@ class WorkoutAddViewModel @Inject constructor(
         }
     }
 
+    fun showMovementDeleteDialog() {
+        viewModelScope.launch {
+            sendSideEffect(WorkoutAddSdieEffect.ShowMovementDeleteDialog)
+        }
+    }
+
     fun updateMovementUI(movement: MovementData) {
         viewModelScope.launch(Dispatchers.IO) {
             when (movement.contraction) {
@@ -102,4 +108,5 @@ class WorkoutAddViewModel @Inject constructor(
 
 sealed interface WorkoutAddSdieEffect {
     data class ShowMovementAddBottomSheet(val movement: MovementData? = null) : WorkoutAddSdieEffect
+    data object ShowMovementDeleteDialog : WorkoutAddSdieEffect
 }

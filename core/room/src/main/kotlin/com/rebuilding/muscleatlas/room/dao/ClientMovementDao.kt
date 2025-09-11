@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface ClientMovementDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertClientMovement(clientMovement: ClientMovementEntity)
+    suspend fun insertClientMovement(clientMovement: List<ClientMovementEntity>)
 
     @Query("SELECT * FROM client_movement WHERE clientId = :clientId")
     fun getClientMovements(clientId: String): Flow<List<ClientMovementEntity>>

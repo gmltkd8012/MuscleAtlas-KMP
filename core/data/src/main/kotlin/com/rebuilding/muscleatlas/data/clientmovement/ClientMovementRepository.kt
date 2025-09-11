@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ClientMovementRepository {
 
-    suspend fun insertClientMovement(clientMovement: ClientMovementData)
+    suspend fun insertClientMovement(clientMovement: List<ClientMovementData>)
 
     suspend fun getClientMovements(clientId: String): Flow<List<ClientMovementData>>
 

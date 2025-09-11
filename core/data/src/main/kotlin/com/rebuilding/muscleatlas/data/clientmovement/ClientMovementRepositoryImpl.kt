@@ -15,12 +15,12 @@ class ClientMovementRepositoryImpl @Inject constructor(
     private val clientMovementDao: ClientMovementDao,
 ) : ClientMovementRepository {
 
-    override suspend fun insertClientMovement(clientMovement: ClientMovementData) {
-        clientMovementDao.insertClientMovement(clientMovement.asEntity())
+    override suspend fun insertClientMovement(clientMovement: List<ClientMovementData>) {
+        clientMovementDao.insertClientMovement(clientMovement.map { it.asEntity() })
     }
 
-    override suspend fun getClientMovements(clientId: String): Flow<List<ClientMovementData>> =
-        clientMovementDao.getClientMovements(clientId)
+    override suspend fun getClientMovementsByWorkoutId(clientId: String, workoutId: String): Flow<List<ClientMovementData>> =
+        clientMovementDao.getClientMovementsByWorkoutId(clientId, workoutId)
             .map { it.map(ClientMovementEntity::asExternalModel) }
 
     override suspend fun updateClientMovement(

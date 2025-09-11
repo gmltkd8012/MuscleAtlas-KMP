@@ -79,7 +79,8 @@ fun SettingScreen(
                         },
                         onClickAddWorkout = {
                             navController.navigate(SettingScreen.AddWorkout.createRoute(""))
-                        }
+                        },
+                        onClickBack = onClickBack
                     )
                 }
                 composable(SettingScreen.AppInfo.route) {

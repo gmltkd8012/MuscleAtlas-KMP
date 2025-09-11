@@ -64,7 +64,13 @@ fun ClientProfileScreen(
     var isProfileScreen by remember { mutableStateOf(true) }
     val movementDetailBottomSheet = rememberMovementBottomSheetState<ClientSideEffect>()
 
-    BackHandler { onClickBack }
+    BackHandler {
+        if (isProfileScreen) {
+            onClickBack()
+        } else {
+            isProfileScreen = true
+        }
+    }
 
     LaunchedEffect(Unit) {
         if (clientId.isNotEmpty()) {
@@ -114,9 +120,10 @@ fun ClientProfileScreen(
                     Spacer(Modifier.height(16.dp))
 
                     ClientWorkoutChip(
+                        clientId = state.client.id,
                         workoutList = state.workoutList,
-                        onClickedWorkout = { selectedWorkout ->
-                            viewModel.selectedWorkout(selectedWorkout)
+                        onClickedWorkout = { clientId, workoutData ->
+                            viewModel.selectedWorkout(clientId, workoutData)
                             isProfileScreen = false
                         }
                     )
@@ -145,12 +152,15 @@ fun ClientProfileScreen(
                             HorizontalPager(
                                 state = pagerState,
                                 modifier = Modifier.fillMaxSize(),
-                                userScrollEnabled = true,
+                                userScrollEnabled = false,
                             ) {
                                 when (currentTabIndex) {
                                     Contraction.Concentric.value -> {
                                         MovementListChip(
                                             contractions = state.concentric,
+                                            onClickCheckBox = { clientMovement ->
+                                                viewModel.updateClientMovement(clientMovement)
+                                            },
                                             onClick = { movement ->
                                                 viewModel.showMovementDetailBottomSheet(movement)
                                             }
@@ -159,6 +169,9 @@ fun ClientProfileScreen(
                                     Contraction.Eccentric.value -> {
                                         MovementListChip(
                                             contractions = state.eccentric,
+                                            onClickCheckBox = { clientMovement ->
+                                                viewModel.updateClientMovement(clientMovement)
+                                            },
                                             onClick = { movement ->
                                                 viewModel.showMovementDetailBottomSheet(movement)
                                             }

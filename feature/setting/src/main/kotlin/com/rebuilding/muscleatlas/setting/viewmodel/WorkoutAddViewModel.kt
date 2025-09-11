@@ -56,7 +56,7 @@ class WorkoutAddViewModel @Inject constructor(
             launch {
                 updateMovementUseCase(
                     workoutId = workoutData.id,
-                    movement = state.value.eccentric.saveWith() + state.value.concentric.saveWith()
+                    movements = state.value.eccentric.saveWith() + state.value.concentric.saveWith()
                 )
             }
         }

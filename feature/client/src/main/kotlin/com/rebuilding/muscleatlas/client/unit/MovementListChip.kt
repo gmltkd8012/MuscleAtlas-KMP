@@ -13,14 +13,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.rebuilding.muscleatlas.model.ClientMovementData
 import com.rebuilding.muscleatlas.model.Movement
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.state.ContractionTypeList
+import com.rebuilding.muscleatlas.model.state.ContractionTypeWithClientMovementList
 
 @Composable
 fun MovementListChip(
-    scrollState: ScrollState = ScrollState(0),
-    contractions: ContractionTypeList = ContractionTypeList(),
+    scrollState: ScrollState = rememberScrollState(),
+    contractions: ContractionTypeWithClientMovementList = ContractionTypeWithClientMovementList(),
+    onClickCheckBox: (ClientMovementData) -> Unit = {},
     onClick: (MovementData) -> Unit = {},
 ) {
     Column(
@@ -30,6 +33,7 @@ fun MovementListChip(
             title = Movement.JoinMovement.title,
             icon = Icons.Default.Warning,
             movemenetList = contractions.joinMovementList,
+            onClickCheckBox = onClickCheckBox,
             onClick = onClick
         )
 
@@ -39,6 +43,7 @@ fun MovementListChip(
             title = Movement.StabilizationMechanism.title,
             icon = Icons.Default.Warning,
             movemenetList = contractions.stabilizationMechanismList,
+            onClickCheckBox = onClickCheckBox,
             onClick = onClick
         )
 
@@ -48,6 +53,7 @@ fun MovementListChip(
             title = Movement.NeuromuscularRelation.title,
             icon = Icons.Default.Warning,
             movemenetList = contractions.neuromuscularRelationList,
+            onClickCheckBox = onClickCheckBox,
             onClick = onClick
         )
 

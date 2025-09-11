@@ -146,7 +146,7 @@ fun ClientProfileScreen(
                             HorizontalPager(
                                 state = pagerState,
                                 modifier = Modifier.fillMaxSize(),
-                                userScrollEnabled = true,
+                                userScrollEnabled = false,
                             ) {
                                 when (currentTabIndex) {
                                     Contraction.Concentric.value -> {

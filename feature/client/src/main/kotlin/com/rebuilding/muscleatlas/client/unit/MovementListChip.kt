@@ -21,7 +21,7 @@ import com.rebuilding.muscleatlas.model.state.ContractionTypeWithClientMovementL
 
 @Composable
 fun MovementListChip(
-    scrollState: ScrollState = ScrollState(0),
+    scrollState: ScrollState = rememberScrollState(),
     contractions: ContractionTypeWithClientMovementList = ContractionTypeWithClientMovementList(),
     onClickCheckBox: (ClientMovementData) -> Unit = {},
     onClick: (MovementData) -> Unit = {},

@@ -19,8 +19,8 @@ class ClientMovementRepositoryImpl @Inject constructor(
         clientMovementDao.insertClientMovement(clientMovement.map { it.asEntity() })
     }
 
-    override suspend fun getClientMovements(clientId: String): Flow<List<ClientMovementData>> =
-        clientMovementDao.getClientMovements(clientId)
+    override suspend fun getClientMovementsByWorkoutId(clientId: String, workoutId: String): Flow<List<ClientMovementData>> =
+        clientMovementDao.getClientMovementsByWorkoutId(clientId, workoutId)
             .map { it.map(ClientMovementEntity::asExternalModel) }
 
     override suspend fun updateClientMovement(

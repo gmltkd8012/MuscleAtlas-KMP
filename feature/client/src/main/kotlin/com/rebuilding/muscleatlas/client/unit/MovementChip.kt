@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.client.unit
 
+import android.R.attr.onClick
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.design_system.base.BaseText
+import com.rebuilding.muscleatlas.model.ClientMovementData
+import com.rebuilding.muscleatlas.model.MovementByClientData
 import com.rebuilding.muscleatlas.model.MovementData
 import com.rebuilding.muscleatlas.model.state.ContractionTypeList
 
@@ -30,7 +33,8 @@ import com.rebuilding.muscleatlas.model.state.ContractionTypeList
 fun MovementChip(
     title: String,
     icon: ImageVector,
-    movemenetList: List<MovementData> = emptyList<MovementData>(),
+    movemenetList: List<MovementByClientData> = emptyList<MovementByClientData>(),
+    onClickCheckBox: (ClientMovementData) -> Unit = {},
     onClick: (MovementData) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -78,10 +82,18 @@ fun MovementChip(
                     count = movemenetList.size,
                 ) { index ->
                     MovementBox(
-                        name = movemenetList[index].title,
+                        name = movemenetList[index].movementData.title,
                         size = 150.dp,
+                        isChecked = movemenetList[index].clientMovementData.isCompleted,
+                        onClickCheckBox = {
+                            onClickCheckBox(
+                                movemenetList[index].clientMovementData.copy(
+                                    isCompleted = it
+                                )
+                            )
+                        },
                         onClick = {
-                            onClick(movemenetList[index])
+                            onClick(movemenetList[index].movementData)
                         }
                     )
                 }
@@ -97,14 +109,14 @@ fun MovementChipPreview() {
         title = "Movement",
         icon = Icons.Default.Warning,
         movemenetList = listOf(
-            MovementData(
-                "세부 동작 1"
+            MovementByClientData(
+                MovementData(title = "세부 동작 1")
             ),
-            MovementData(
-                "세부 동작 2"
+            MovementByClientData(
+                MovementData(title = "세부 동작 2")
             ),
-            MovementData(
-                "세부 동작 3"
+            MovementByClientData(
+                MovementData(title = "세부 동작 3")
             )
         )
     )

@@ -15,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
+import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun BaseCircleCheckBox(
     modifier: Modifier = Modifier,
     isChecked: Boolean = false,
+    onClickCheckBox: (Boolean) -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -27,6 +29,11 @@ fun BaseCircleCheckBox(
             .background(
                 color = if (isChecked) AppColors.clear else AppColors.warning,
                 shape = CircleShape
+            )
+            .clickableWithoutIndication(
+                onClick = {
+                    onClickCheckBox(!isChecked)
+                }
             ),
         contentAlignment = Alignment.Center,
     ) {

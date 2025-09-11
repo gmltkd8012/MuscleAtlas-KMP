@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.client.unit
 
+import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +20,15 @@ import androidx.compose.ui.unit.sp
 import com.rebuilding.muscleatlas.design_system.base.BaseText
 import com.rebuilding.muscleatlas.design_system.base.SquaredImageBox
 import com.rebuilding.muscleatlas.design_system.component.BaseCircleCheckBox
+import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun MovementBox(
     name: String,
     imgUrl: String? = null,
     size: Dp = 200.dp,
+    isChecked: Boolean,
+    onClickCheckBox:(Boolean) -> Unit,
     onClick: () -> Unit = {},
 ) {
     Column(
@@ -36,16 +40,18 @@ fun MovementBox(
         Box(
             modifier = Modifier.wrapContentSize()
         ) {
-            BaseCircleCheckBox(
-                modifier = Modifier
-                    .size(36.dp)
-                    .align(Alignment.TopEnd)
-            )
-
             SquaredImageBox(
                 icon = null,
                 size = size,
                 onClick = onClick
+            )
+
+            BaseCircleCheckBox(
+                modifier = Modifier
+                    .size(36.dp)
+                    .align(Alignment.TopEnd),
+                isChecked = isChecked,
+                onClickCheckBox = onClickCheckBox
             )
         }
 
@@ -65,6 +71,8 @@ fun MovementBox(
 @Composable
 fun MovementBoxPreview() {
     MovementBox(
-        name = "세부 동작 1"
+        name = "세부 동작 1",
+        isChecked = false,
+        onClickCheckBox = {},
     )
 }

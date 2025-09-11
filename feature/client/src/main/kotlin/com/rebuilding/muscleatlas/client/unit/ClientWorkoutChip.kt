@@ -26,8 +26,9 @@ import com.rebuilding.muscleatlas.model.WorkoutData
 
 @Composable
 fun ClientWorkoutChip(
+    clientId: String,
     workoutList: List<WorkoutData> = emptyList<WorkoutData>(),
-    onClickedWorkout: (WorkoutData) -> Unit = {},
+    onClickedWorkout: (String, WorkoutData) -> Unit = { _, _ -> },
 ) {
     if (workoutList.isEmpty()) { // TODO - 등록된 운동 항목이 없는 경우
         Box(
@@ -72,7 +73,7 @@ fun ClientWorkoutChip(
                         name = workoutList[index].title,
                         icon = Icons.Default.Warning,
                         onClick = {
-                            onClickedWorkout(workoutList[index])
+                            onClickedWorkout(clientId ,workoutList[index])
                         }
                     )
                 }
@@ -85,6 +86,7 @@ fun ClientWorkoutChip(
 @Composable
 private fun ClientWorkoutChipPreview() {
     ClientWorkoutChip(
+        clientId = "",
         workoutList = listOf(
             WorkoutData(title = "벤치프레스"),
             WorkoutData(title = "스쿼트"),
@@ -96,5 +98,7 @@ private fun ClientWorkoutChipPreview() {
 @Preview
 @Composable
 private fun ClientWorkoutChipEmptyPreview() {
-    ClientWorkoutChip()
+    ClientWorkoutChip(
+        clientId = "",
+    )
 }

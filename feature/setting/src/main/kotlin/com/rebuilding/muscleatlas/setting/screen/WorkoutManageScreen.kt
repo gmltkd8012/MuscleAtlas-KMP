@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.setting.screen
 
 import android.text.TextUtils.isEmpty
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,8 +40,13 @@ fun WorkoutManageScreen(
     viewModel: WorkoutManageViewModel = hiltViewModel(),
     onClickEditWorkout: (String) -> Unit = {},
     onClickAddWorkout: () -> Unit = {},
+    onClickBack: () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
+
+    BackHandler {
+        onClickBack()
+    }
 
     Column (
         modifier = Modifier

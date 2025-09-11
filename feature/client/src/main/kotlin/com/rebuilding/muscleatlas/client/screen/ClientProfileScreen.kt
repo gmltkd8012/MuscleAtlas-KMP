@@ -64,7 +64,13 @@ fun ClientProfileScreen(
     var isProfileScreen by remember { mutableStateOf(true) }
     val movementDetailBottomSheet = rememberMovementBottomSheetState<ClientSideEffect>()
 
-    BackHandler { onClickBack }
+    BackHandler {
+        if (isProfileScreen) {
+            onClickBack()
+        } else {
+            isProfileScreen = true
+        }
+    }
 
     LaunchedEffect(Unit) {
         if (clientId.isNotEmpty()) {

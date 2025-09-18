@@ -33,7 +33,6 @@ fun WorkoutBox(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SquaredImageBox(
-            icon = icon,
             size = size,
             onClick = onClick
         )

@@ -2,8 +2,11 @@ package com.rebuilding.muscleatlas.setting.screen
 
 import android.R.attr.bottom
 import android.R.attr.type
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,8 +75,19 @@ fun AddWorkoutScreen(
     var movementDeleteDialogState = rememberDeleteMovementDialogState<WorkoutAddSdieEffect>()
     val movementAddBottomSheetState = rememberMovementBottomSheetState<WorkoutAddSdieEffect>()
 
+    var profileUri by remember { mutableStateOf<Uri?>(null) }
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+    ) { uri: Uri? ->
+        profileUri = uri
+    }
+
     BackHandler {
         onClickBack()
+    }
+
+    LaunchedEffect(profileUri) {
+        Log.d("heesang", "profileUri: $profileUri")
     }
 
     LaunchedEffect(Unit) {
@@ -246,6 +260,10 @@ fun AddWorkoutScreen(
         ) {
             MovementBottomSheetScreen(
                 state = movementAddBottomSheetState,
+                uri = profileUri,
+                onSelectedImage = {
+                    galleryLauncher.launch("image/*")
+                },
                 onClickedClose = {
                     movementAddBottomSheetState.hide()
                 },

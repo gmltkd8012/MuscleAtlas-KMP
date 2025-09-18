@@ -1,8 +1,11 @@
 package com.rebuilding.muscleatlas.design_system.base
 
+import android.R.attr.contentDescription
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -11,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,13 +25,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.rebuilding.muscleatlas.design_system.theme.AppColors
 import com.rebuilding.muscleatlas.ui.extension.clickableWithoutIndication
 
 @Composable
 fun SquaredImageBox(
     modifier: Modifier = Modifier,
-    icon: ImageVector?,
+    uri: Uri? = null,
     iconColor: Color = MaterialTheme.colorScheme.onSecondary,
     size: Dp = Dp.Unspecified,
     onClick: () -> Unit = {},
@@ -35,18 +40,18 @@ fun SquaredImageBox(
     Box(
         modifier = modifier
             .size(size)
-            .background(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .background(color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.1f))
             .clickableWithoutIndication(
                 onClick = onClick
             ),
         contentAlignment = Alignment.Center
     ) {
-        if (icon != null) {
-            Image(
-                imageVector = icon,
+        if (uri != null) {
+            AsyncImage(
+                model = uri,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(iconColor),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop,
             )
         } else {
             BaseText(
@@ -67,7 +72,6 @@ fun SquaredImageBox(
 @Composable
 private fun SquaredImageBoxPreview() {
     SquaredImageBox(
-        icon = Icons.Default.Add,
         size = 100.dp
     )
 }

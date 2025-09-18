@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.setting.screen
 
 import android.R.attr.text
 import android.R.attr.type
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -47,6 +48,8 @@ import java.util.UUID
 @Composable
 fun MovementBottomSheetScreen(
     state: MovementBottomSheetState,
+    uri: Uri?,
+    onSelectedImage: () -> Unit,
     onClickedClose: () -> Unit,
     onSaveMovement: (MovementData) -> Unit,
 ) {
@@ -96,8 +99,8 @@ fun MovementBottomSheetScreen(
 
                 SquaredImageBox(
                     modifier = Modifier.size(200.dp),
-                    icon = null,
-                    onClick = { }
+                    uri = uri,
+                    onClick = onSelectedImage
                 )
 
                 Spacer(Modifier.height(25.dp))

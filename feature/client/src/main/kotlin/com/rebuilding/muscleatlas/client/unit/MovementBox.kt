@@ -41,7 +41,6 @@ fun MovementBox(
             modifier = Modifier.wrapContentSize()
         ) {
             SquaredImageBox(
-                icon = null,
                 size = size,
                 onClick = onClick
             )

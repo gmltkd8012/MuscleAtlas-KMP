@@ -59,7 +59,6 @@ fun WorkoutManageChip(
             ) {
                 SquaredImageBox(
                     size = 48.dp,
-                    icon = workoutImg
                 )
 
                 Spacer(Modifier.width(16.dp))

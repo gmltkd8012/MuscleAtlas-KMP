@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.DatabaseUtils
 import androidx.room.Room
 import com.rebuilding.muscleatlas.room.MuscleAtlasDatabase
+import com.rebuilding.muscleatlas.room.converter.UriConverter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,5 +23,7 @@ internal object DatabaseModule {
         context,
         MuscleAtlasDatabase::class.java,
         "muscle_atlas_db"
-    ).build()
+    )
+    .addTypeConverter(UriConverter())
+    .build()
 }

@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.ui.extension
 
 import android.R.attr.name
 import android.R.attr.type
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +29,7 @@ fun <SideEffect> rememberClientBottomSheetState(
             mutableStateOf(
                 ClientBottomSheetData(
                     isShown = list[0] as Boolean,
-                    imgUrl = list[1] as String?,
+                    imgUrl = list[1] as Uri?,
                     id = list[2] as String?,
                     name = list[3] as String?,
                     memo = list[4] as String?,
@@ -65,7 +66,7 @@ fun <SideEffect> rememberMovementBottomSheetState(
                     isShown = it[0] as Boolean,
                     id = it[1] as String?,
                     workoutId = it[2] as String?,
-                    imgUrl = it[3] as String?,
+                    imgUrl = it[3] as Uri?,
                     type = it[4] as Int?,
                     title = it[5] as String?,
                     description = it[6] as String?,

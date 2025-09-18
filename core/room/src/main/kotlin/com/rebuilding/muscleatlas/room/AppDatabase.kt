@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.rebuilding.muscleatlas.room.converter.UriConverter
 import com.rebuilding.muscleatlas.room.dao.ClientDao
 import com.rebuilding.muscleatlas.room.dao.ClientMovementDao
 import com.rebuilding.muscleatlas.room.dao.MovementDao
@@ -33,6 +35,7 @@ import com.rebuilding.muscleatlas.room.model.WorkoutEntity
     ],
     version = 1
 )
+@TypeConverters(UriConverter::class)
 internal abstract class MuscleAtlasDatabase : RoomDatabase() {
     abstract fun clientDao(): ClientDao
     abstract fun workoutDao(): WorkoutDao

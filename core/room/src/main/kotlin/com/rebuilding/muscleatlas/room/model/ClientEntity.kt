@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.room.model
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.rebuilding.muscleatlas.model.Client
@@ -11,7 +12,7 @@ import java.util.UUID
 data class ClientEntity(
     @PrimaryKey
     val id: String,
-    val imgUrl: String?,
+    val imgUrl: Uri?,
     val name: String,
     val memo: String,
     val currentMills: Long,

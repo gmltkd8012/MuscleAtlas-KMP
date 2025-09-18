@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.room.model
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.rebuilding.muscleatlas.model.WorkoutData
@@ -10,7 +11,7 @@ import com.rebuilding.muscleatlas.model.WorkoutData
 data class WorkoutEntity(
     @PrimaryKey
     val id: String,
-    val imgUrl: String?,
+    val imgUrl: Uri?,
     val title: String,
     val description: String,
     val currentMills: Long,

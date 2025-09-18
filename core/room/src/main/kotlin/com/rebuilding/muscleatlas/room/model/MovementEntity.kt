@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.room.model
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -22,7 +23,7 @@ data class MovementEntity(
     val workoutId: String, // FK
     val contraction: Int, // 수축 유형
     val type: Int, // 세부 유형
-    val imgUrl: String?,
+    val imgUrl: Uri?,
     val title: String,
     val description: String,
     val currentMills: Long,

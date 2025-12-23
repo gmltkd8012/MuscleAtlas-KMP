@@ -19,7 +19,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "model"
+            baseName = "network"
             isStatic = true
         }
     }
@@ -29,18 +29,28 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.core)
+//            implementation(libs.ktor.client.core)
+//            implementation(libs.ktor.client.content.negotiation)
+//            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(project(":core:model"))
         }
         androidMain.dependencies {
+//            implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
+//            implementation(libs.ktor.client.darwin)
+        }
+        jsMain.dependencies {
+//            implementation(libs.ktor.client.js)
         }
     }
 }
 
 android {
-    namespace = "com.rebuilding.muscleatlas.model"
+    namespace = "com.rebuilding.muscleatlas.network"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

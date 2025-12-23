@@ -14,62 +14,27 @@ dependencies {
     compileOnly(libs.android.tools.build.gradle)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.compose.multiplatform.gradle.plugin)
 }
 
 gradlePlugin {
     plugins {
-        register("android-hilt") {
-            id = "all.hilt"
-            implementationClass = "com.rebuilding.convention.plugin.AndroidHiltPlugin"
+        // KMP Library Plugin (for core modules)
+        register("kmp-library") {
+            id = "kmp.library"
+            implementationClass = "com.rebuilding.convention.plugin.KmpLibraryPlugin"
         }
-    }
 
-    plugins {
-        register("application") {
-            id = "app.application"
-            implementationClass = "com.rebuilding.convention.plugin.ApplicationConventionPlugin"
+        // KMP Compose Plugin (for shared UI modules)
+        register("kmp-compose") {
+            id = "kmp.compose"
+            implementationClass = "com.rebuilding.convention.plugin.KmpComposePlugin"
         }
-    }
 
-    plugins {
-        register("application-flavor") {
-            id = "app.flavor"
-            implementationClass = "com.rebuilding.convention.plugin.AppFlavorConventionPlugin"
-        }
-    }
-
-    plugins {
-        register("application-compose") {
-            id = "app.compose"
-            implementationClass = "com.rebuilding.convention.plugin.ApplicationComposePlugin"
-        }
-    }
-
-    plugins {
-        register("library") {
-            id = "lib.library"
-            implementationClass = "com.rebuilding.convention.plugin.LibraryConventionPlugin"
-        }
-    }
-
-    plugins {
-        register("library-flavor") {
-            id = "lib.flavor"
-            implementationClass = "com.rebuilding.convention.plugin.LibraryFlavorConventionPlugin"
-        }
-    }
-
-    plugins {
-        register("library-compose") {
-            id = "lib.compose"
-            implementationClass = "com.rebuilding.convention.plugin.LibraryComposePlugin"
-        }
-    }
-
-    plugins {
-        register("library-room") {
-            id = "lib.room"
-            implementationClass = "com.rebuilding.convention.plugin.AndroidRoomPlugin"
+        // Android App Plugin (for androidApp entry point)
+        register("android-app") {
+            id = "android.app"
+            implementationClass = "com.rebuilding.convention.plugin.AndroidAppPlugin"
         }
     }
 }

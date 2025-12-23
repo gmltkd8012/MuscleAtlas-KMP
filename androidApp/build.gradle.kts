@@ -44,8 +44,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":composeApp"))
 
+    implementation(project(":shared"))
     implementation(compose.runtime)
     implementation(compose.foundation)
     implementation(compose.material3)

@@ -24,7 +24,7 @@ dependencyResolutionManagement {
 rootProject.name = "MuscleAtlas"
 
 // App entry points
-include(":composeApp")
+include(":shared")
 include(":androidApp")
 
 // Core modules (KMP)

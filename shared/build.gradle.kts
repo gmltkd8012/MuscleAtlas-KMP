@@ -99,7 +99,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.rebuilding.muscleatlas.composeapp"
+    namespace = "com.rebuilding.muscleatlas.shared"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

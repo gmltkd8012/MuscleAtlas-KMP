@@ -1,0 +1,17 @@
+plugins {
+    alias(libs.plugins.library)
+    alias(libs.plugins.lib.flavor)
+    alias(libs.plugins.lib.compose)
+}
+
+android {
+    namespace = "com.rebuilding.muscleatlas.design_system"
+}
+
+dependencies {
+    implementation(project(":core:ui"))
+    implementation(project(":core:util"))
+    implementation(project(":core:model"))
+
+    implementation(libs.androidx.glance)
+}

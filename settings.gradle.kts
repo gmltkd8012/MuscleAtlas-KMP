@@ -22,15 +22,19 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "MuscleAtlas"
-include(":app")
+
+// App entry points
+include(":shared")
+include(":androidApp")
+
+// Core modules (KMP)
 include(":core:data")
-include(":core:design-system")
 include(":core:domain")
-include(":core:room")
-include(":core:util")
-include(":core:ui")
-include(":feature:main")
-include(":feature:client")
-include(":feature:setting")
 include(":core:model")
+include(":core:database")
 include(":core:datastore")
+include(":core:network")
+
+// Shared UI (CMP)
+include(":core:ui")
+include(":core:design-system")

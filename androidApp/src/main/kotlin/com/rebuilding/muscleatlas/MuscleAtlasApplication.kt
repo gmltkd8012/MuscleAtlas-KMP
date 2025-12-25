@@ -9,11 +9,5 @@ class MuscleAtlasApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        startKoin {
-            androidLogger()
-            androidContext(this@MuscleAtlasApplication)
-            // modules(appModule) // TODO: Add your Koin modules here
-        }
     }
 }

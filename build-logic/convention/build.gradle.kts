@@ -36,5 +36,11 @@ gradlePlugin {
             id = "android.app"
             implementationClass = "com.rebuilding.convention.plugin.AndroidAppPlugin"
         }
+
+        // KMP Koin Plugin (for Koin DI setup)
+        register("kmp-koin") {
+            id = "kmp.koin"
+            implementationClass = "com.rebuilding.convention.plugin.KmpKoinPlugin"
+        }
     }
 }

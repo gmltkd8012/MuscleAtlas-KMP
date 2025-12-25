@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 /**
  * Kotlin Multiplatform + Compose 플러그인
@@ -24,10 +25,8 @@ class KmpComposePlugin : Plugin<Project> {
             extensions.configure<KotlinMultiplatformExtension> {
                 // Android target
                 androidTarget {
-                    compilations.all {
-                        kotlinOptions {
-                            jvmTarget = "17"
-                        }
+                    compilerOptions {
+                        jvmTarget.set(JvmTarget.JVM_17)
                     }
                 }
 

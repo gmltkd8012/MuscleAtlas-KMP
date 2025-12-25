@@ -13,6 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.supabase.di.supabaseModule
+import org.koin.core.KoinApplication
+import org.koin.dsl.KoinAppDeclaration
 
 @Composable
 fun App() {
@@ -41,4 +44,10 @@ fun App() {
             }
         }
     }
+}
+
+fun muscleAtlasAppDeclaration(
+    platformDeclaration: KoinApplication.() -> Unit = {},
+): KoinAppDeclaration = {
+    modules(supabaseModule)
 }

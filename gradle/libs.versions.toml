@@ -5,35 +5,35 @@ appVersionCode = "10000"
 appVersionName = "01.00.00"
 
 # base setting
-agp = "8.5.2"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+agp = "8.9.1"
+kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
 
 # KMP/CMP
-composeMultiplatform = "1.7.1"
+composeMultiplatform = "1.8.0"
 
 # sdk
 compileSdk = "36"
 minSdk = "26"
 
 # AndroidX
-coreKtx = "1.13.1"
-lifecycleRuntimeKtx = "2.8.6"
+coreKtx = "1.15.0"
+lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-navigationCompose = "2.8.1"
+navigationCompose = "2.9.0"
 
 # Koin (DI - KMP compatible)
-koin = "4.0.0"
-koinCompose = "4.0.0"
+koin = "4.0.4"
+koinCompose = "4.0.4"
 
 # Ktor (Network - KMP)
-ktor = "2.3.12"
+ktor = "3.1.0"
 
 # serialization
-kotlinSerializationJson = "1.7.3"
+kotlinSerializationJson = "1.8.0"
 
 # Coroutines
-coroutines = "1.9.0"
+coroutines = "1.10.1"
 
 # Test
 junit = "4.13.2"
@@ -47,7 +47,7 @@ datastoreVersion = "1.1.1"
 androidMaterial = "1.11.0"
 
 # Supabase
-supabase = "3.2.3"
+supabase = "3.2.4"
 
 [libraries]
 # Gradle Plugins
@@ -124,6 +124,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 convention-android-library = { id = "android.library", version = "unspecified" }
 convention-kmp-compose = { id = "kmp.compose", version = "unspecified" }
 convention-android-app = { id = "android.app", version = "unspecified" }
+convention-kmp-koin = { id = "kmp.koin", version = "unspecified" }
 
 [bundles]
 

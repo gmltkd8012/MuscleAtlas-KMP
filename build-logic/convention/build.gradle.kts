@@ -19,13 +19,13 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        // KMP Library Plugin (for core modules)
-        register("kmp-library") {
-            id = "kmp.library"
-            implementationClass = "com.rebuilding.convention.plugin.KmpLibraryPlugin"
+        // Android Library Plugin (for library modules)
+        register("android-library") {
+            id = "android.library"
+            implementationClass = "com.rebuilding.convention.plugin.AndroidLibraryPlugin"
         }
 
-        // KMP Compose Plugin (for shared UI modules)
+        // KMP Compose Plugin (for KMP + Compose setup)
         register("kmp-compose") {
             id = "kmp.compose"
             implementationClass = "com.rebuilding.convention.plugin.KmpComposePlugin"

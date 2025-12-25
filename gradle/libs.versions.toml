@@ -46,6 +46,9 @@ datastoreVersion = "1.1.1"
 # AndroidX Material (Android only)
 androidMaterial = "1.11.0"
 
+# Supabase
+supabase = "3.2.3"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -92,6 +95,13 @@ navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navi
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "datastoreVersion" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreVersion" }
 
+# Supabase
+supabase-auth = { group = "io.github.jan-tennert.supabase", name = "auth-kt", version.ref = "supabase" }
+supabase-postgrest = { group = "io.github.jan-tennert.supabase", name = "postgrest-kt", version.ref = "supabase" }
+supabase-functions = { group = "io.github.jan-tennert.supabase", name = "functions-kt", version.ref = "supabase" }
+supabase-compose-auth = { group = "io.github.jan-tennert.supabase", name = "compose-auth", version.ref = "supabase" }
+supabase-compose-auth-ui = { group = "io.github.jan-tennert.supabase", name = "compose-auth-ui", version.ref = "supabase" }
+
 [plugins]
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -111,6 +121,15 @@ compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMu
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 # Convention Plugins (custom)
-kmp-library = { id = "kmp.library", version = "unspecified" }
-kmp-compose = { id = "kmp.compose", version = "unspecified" }
-android-app = { id = "android.app", version = "unspecified" }
+convention-android-library = { id = "android.library", version = "unspecified" }
+convention-kmp-compose = { id = "kmp.compose", version = "unspecified" }
+convention-android-app = { id = "android.app", version = "unspecified" }
+
+[bundles]
+
+supabase = [
+    "supabase-auth",
+    "supabase-postgrest",
+    "supabase-functions",
+    "supabase-compose-auth"
+]

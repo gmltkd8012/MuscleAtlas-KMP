@@ -49,6 +49,10 @@ androidMaterial = "1.11.0"
 # Supabase
 supabase = "3.2.4"
 
+# BuildKonfig (KMP BuildConfig)
+buildkonfig = "0.17.1"
+jetbrainsKotlinJvm = "2.2.0"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -102,6 +106,11 @@ supabase-functions = { group = "io.github.jan-tennert.supabase", name = "functio
 supabase-compose-auth = { group = "io.github.jan-tennert.supabase", name = "compose-auth", version.ref = "supabase" }
 supabase-compose-auth-ui = { group = "io.github.jan-tennert.supabase", name = "compose-auth-ui", version.ref = "supabase" }
 
+# Build Konfig
+buildkonfig-compiler = { module = "com.codingfeline.buildkonfig:buildkonfig-compiler", version.ref = "buildkonfig" }
+buildkonfigGradlePlugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+
+
 [plugins]
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -120,11 +129,15 @@ compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMu
 # KSP
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
+# BuildKonfig
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+
 # Convention Plugins (custom)
 convention-android-library = { id = "android.library", version = "unspecified" }
 convention-kmp-compose = { id = "kmp.compose", version = "unspecified" }
 convention-android-app = { id = "android.app", version = "unspecified" }
 convention-kmp-koin = { id = "kmp.koin", version = "unspecified" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 
@@ -133,4 +146,9 @@ supabase = [
     "supabase-postgrest",
     "supabase-functions",
     "supabase-compose-auth"
+]
+
+buildKonfig = [
+    "buildkonfig-compiler",
+    "buildkonfigGradlePlugin",
 ]

@@ -13,6 +13,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:ui"))
+            implementation(libs.bundles.supabase)
+            implementation(libs.supabase.compose.auth.ui)
         }
         androidMain.dependencies {
         }

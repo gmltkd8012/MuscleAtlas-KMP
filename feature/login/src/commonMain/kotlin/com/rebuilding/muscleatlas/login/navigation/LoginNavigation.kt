@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.rebuilding.muscleatlas.login.screen.LoginScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
 import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Serializable
 data object LoginRoute : Route
@@ -19,6 +20,8 @@ fun NavGraphBuilder.loginScreen(
         enterTransition = { fadeIn(tween(700)) },
         exitTransition = { fadeOut(tween(700)) },
     ) {
-        LoginScreen()
+        LoginScreen(
+            viewModel = koinViewModel()
+        )
     }
 }

@@ -44,13 +44,13 @@ import org.koin.dsl.module
 @Composable
 fun App(
     viewModel: AppViewModel = koinInject(),
-    isLoggedIn: Boolean = false,
+    isLoggedIn: Boolean = true,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     MuscleAtlasTheme {
         MuscleAtlasNavHost(
-            startDestination = if (isLoggedIn) LoginRoute else SplashRoute,
+            startDestination = LoginRoute,
             modifier = Modifier.fillMaxSize()
         )
     }

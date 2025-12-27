@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.splash.di.splashModule
 import com.rebuilding.muscleatlas.supabase.di.supabaseModule
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.core.KoinApplication
 import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.module
 
 @Composable
 fun App() {
@@ -118,6 +120,12 @@ fun App() {
 fun muscleAtlasAppDeclaration(
     platformDeclaration: KoinApplication.() -> Unit = {},
 ): KoinAppDeclaration = {
+
+    /* Feature 모듈 의존성 */
+    modules(
+        splashModule
+    )
+
     modules(supabaseModule)
     platformDeclaration()
 }

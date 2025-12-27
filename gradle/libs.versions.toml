@@ -20,7 +20,6 @@ minSdk = "26"
 coreKtx = "1.15.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-navigationCompose = "2.9.0"
 
 # Koin (DI - KMP compatible)
 koin = "4.0.4"
@@ -53,6 +52,12 @@ supabase = "3.2.4"
 buildkonfig = "0.17.1"
 jetbrainsKotlinJvm = "2.2.0"
 
+# kmp Navigation
+navigation = "2.9.1"
+
+# kmp lifecycle
+navLifecycle = "2.8.4"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -64,7 +69,6 @@ compose-multiplatform-gradle-plugin = { group = "org.jetbrains.compose", name = 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
 
 # Koin (DI - KMP)
@@ -89,11 +93,11 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJson" }
 
 # Lifecycle (KMP)
-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version = "2.8.4" }
-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version = "2.8.4" }
+lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "navLifecycle" }
+lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "navLifecycle" }
 
 # Navigation (KMP)
-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version = "2.8.0-alpha10" }
+navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 # DataStore
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "datastoreVersion" }

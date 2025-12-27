@@ -40,6 +40,8 @@ kotlin {
 
             // Core modules
             implementation(project(":core:supabase"))
+            implementation(project(":core:ui"))
+            implementation(project(":feature:splash"))
         }
 
         androidMain.dependencies {

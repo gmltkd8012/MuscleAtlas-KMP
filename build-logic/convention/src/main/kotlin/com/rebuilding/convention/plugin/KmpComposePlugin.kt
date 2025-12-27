@@ -1,5 +1,6 @@
 package com.rebuilding.convention.plugin
 
+import com.rebuilding.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -25,6 +26,11 @@ class KmpComposePlugin : Plugin<Project> {
             }
 
             val compose = extensions.getByType<ComposeExtension>().dependencies
+
+            // libs 카탈로그에서 의존성 미리 가져오기
+            val navigationCompose = libs.findLibrary("navigation-compose").get()
+            val lifecycleViewModelCompose = libs.findLibrary("lifecycle-viewmodel-compose").get()
+            val lifecycleRuntimeCompose = libs.findLibrary("lifecycle-runtime-compose").get()
 
             extensions.configure<KotlinMultiplatformExtension> {
                 // Android target
@@ -58,12 +64,20 @@ class KmpComposePlugin : Plugin<Project> {
                 // Compose dependencies for all source sets
                 sourceSets.apply {
                     commonMain.dependencies {
+                        // Compose
                         implementation(compose.runtime)
                         implementation(compose.foundation)
                         implementation(compose.material3)
                         implementation(compose.ui)
                         implementation(compose.components.resources)
                         implementation(compose.components.uiToolingPreview)
+
+                        // Navigation (KMP)
+                        implementation(navigationCompose)
+
+                        // Lifecycle (KMP)
+                        implementation(lifecycleViewModelCompose)
+                        implementation(lifecycleRuntimeCompose)
                     }
                 }
             }

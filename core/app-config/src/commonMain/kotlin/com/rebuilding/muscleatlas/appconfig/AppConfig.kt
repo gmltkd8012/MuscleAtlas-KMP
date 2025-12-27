@@ -5,6 +5,19 @@ package com.rebuilding.muscleatlas.appconfig
  * Access Supabase credentials and other build-time config here
  */
 object AppConfig {
-    val supabaseUrl: String get() = BuildKonfig.SUPABASE_URL
-    val supabaseAnonKey: String get() = BuildKonfig.SUPABASE_ANON_KEY
+    val SUPABASE_URL: String
+        get() = BuildKonfig.SUPABASE_URL
+
+    val SUPABASE_KEY: String
+        get() = BuildKonfig.SUPABASE_ANON_KEY
+
+    val SUPABASE_LOGIN_HOST: String
+        get() = "com.rebuilding.muscleatlas"
+
+    val SUPABASE_LOGIN_SCHEME: String
+        get() = "login-callback"
+
+    // Google OAuth
+    val GOOGLE_SERVER_CLIENT_ID: String
+        get() = BuildKonfig.GOOGLE_SERVER_CLIENT_ID
 }

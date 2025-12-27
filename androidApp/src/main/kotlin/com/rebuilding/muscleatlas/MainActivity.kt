@@ -13,11 +13,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        startKoin {
+        // muscleAtlasAppDeclaration은 KoinAppDeclaration을 반환하므로
+        // startKoin()의 인자로 전달해야 함
+        startKoin(
             muscleAtlasAppDeclaration {
                 androidContext(this@MainActivity)
             }
-        }
+        )
 
         setContent {
             App()

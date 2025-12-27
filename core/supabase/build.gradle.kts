@@ -15,12 +15,15 @@ kotlin {
         commonMain.dependencies {
             // Common dependencies can be added here
             api(libs.bundles.supabase)
+            implementation(project(":core:app-config"))
         }
         androidMain.dependencies {
-            // Android-specific dependencies
+            // Android Ktor engine
+            implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
-            // iOS-specific dependencies
+            // iOS Ktor engine
+            implementation(libs.ktor.client.darwin)
         }
     }
 }

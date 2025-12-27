@@ -1,5 +1,4 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
-import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
 import java.util.Properties
 
 plugins {
@@ -28,6 +27,11 @@ buildkonfig {
             STRING,
             "SUPABASE_ANON_KEY",
             localProperties.getProperty("SUPABASE_ANON_KEY") ?: ""
+        )
+        buildConfigField(
+            STRING,
+            "GOOGLE_SERVER_CLIENT_ID",
+            localProperties.getProperty("GOOGLE_SERVER_CLIENT_ID") ?: ""
         )
     }
 }

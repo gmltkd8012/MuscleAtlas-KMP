@@ -12,6 +12,7 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            // Compose dependencies are provided by kmp.compose plugin
         }
         androidMain.dependencies {
         }

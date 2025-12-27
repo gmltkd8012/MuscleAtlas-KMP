@@ -2,8 +2,10 @@ package com.rebuilding.convention.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.compose.ComposeExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 /**
@@ -21,6 +23,8 @@ class KmpComposePlugin : Plugin<Project> {
                 apply("org.jetbrains.compose")
                 apply("org.jetbrains.kotlin.plugin.compose")
             }
+
+            val compose = extensions.getByType<ComposeExtension>().dependencies
 
             extensions.configure<KotlinMultiplatformExtension> {
                 // Android target
@@ -49,6 +53,18 @@ class KmpComposePlugin : Plugin<Project> {
 
                 wasmJs {
                     browser()
+                }
+
+                // Compose dependencies for all source sets
+                sourceSets.apply {
+                    commonMain.dependencies {
+                        implementation(compose.runtime)
+                        implementation(compose.foundation)
+                        implementation(compose.material3)
+                        implementation(compose.ui)
+                        implementation(compose.components.resources)
+                        implementation(compose.components.uiToolingPreview)
+                    }
                 }
             }
         }

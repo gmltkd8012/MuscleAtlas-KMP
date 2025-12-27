@@ -41,7 +41,9 @@ kotlin {
             // Core modules
             implementation(project(":core:supabase"))
             implementation(project(":core:ui"))
+            implementation(project(":core:design-system"))
             implementation(project(":feature:splash"))
+            implementation(project(":feature:login"))
         }
 
         androidMain.dependencies {

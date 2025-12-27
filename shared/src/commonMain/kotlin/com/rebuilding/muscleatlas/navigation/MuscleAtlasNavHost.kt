@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.rebuilding.muscleatlas.login.navigation.loginScreen
+import com.rebuilding.muscleatlas.splash.navigation.splashScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
 
 @Composable
@@ -44,7 +46,15 @@ fun MuscleAtlasNavHost(
         },
         modifier = modifier,
     ) {
+        loginScreen(
+            onNavigateToMain = {},
+        )
 
+        splashScreen(
+            onNavigateToOnboarding = {},
+            onNavigateToLogin = {},
+            onNavigateToMain = {},
+        )
     }
 
 }

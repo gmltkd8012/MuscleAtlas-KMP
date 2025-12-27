@@ -47,6 +47,7 @@ dependencies {
 
     implementation(project(":shared"))
     implementation(project(":core:supabase"))
+    implementation(project(":core:app-config"))
     implementation(compose.runtime)
     implementation(compose.foundation)
     implementation(compose.material3)

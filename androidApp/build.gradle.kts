@@ -46,6 +46,8 @@ android {
 dependencies {
 
     implementation(project(":shared"))
+    implementation(project(":core:supabase"))
+    implementation(project(":core:app-config"))
     implementation(compose.runtime)
     implementation(compose.foundation)
     implementation(compose.material3)
@@ -59,4 +61,6 @@ dependencies {
     // Koin DI
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+
+    implementation(libs.bundles.supabase)
 }

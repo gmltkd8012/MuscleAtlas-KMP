@@ -5,35 +5,34 @@ appVersionCode = "10000"
 appVersionName = "01.00.00"
 
 # base setting
-agp = "8.5.2"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+agp = "8.9.1"
+kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
 
 # KMP/CMP
-composeMultiplatform = "1.7.1"
+composeMultiplatform = "1.8.0"
 
 # sdk
 compileSdk = "36"
 minSdk = "26"
 
 # AndroidX
-coreKtx = "1.13.1"
-lifecycleRuntimeKtx = "2.8.6"
+coreKtx = "1.15.0"
+lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-navigationCompose = "2.8.1"
 
 # Koin (DI - KMP compatible)
-koin = "4.0.0"
-koinCompose = "4.0.0"
+koin = "4.0.4"
+koinCompose = "4.0.4"
 
 # Ktor (Network - KMP)
-ktor = "2.3.12"
+ktor = "3.1.0"
 
 # serialization
-kotlinSerializationJson = "1.7.3"
+kotlinSerializationJson = "1.8.0"
 
 # Coroutines
-coroutines = "1.9.0"
+coroutines = "1.10.1"
 
 # Test
 junit = "4.13.2"
@@ -46,6 +45,19 @@ datastoreVersion = "1.1.1"
 # AndroidX Material (Android only)
 androidMaterial = "1.11.0"
 
+# Supabase
+supabase = "3.2.4"
+
+# BuildKonfig (KMP BuildConfig)
+buildkonfig = "0.17.1"
+jetbrainsKotlinJvm = "2.2.0"
+
+# kmp Navigation
+navigation = "2.9.1"
+
+# kmp lifecycle
+navLifecycle = "2.8.4"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -57,7 +69,6 @@ compose-multiplatform-gradle-plugin = { group = "org.jetbrains.compose", name = 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
 
 # Koin (DI - KMP)
@@ -82,15 +93,27 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJson" }
 
 # Lifecycle (KMP)
-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version = "2.8.4" }
-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version = "2.8.4" }
+lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "navLifecycle" }
+lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "navLifecycle" }
 
 # Navigation (KMP)
-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version = "2.8.0-alpha10" }
+navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 # DataStore
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "datastoreVersion" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreVersion" }
+
+# Supabase
+supabase-auth = { group = "io.github.jan-tennert.supabase", name = "auth-kt", version.ref = "supabase" }
+supabase-postgrest = { group = "io.github.jan-tennert.supabase", name = "postgrest-kt", version.ref = "supabase" }
+supabase-functions = { group = "io.github.jan-tennert.supabase", name = "functions-kt", version.ref = "supabase" }
+supabase-compose-auth = { group = "io.github.jan-tennert.supabase", name = "compose-auth", version.ref = "supabase" }
+supabase-compose-auth-ui = { group = "io.github.jan-tennert.supabase", name = "compose-auth-ui", version.ref = "supabase" }
+
+# Build Konfig
+buildkonfig-compiler = { module = "com.codingfeline.buildkonfig:buildkonfig-compiler", version.ref = "buildkonfig" }
+buildkonfigGradlePlugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+
 
 [plugins]
 # Android
@@ -110,7 +133,26 @@ compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMu
 # KSP
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
+# BuildKonfig
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+
 # Convention Plugins (custom)
-kmp-library = { id = "kmp.library", version = "unspecified" }
-kmp-compose = { id = "kmp.compose", version = "unspecified" }
-android-app = { id = "android.app", version = "unspecified" }
+convention-android-library = { id = "android.library", version = "unspecified" }
+convention-kmp-compose = { id = "kmp.compose", version = "unspecified" }
+convention-android-app = { id = "android.app", version = "unspecified" }
+convention-kmp-koin = { id = "kmp.koin", version = "unspecified" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+
+[bundles]
+
+supabase = [
+    "supabase-auth",
+    "supabase-postgrest",
+    "supabase-functions",
+    "supabase-compose-auth",
+]
+
+buildKonfig = [
+    "buildkonfig-compiler",
+    "buildkonfigGradlePlugin",
+]

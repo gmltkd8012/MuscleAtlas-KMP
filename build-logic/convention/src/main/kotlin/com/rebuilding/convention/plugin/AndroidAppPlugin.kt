@@ -6,14 +6,15 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
+/**
+ * Android Application 모듈 전용 플러그인
+ * KMP를 사용하는 경우 kmp.compose 플러그인과 함께 사용
+ */
 class AndroidAppPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
                 apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.compose")
-                apply("org.jetbrains.kotlin.plugin.compose")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -29,18 +30,10 @@ class AndroidAppPlugin : Plugin<Project> {
                     targetCompatibility = org.gradle.api.JavaVersion.VERSION_17
                 }
 
-                kotlinOptions {
-                    jvmTarget = "17"
-                }
-
                 buildFeatures {
                     compose = true
                 }
             }
         }
-    }
-
-    private fun ApplicationExtension.kotlinOptions(block: org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions.() -> Unit) {
-        (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("kotlinOptions", block)
     }
 }

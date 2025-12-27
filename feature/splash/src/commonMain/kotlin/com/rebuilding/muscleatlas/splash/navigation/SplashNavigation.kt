@@ -14,13 +14,15 @@ data object SplashRoute : Route
 
 fun NavGraphBuilder.splashScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToOnboarding: () -> Unit,
     onNavigateToMain: () -> Unit,
 ) {
     composable<SplashRoute>(
         enterTransition = { fadeIn(tween(700)) },
         exitTransition = { fadeOut(tween(700)) },
     ) {
-        SplashScreen()
+        SplashScreen(
+            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToMain = onNavigateToMain,
+        )
     }
 }

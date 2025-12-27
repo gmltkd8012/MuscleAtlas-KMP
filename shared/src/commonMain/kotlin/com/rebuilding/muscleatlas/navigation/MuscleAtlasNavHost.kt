@@ -7,7 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.rebuilding.muscleatlas.login.navigation.LoginRoute
 import com.rebuilding.muscleatlas.login.navigation.loginScreen
+import com.rebuilding.muscleatlas.member.navigation.MemberRoute
+import com.rebuilding.muscleatlas.member.navigation.memberScreen
+import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.splash.navigation.splashScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
 
@@ -46,15 +50,28 @@ fun MuscleAtlasNavHost(
         },
         modifier = modifier,
     ) {
-        loginScreen(
-            onNavigateToMain = {},
+        splashScreen(
+            onNavigateToLogin = {
+                navController.navigate(LoginRoute) {
+                    popUpTo(SplashRoute) { inclusive = true }
+                }
+            },
+            onNavigateToMain = {
+                navController.navigate(MemberRoute) {
+                    popUpTo(SplashRoute) { inclusive = true }
+                }
+            },
         )
 
-        splashScreen(
-            onNavigateToOnboarding = {},
-            onNavigateToLogin = {},
-            onNavigateToMain = {},
+        loginScreen(
+            onNavigateToMain = {
+                navController.navigate(MemberRoute) {
+                    popUpTo(SplashRoute) { inclusive = true }
+                }
+            },
         )
+
+        memberScreen()
     }
 
 }

@@ -3,20 +3,36 @@ package com.rebuilding.muscleatlas.splash.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.rebuilding.muscleatlas.splash.viewmodel.SplashSideEffect
+import com.rebuilding.muscleatlas.splash.viewmodel.SplashViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    viewModel: SplashViewModel = koinViewModel(),
+    onNavigateToLogin: () -> Unit,
+    onNavigateToMain: () -> Unit,
+) {
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is SplashSideEffect.NavigateToLogin -> onNavigateToLogin()
+            is SplashSideEffect.NavigateToMain -> onNavigateToMain()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
-        Text("스플래쉬")
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }

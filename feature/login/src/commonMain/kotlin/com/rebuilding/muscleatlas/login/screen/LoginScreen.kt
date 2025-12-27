@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.login.component.SignInButton
 import com.rebuilding.muscleatlas.login.viewmodel.LoginViewModel
+import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -27,13 +28,18 @@ import org.koin.compose.koinInject
 @Composable
 internal fun LoginScreen(
     viewModel: LoginViewModel,
+    onNavigateToMain: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val supabaseClient = koinInject<SupabaseClient>()
 
     val onNativeSignInResult: (NativeSignInResult) -> Unit = { result ->
+
+        Logger.d("LoginScreen", "onNativeSignInResult: $result")
         when (result) {
-            NativeSignInResult.Success -> {}
+            NativeSignInResult.Success -> {
+                onNavigateToMain()
+            }
             else -> {
 
             }

@@ -30,25 +30,15 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        val isLoggedIn = isLoggedIn(intent)
         supabaseClient.handleDeeplinks(intent)
 
         setContent {
-            App(
-                isLoggedIn = isLoggedIn
-            )
+            App()
         }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         supabaseClient.handleDeeplinks(intent)
-    }
-
-    private fun isLoggedIn(intent: Intent): Boolean {
-        val loginCallbackUri =
-            "${AppConfig.SUPABASE_LOGIN_SCHEME}://${AppConfig.SUPABASE_LOGIN_HOST}"
-        return intent.action == Intent.ACTION_VIEW &&
-                intent.data?.toString()?.startsWith(loginCallbackUri) == true
     }
 }

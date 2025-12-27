@@ -21,7 +21,8 @@ fun NavGraphBuilder.loginScreen(
         exitTransition = { fadeOut(tween(700)) },
     ) {
         LoginScreen(
-            viewModel = koinViewModel()
+            viewModel = koinViewModel(),
+            onNavigateToMain = onNavigateToMain,
         )
     }
 }

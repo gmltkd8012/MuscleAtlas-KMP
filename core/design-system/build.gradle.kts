@@ -9,6 +9,11 @@ android {
     namespace = "com.rebuilding.muscleatlas.design_system"
 }
 
+compose.resources {
+    publicResClass = true
+    generateResClass = always
+}
+
 kotlin {
     sourceSets {
         commonMain.dependencies {

@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.rebuilding.muscleatlas.appconfig.AppConfig
+import dev.yjyoon.kinappbrowser.KInAppBrowser
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.handleDeeplinks
 import org.koin.android.ext.android.inject
@@ -20,6 +21,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        KInAppBrowser.init(this)
 
         // Koin이 아직 초기화되지 않은 경우에만 시작
         if (GlobalContext.getOrNull() == null) {

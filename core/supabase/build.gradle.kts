@@ -20,10 +20,14 @@ kotlin {
         androidMain.dependencies {
             // Android Ktor engine
             implementation(libs.ktor.client.okhttp)
+            // In-App Browser
+            implementation(libs.kinappbrowser)
         }
         iosMain.dependencies {
             // iOS Ktor engine
             implementation(libs.ktor.client.darwin)
+            // In-App Browser
+            implementation(libs.kinappbrowser)
         }
     }
 }

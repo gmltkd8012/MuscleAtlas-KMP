@@ -3,13 +3,16 @@ package com.rebuilding.muscleatlas.login.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,11 +21,14 @@ import com.rebuilding.muscleatlas.login.component.SignInButton
 import com.rebuilding.muscleatlas.login.viewmodel.LoginViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
+import io.github.jan.supabase.auth.providers.Kakao
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import io.ktor.util.Platform
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
@@ -31,8 +37,10 @@ internal fun LoginScreen(
     onNavigateToMain: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    
+    val scope = rememberCoroutineScope()
     val supabaseClient = koinInject<SupabaseClient>()
-
+    
     val onNativeSignInResult: (NativeSignInResult) -> Unit = { result ->
 
         Logger.d("LoginScreen", "onNativeSignInResult: $result")
@@ -45,6 +53,7 @@ internal fun LoginScreen(
             }
         }
     }
+
     val googleSignInAction =
         supabaseClient.composeAuth.rememberSignInWithGoogle(onNativeSignInResult)
 
@@ -67,6 +76,18 @@ internal fun LoginScreen(
                     googleSignInAction.startFlow()
                 },
                 oAuthProvider = Google,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            
+            Spacer(Modifier.height(8.dp))
+
+            SignInButton(
+                onClick = {
+                    scope.launch { 
+                        supabaseClient.auth.signInWith(Kakao)
+                    }
+                },
+                oAuthProvider = Kakao,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

@@ -21,6 +21,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -45,6 +46,8 @@ kotlin {
             implementation(project(":feature:splash"))
             implementation(project(":feature:login"))
             implementation(project(":feature:member"))
+            implementation(project(":feature:setting"))
+            implementation(project(":feature:workout"))
         }
 
         androidMain.dependencies {

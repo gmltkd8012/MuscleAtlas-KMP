@@ -6,11 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.login.navigation.LoginRoute
 import com.rebuilding.muscleatlas.login.navigation.loginScreen
-import com.rebuilding.muscleatlas.member.navigation.MemberRoute
-import com.rebuilding.muscleatlas.member.navigation.memberScreen
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.splash.navigation.splashScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
@@ -50,6 +49,7 @@ fun MuscleAtlasNavHost(
         },
         modifier = modifier,
     ) {
+        // Auth Flow (전체 화면, Bottom Navigation 없음)
         splashScreen(
             onNavigateToLogin = {
                 navController.navigate(LoginRoute) {
@@ -57,7 +57,7 @@ fun MuscleAtlasNavHost(
                 }
             },
             onNavigateToMain = {
-                navController.navigate(MemberRoute) {
+                navController.navigate(MainRoute) {
                     popUpTo(SplashRoute) { inclusive = true }
                 }
             },
@@ -65,13 +65,15 @@ fun MuscleAtlasNavHost(
 
         loginScreen(
             onNavigateToMain = {
-                navController.navigate(MemberRoute) {
-                    popUpTo(SplashRoute) { inclusive = true }
+                navController.navigate(MainRoute) {
+                    popUpTo(LoginRoute) { inclusive = true }
                 }
             },
         )
 
-        memberScreen()
+        // Main Screen (Scaffold + Bottom Navigation)
+        composable<MainRoute> {
+            MainScreen()
+        }
     }
-
 }

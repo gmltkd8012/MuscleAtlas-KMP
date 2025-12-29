@@ -9,8 +9,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SettingRoute : Route
 
-fun NavGraphBuilder.settingScreen() {
+fun NavGraphBuilder.settingScreen(
+    onNavigateToAccount: () -> Unit,
+) {
     composable<SettingRoute> {
-        SettingScreen()
+        SettingScreen(
+            onNavigateToAccount = onNavigateToAccount,
+        )
     }
 }

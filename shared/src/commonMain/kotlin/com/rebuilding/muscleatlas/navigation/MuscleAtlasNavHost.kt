@@ -10,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.login.navigation.LoginRoute
 import com.rebuilding.muscleatlas.login.navigation.loginScreen
+import com.rebuilding.muscleatlas.setting.navigation.AccountRoute
+import com.rebuilding.muscleatlas.setting.navigation.accountScreen
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.splash.navigation.splashScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
@@ -73,7 +75,23 @@ fun MuscleAtlasNavHost(
 
         // Main Screen (Scaffold + Bottom Navigation)
         composable<MainRoute> {
-            MainScreen()
+            MainScreen(
+                onNavigateToAccount = {
+                    navController.navigate(AccountRoute)
+                },
+            )
         }
+
+        // Setting 하위 화면들 (Full Screen, Bottom Navigation 없음)
+        accountScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onLogout = {
+                navController.navigate(LoginRoute) {
+                    popUpTo(MainRoute) { inclusive = true }
+                }
+            },
+        )
     }
 }

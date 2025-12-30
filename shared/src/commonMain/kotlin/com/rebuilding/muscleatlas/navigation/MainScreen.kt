@@ -33,6 +33,8 @@ import com.rebuilding.muscleatlas.workout.navigation.workoutScreen
 fun MainScreen(
     navController: NavHostController = rememberNavController(),
     onNavigateToAccount: () -> Unit = {},
+    onNavigateToWorkoutDetail: () -> Unit,
+    onNavigateToMemberDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -59,10 +61,14 @@ fun MainScreen(
             modifier = Modifier.padding(innerPadding),
         ) {
             // Workout Tab
-            workoutScreen()
+            workoutScreen(
+                onNavigateToDetail = onNavigateToWorkoutDetail,
+            )
 
             // Member Tab
-            memberScreen()
+            memberScreen(
+                onNavigateToDetail = onNavigateToMemberDetail,
+            )
 
             // Settings Tab
             settingScreen(

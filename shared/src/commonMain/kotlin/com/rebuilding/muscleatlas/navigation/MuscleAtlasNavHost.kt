@@ -10,11 +10,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rebuilding.muscleatlas.login.navigation.LoginRoute
 import com.rebuilding.muscleatlas.login.navigation.loginScreen
+import com.rebuilding.muscleatlas.member.navigation.MemberDetailRoute
+import com.rebuilding.muscleatlas.member.navigation.memberDetailScreen
+import com.rebuilding.muscleatlas.member.screen.MemberDetailScreen
 import com.rebuilding.muscleatlas.setting.navigation.AccountRoute
 import com.rebuilding.muscleatlas.setting.navigation.accountScreen
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.splash.navigation.splashScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
+import com.rebuilding.muscleatlas.workout.navigation.WorkoutDetailRoute
+import com.rebuilding.muscleatlas.workout.navigation.workoutDetailScreen
 
 @Composable
 fun MuscleAtlasNavHost(
@@ -79,10 +84,32 @@ fun MuscleAtlasNavHost(
                 onNavigateToAccount = {
                     navController.navigate(AccountRoute)
                 },
+                onNavigateToWorkoutDetail = {
+                    navController.navigate(WorkoutDetailRoute)
+                },
+                onNavigateToMemberDetail = {
+                    navController.navigate(MemberDetailRoute)
+                }
             )
         }
 
-        // Setting 하위 화면들 (Full Screen, Bottom Navigation 없음)
+        // ================ 2Depth Screens ================ //
+
+        // Workout Detail
+        workoutDetailScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            }
+        )
+
+        // Memeber Detail
+        memberDetailScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            }
+        )
+
+        // Setting Detail - Account
         accountScreen(
             onNavigateBack = {
                 navController.popBackStack()

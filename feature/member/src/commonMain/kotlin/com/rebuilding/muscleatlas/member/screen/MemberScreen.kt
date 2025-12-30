@@ -1,38 +1,34 @@
 package com.rebuilding.muscleatlas.member.screen
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.rebuilding.muscleatlas.member.component.MemberListItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberViewModel
-import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MemberScreen(
     viewModel: MemberViewModel = koinViewModel(),
+    onNavigateToDetail: () -> Unit,
 ) {
-    val supabaseClient = koinInject<SupabaseClient>()
-    val scope = rememberCoroutineScope()
+    val testMembers = remember {
+        (1..20).map { "회원 $it" }
+    }
 
-    Box(
+    LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = "회원 관리",
-            modifier = Modifier.clickable {
-                scope.launch {
-                    supabaseClient.auth.signOut()
-                }
-            }
-        )
+
+        //TODO - 실제 데이터 연동 해야함
+        items(testMembers) { member ->
+            MemberListItem(
+                title = member,
+                onClick = onNavigateToDetail,
+            )
+        }
     }
 }

@@ -63,4 +63,7 @@ dependencies {
     implementation(libs.koin.compose)
 
     implementation(libs.bundles.supabase)
+
+    // In App Browser
+    implementation(libs.kinappbrowser)
 }

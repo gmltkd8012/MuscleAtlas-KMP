@@ -58,6 +58,9 @@ navigation = "2.9.1"
 # kmp lifecycle
 navLifecycle = "2.8.4"
 
+# In App Browser - by yjyoon-dev
+kinappbrowser = "1.0.0"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -113,6 +116,9 @@ supabase-compose-auth-ui = { group = "io.github.jan-tennert.supabase", name = "c
 # Build Konfig
 buildkonfig-compiler = { module = "com.codingfeline.buildkonfig:buildkonfig-compiler", version.ref = "buildkonfig" }
 buildkonfigGradlePlugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+
+# In App Browser - by yjyoon-dev
+kinappbrowser = { module = "dev.yjyoon:kinappbrowser", version.ref = "kinappbrowser" }
 
 
 [plugins]

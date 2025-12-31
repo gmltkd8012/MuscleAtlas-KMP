@@ -8,9 +8,11 @@ import com.rebuilding.muscleatlas.di.appModule
 import com.rebuilding.muscleatlas.login.di.loginModule
 import com.rebuilding.muscleatlas.member.di.memberModule
 import com.rebuilding.muscleatlas.navigation.MuscleAtlasNavHost
+import com.rebuilding.muscleatlas.setting.di.settingModule
 import com.rebuilding.muscleatlas.splash.di.splashModule
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.supabase.di.supabaseModule
+import com.rebuilding.muscleatlas.workout.di.workoutModule
 import org.koin.core.KoinApplication
 import org.koin.dsl.KoinAppDeclaration
 
@@ -34,6 +36,8 @@ fun muscleAtlasAppDeclaration(
         splashModule,
         loginModule,
         memberModule,
+        settingModule,
+        workoutModule,
     )
 
     modules(supabaseModule)

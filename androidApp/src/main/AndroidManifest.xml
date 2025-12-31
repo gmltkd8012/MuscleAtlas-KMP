@@ -30,8 +30,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="com.rebuilding.muscleatlas"
-                    android:host="login-callback" />
+                    android:scheme="login-callback"
+                    android:host="com.rebuilding.muscleatlas" />
             </intent-filter>
         </activity>
 

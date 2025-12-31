@@ -1,6 +1,6 @@
-package com.rebuilding.muscleatlas.di
+package com.rebuilding.muscleatlas.app.di
 
-import com.rebuilding.muscleatlas.viewmodel.AppViewModel
+import com.rebuilding.muscleatlas.app.viewmodel.AppViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module

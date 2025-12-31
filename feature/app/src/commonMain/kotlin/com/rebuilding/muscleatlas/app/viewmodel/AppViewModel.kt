@@ -1,4 +1,4 @@
-package com.rebuilding.muscleatlas.viewmodel
+package com.rebuilding.muscleatlas.app.viewmodel
 
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
 

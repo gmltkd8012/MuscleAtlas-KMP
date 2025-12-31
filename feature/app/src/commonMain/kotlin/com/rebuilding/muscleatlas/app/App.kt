@@ -1,13 +1,13 @@
-package com.rebuilding.muscleatlas
+package com.rebuilding.muscleatlas.app
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.rebuilding.muscleatlas.app.di.appModule
+import com.rebuilding.muscleatlas.app.navigation.MuscleAtlasNavHost
 import com.rebuilding.muscleatlas.designsystem.theme.MuscleAtlasTheme
-import com.rebuilding.muscleatlas.di.appModule
 import com.rebuilding.muscleatlas.login.di.loginModule
 import com.rebuilding.muscleatlas.member.di.memberModule
-import com.rebuilding.muscleatlas.navigation.MuscleAtlasNavHost
 import com.rebuilding.muscleatlas.setting.di.settingModule
 import com.rebuilding.muscleatlas.splash.di.splashModule
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute

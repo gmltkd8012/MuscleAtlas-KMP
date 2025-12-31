@@ -32,10 +32,10 @@ data class Member(
  */
 @Serializable
 data class CreateMemberRequest(
-    @SerialName("img_url")
-    val imgUrl: String? = null,
-    val name: String,
-    val memo: String,
+    @SerialName("img_url") val imgUrl: String? = null,
+    @SerialName("name") val name: String,
+    @SerialName("memo") val memo: String,
+    @SerialName("user_id") val userId : String,
 )
 
 /**

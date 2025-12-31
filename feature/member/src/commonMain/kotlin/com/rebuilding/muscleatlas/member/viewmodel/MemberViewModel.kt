@@ -4,11 +4,14 @@ import com.rebuilding.muscleatlas.data.model.CreateMemberRequest
 import com.rebuilding.muscleatlas.data.model.Member
 import com.rebuilding.muscleatlas.data.repository.MemberRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MemberViewModel(
+    private val supabaseClient: SupabaseClient,
     private val memberRepository: MemberRepository,
 ) : StateViewModel<MemberState, MemberSideEffect>(MemberState()) {
 
@@ -40,16 +43,23 @@ class MemberViewModel(
     fun onAddMember(name: String, memo: String) {
         launch {
             reduceState { copy(isLoading = true) }
-            try {
-                val request = CreateMemberRequest(
-                    name = name,
-                    memo = memo,
-                )
-                memberRepository.createMember(request)
-                sendSideEffect(MemberSideEffect.HideAddMemberSheet)
-                loadMembers() // 목록 새로고침
-            } catch (e: Exception) {
-                reduceState { copy(isLoading = false, error = e.message) }
+
+            val userId = getUserId()
+
+            if (userId != null) {
+                try {
+                    val request = CreateMemberRequest(
+                        name = name,
+                        memo = memo,
+                        userId = userId,
+                    )
+
+                    memberRepository.createMember(request)
+                    sendSideEffect(MemberSideEffect.HideAddMemberSheet)
+                    loadMembers() // 목록 새로고침
+                } catch (e: Exception) {
+                    reduceState { copy(isLoading = false, error = e.message) }
+                }
             }
         }
     }
@@ -64,6 +74,11 @@ class MemberViewModel(
             }
         }
     }
+
+
+    // Supabase 의 id
+    private suspend fun getUserId(): String? =
+        supabaseClient.auth.currentUserOrNull()?.id
 }
 
 data class MemberState(

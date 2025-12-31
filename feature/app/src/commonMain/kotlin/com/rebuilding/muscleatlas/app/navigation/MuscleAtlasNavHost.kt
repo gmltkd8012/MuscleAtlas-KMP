@@ -1,4 +1,4 @@
-package com.rebuilding.muscleatlas.navigation
+package com.rebuilding.muscleatlas.app.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween

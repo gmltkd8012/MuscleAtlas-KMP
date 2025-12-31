@@ -1,4 +1,4 @@
-package com.rebuilding.muscleatlas.navigation
+package com.rebuilding.muscleatlas.app.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

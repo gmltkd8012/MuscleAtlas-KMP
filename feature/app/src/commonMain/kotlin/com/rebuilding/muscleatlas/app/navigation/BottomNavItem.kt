@@ -1,4 +1,4 @@
-package com.rebuilding.muscleatlas.navigation
+package com.rebuilding.muscleatlas.app.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter

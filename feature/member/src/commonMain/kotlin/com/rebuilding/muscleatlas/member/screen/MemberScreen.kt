@@ -1,6 +1,5 @@
 package com.rebuilding.muscleatlas.member.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,14 +12,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,10 +42,7 @@ fun MemberScreen(
     viewModel: MemberViewModel = koinViewModel(),
     onNavigateToDetail: () -> Unit,
 ) {
-    val testMembers = remember {
-        (1..20).map { "회원 $it" }
-    }
-
+    val state by viewModel.state.collectAsState()
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
@@ -61,15 +60,55 @@ fun MemberScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            //TODO - 실제 데이터 연동 해야함
-            items(testMembers) { member ->
-                MemberListItem(
-                    title = member,
-                    onClick = onNavigateToDetail,
+        when {
+            state.isLoading && state.members.isEmpty() -> {
+                // 초기 로딩
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
                 )
+            }
+
+            state.error != null && state.members.isEmpty() -> {
+                // 에러 상태
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = state.error ?: "오류가 발생했습니다",
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { viewModel.loadMembers() }) {
+                        Text("다시 시도")
+                    }
+                }
+            }
+
+            state.members.isEmpty() -> {
+                // 빈 상태
+                Text(
+                    text = "등록된 회원이 없습니다\n회원을 추가해보세요!",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            else -> {
+                // 회원 목록
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    items(
+                        items = state.members,
+                        key = { it.id }
+                    ) { member ->
+                        MemberListItem(
+                            title = member.name,
+                            onClick = onNavigateToDetail,
+                        )
+                    }
+                }
             }
         }
 

@@ -1,0 +1,95 @@
+package com.rebuilding.muscleatlas.data.repository
+
+import com.rebuilding.muscleatlas.data.model.CreateMemberRequest
+import com.rebuilding.muscleatlas.data.model.Member
+import com.rebuilding.muscleatlas.data.model.UpdateMemberRequest
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
+interface MemberRepository {
+    /**
+     * 모든 회원 목록 조회
+     */
+    fun getMembers(): Flow<List<Member>>
+
+    /**
+     * 특정 회원 조회
+     */
+    suspend fun getMember(id: String): Member?
+
+    /**
+     * 회원 추가
+     */
+    suspend fun createMember(request: CreateMemberRequest): Member
+
+    /**
+     * 회원 정보 수정
+     */
+    suspend fun updateMember(id: String, request: UpdateMemberRequest): Member
+
+    /**
+     * 회원 삭제
+     */
+    suspend fun deleteMember(id: String)
+}
+
+class MemberRepositoryImpl(
+    private val supabaseClient: SupabaseClient,
+) : MemberRepository {
+
+    companion object {
+        private const val TABLE_NAME = "member"
+    }
+
+    override fun getMembers(): Flow<List<Member>> = flow {
+        val members = supabaseClient
+            .from(TABLE_NAME)
+            .select()
+            .decodeList<Member>()
+        emit(members)
+    }
+
+    override suspend fun getMember(id: String): Member? {
+        return supabaseClient
+            .from(TABLE_NAME)
+            .select {
+                filter {
+                    eq("id", id)
+                }
+            }
+            .decodeSingleOrNull<Member>()
+    }
+
+    override suspend fun createMember(request: CreateMemberRequest): Member {
+        return supabaseClient
+            .from(TABLE_NAME)
+            .insert(request) {
+                select()
+            }
+            .decodeSingle<Member>()
+    }
+
+    override suspend fun updateMember(id: String, request: UpdateMemberRequest): Member {
+        return supabaseClient
+            .from(TABLE_NAME)
+            .update(request) {
+                select()
+                filter {
+                    eq("id", id)
+                }
+            }
+            .decodeSingle<Member>()
+    }
+
+    override suspend fun deleteMember(id: String) {
+        supabaseClient
+            .from(TABLE_NAME)
+            .delete {
+                filter {
+                    eq("id", id)
+                }
+            }
+    }
+}

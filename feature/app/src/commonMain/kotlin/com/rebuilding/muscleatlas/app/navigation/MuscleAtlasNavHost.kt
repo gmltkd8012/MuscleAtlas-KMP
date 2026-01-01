@@ -84,8 +84,8 @@ fun MuscleAtlasNavHost(
                 onNavigateToAccount = {
                     navController.navigate(AccountRoute)
                 },
-                onNavigateToWorkoutDetail = {
-                    navController.navigate(WorkoutDetailRoute)
+                onNavigateToWorkoutDetail = { exerciseId ->
+                    navController.navigate(WorkoutDetailRoute(exerciseId))
                 },
                 onNavigateToMemberDetail = {
                     navController.navigate(MemberDetailRoute)

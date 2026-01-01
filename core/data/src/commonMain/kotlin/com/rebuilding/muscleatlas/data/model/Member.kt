@@ -22,8 +22,8 @@ data class Member(
     val imgUrl: String? = null,
     val name: String,
     val memo: String,
-    @SerialName("current_mills")
-    val currentMills: Long,
+    @SerialName("created_at")
+    val currentMills: String,
 )
 
 /**

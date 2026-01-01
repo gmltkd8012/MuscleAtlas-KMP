@@ -32,7 +32,7 @@ import com.rebuilding.muscleatlas.workout.navigation.workoutScreen
 fun MainScreen(
     navController: NavHostController = rememberNavController(),
     onNavigateToAccount: () -> Unit = {},
-    onNavigateToWorkoutDetail: () -> Unit,
+    onNavigateToWorkoutDetail: (exerciseId: String) -> Unit,
     onNavigateToMemberDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

@@ -26,6 +26,17 @@ object AppColors {
     val warning = Color.Red
     val fixedWithe = Color.White
 
+    // Exercise Detail Screen Colors
+    val exerciseDetailBackground = Color(0xFF0D1117)
+    val cardBackground = Color(0xFF161B22)
+    val cardBackgroundLight = Color(0xFF1C2128)
+    val accentCyan = Color(0xFF22B8CF)
+    val accentOrange = Color(0xFFE87B35)
+    val accentBlue = Color(0xFF2196F3)
+    val tagBackground = Color(0xFF1E3A5F)
+    val tagText = Color(0xFF4FC3F7)
+    val sectionTitle = Color(0xFF8B949E)
+    val descriptionText = Color(0xFFB0B8C1)
 
     object Shadow {
         val Dialog = Color(0x1F000000)

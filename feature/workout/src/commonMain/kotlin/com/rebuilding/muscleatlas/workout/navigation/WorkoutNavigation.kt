@@ -24,6 +24,7 @@ fun NavGraphBuilder.workoutScreen(
 @Serializable
 data class WorkoutDetailRoute(
     val exerciseId: String,
+    val fromWorkoutScreen: Boolean = true, // 회원 상세 화면에서 접근 시, 편집 하지 않도록
 ) : Route
 
 fun NavGraphBuilder.workoutDetailScreen(
@@ -33,6 +34,7 @@ fun NavGraphBuilder.workoutDetailScreen(
         val route = backStackEntry.toRoute<WorkoutDetailRoute>()
         WorkoutDetailScreen(
             exerciseId = route.exerciseId,
+            fromWorkoutScreen = route.fromWorkoutScreen,
             onNavigateBack = onNavigateBack,
         )
     }

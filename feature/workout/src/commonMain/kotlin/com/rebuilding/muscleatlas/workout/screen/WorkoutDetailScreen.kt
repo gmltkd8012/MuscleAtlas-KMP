@@ -63,6 +63,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun WorkoutDetailScreen(
     exerciseId: String,
     viewModel: WorkoutDetailViewModel = koinViewModel(),
+    fromWorkoutScreen: Boolean,
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -276,7 +277,7 @@ fun WorkoutDetailScreen(
     }
     
     // Technical Breakdown 편집 BottomSheet
-    if (showEditSheet) {
+    if (showEditSheet && fromWorkoutScreen) {
         ModalBottomSheet(
             onDismissRequest = { showEditSheet = false },
             sheetState = sheetState,
@@ -313,7 +314,7 @@ fun WorkoutDetailScreen(
     }
     
     // Safety 편집 BottomSheet
-    if (showSafetyEditSheet) {
+    if (showSafetyEditSheet && fromWorkoutScreen) {
         ModalBottomSheet(
             onDismissRequest = { showSafetyEditSheet = false },
             sheetState = safetySheetState,

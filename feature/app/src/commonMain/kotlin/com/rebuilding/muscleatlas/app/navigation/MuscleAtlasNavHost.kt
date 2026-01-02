@@ -107,7 +107,7 @@ fun MuscleAtlasNavHost(
                 navController.popBackStack()
             },
             onNavigateToWorkoutDetail = { exerciseId ->
-                navController.navigate(WorkoutDetailRoute(exerciseId))
+                navController.navigate(WorkoutDetailRoute(exerciseId, false))
             }
         )
 

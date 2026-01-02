@@ -1,5 +1,6 @@
 package com.rebuilding.muscleatlas.member.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -22,15 +24,16 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.background
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.member.component.MemberListItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberViewModel
@@ -40,11 +43,12 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun MemberScreen(
     viewModel: MemberViewModel = koinViewModel(),
-    onNavigateToDetail: () -> Unit,
+    onNavigateToDetail: (memberId: String) -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val colorScheme = MaterialTheme.colorScheme
     var showBottomSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     // SideEffect 처리
     viewModel.collectSideEffect { sideEffect ->
@@ -62,26 +66,28 @@ fun MemberScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(colorScheme.background),
     ) {
         when {
             state.isLoading && state.members.isEmpty() -> {
                 // 초기 로딩
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = colorScheme.primary,
                 )
             }
 
             state.error != null && state.members.isEmpty() -> {
                 // 에러 상태
                 Column(
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = state.error ?: "오류가 발생했습니다",
-                        color = MaterialTheme.colorScheme.error,
+                        color = colorScheme.error,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = { viewModel.loadMembers() }) {
@@ -95,7 +101,7 @@ fun MemberScreen(
                 Text(
                     text = "등록된 회원이 없습니다\n회원을 추가해보세요!",
                     modifier = Modifier.align(Alignment.Center),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -110,7 +116,7 @@ fun MemberScreen(
                     ) { member ->
                         MemberListItem(
                             title = member.name,
-                            onClick = onNavigateToDetail,
+                            onClick = { onNavigateToDetail(member.id) },
                         )
                     }
                 }
@@ -123,8 +129,8 @@ fun MemberScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = colorScheme.primary,
+            contentColor = colorScheme.onPrimary,
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -138,6 +144,7 @@ fun MemberScreen(
         ModalBottomSheet(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
+            containerColor = colorScheme.surface,
         ) {
             AddMemberSheetContent(
                 onAddClick = { name, memo ->
@@ -154,15 +161,20 @@ private fun AddMemberSheetContent(
 ) {
     var name by remember { mutableStateOf("") }
     var memo by remember { mutableStateOf("") }
+    val colorScheme = MaterialTheme.colorScheme
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(colorScheme.surface)
             .padding(horizontal = 16.dp)
             .padding(bottom = 32.dp),
     ) {
         Text(
             text = "회원 추가",
+            color = colorScheme.onSurface,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
@@ -191,6 +203,10 @@ private fun AddMemberSheetContent(
             onClick = { onAddClick(name, memo) },
             modifier = Modifier.fillMaxWidth(),
             enabled = name.isNotBlank(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorScheme.primary,
+                contentColor = colorScheme.onPrimary,
+            ),
         ) {
             Text("추가")
         }

@@ -6,16 +6,13 @@ plugins {
 }
 
 android {
-    namespace = "com.rebuilding.muscleatlas.member"
+    namespace = "com.rebuilding.muscleatlas.util"
 }
 
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":core:ui"))
-            implementation(project(":core:data"))
-            implementation(project(":core:supabase"))
-            implementation(project(":core:util"))
+            implementation(libs.kotlinx.datetime)
         }
         androidMain.dependencies {
         }

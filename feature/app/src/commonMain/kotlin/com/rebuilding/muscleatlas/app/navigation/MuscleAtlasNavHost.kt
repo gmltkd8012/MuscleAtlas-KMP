@@ -12,7 +12,6 @@ import com.rebuilding.muscleatlas.login.navigation.LoginRoute
 import com.rebuilding.muscleatlas.login.navigation.loginScreen
 import com.rebuilding.muscleatlas.member.navigation.MemberDetailRoute
 import com.rebuilding.muscleatlas.member.navigation.memberDetailScreen
-import com.rebuilding.muscleatlas.member.screen.MemberDetailScreen
 import com.rebuilding.muscleatlas.setting.navigation.AccountRoute
 import com.rebuilding.muscleatlas.setting.navigation.accountScreen
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
@@ -87,8 +86,8 @@ fun MuscleAtlasNavHost(
                 onNavigateToWorkoutDetail = { exerciseId ->
                     navController.navigate(WorkoutDetailRoute(exerciseId))
                 },
-                onNavigateToMemberDetail = {
-                    navController.navigate(MemberDetailRoute)
+                onNavigateToMemberDetail = { memberId ->
+                    navController.navigate(MemberDetailRoute(memberId))
                 }
             )
         }
@@ -106,6 +105,9 @@ fun MuscleAtlasNavHost(
         memberDetailScreen(
             onNavigateBack = {
                 navController.popBackStack()
+            },
+            onNavigateToWorkoutDetail = { exerciseId ->
+                navController.navigate(WorkoutDetailRoute(exerciseId))
             }
         )
 

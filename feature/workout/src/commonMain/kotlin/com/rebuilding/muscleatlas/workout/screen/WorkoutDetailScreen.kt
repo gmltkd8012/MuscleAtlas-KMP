@@ -214,13 +214,6 @@ fun WorkoutDetailScreen(
                         }
                     }
 
-                    // Muscle Analysis Section
-                    state.groupedDetails["기계적 움직임"]?.get("근육 분석")?.let { muscleDetails ->
-                        item {
-                            MuscleAnalysisCard(muscleDetails)
-                        }
-                    }
-
                     // Technical Breakdown Section (순서 유지하면서 필터링)
                     val technicalDetails = state.groupedDetails["기계적 움직임"]
                         ?.entries
@@ -555,63 +548,6 @@ private fun PhaseCard(
 }
 
 @Composable
-private fun MuscleAnalysisCard(muscleDetails: List<ExerciseDetail>) {
-    val colorScheme = MaterialTheme.colorScheme
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colorScheme.surface,
-        ),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "🏃",
-                    fontSize = 16.sp,
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Muscle Analysis",
-                    color = colorScheme.onBackground,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Agonist (Prime Mover)
-            val agonist = muscleDetails.find { it.detailCategory == "주동근" }
-            agonist?.let {
-                MuscleDetailRow(
-                    label = "AGONIST (PRIME MOVER)",
-                    value = it.description ?: "",
-                    accentColor = colorScheme.primary,
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Antagonist
-            val antagonist = muscleDetails.find { it.detailCategory == "길항근" }
-            antagonist?.let {
-                MuscleDetailRow(
-                    label = "ANTAGONIST",
-                    value = it.description ?: "",
-                    accentColor = colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun MuscleDetailRow(
     label: String,
     value: String,
@@ -696,7 +632,19 @@ private fun TechnicalCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            details.forEach { detail ->
+            // 고정된 순서로 정렬
+            val sortedDetails = details.sortedBy { detail ->
+                when (detail.detailCategory) {
+                    "Primary" -> 0
+                    "Secondary" -> 1
+                    "근위/원위" -> 2
+                    "주동근" -> 3
+                    "길항근" -> 4
+                    else -> 5
+                }
+            }
+
+            sortedDetails.forEach { detail ->
                 detail.detailCategory?.let { category ->
                     Text(
                         text = category,
@@ -706,14 +654,16 @@ private fun TechnicalCard(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                 }
-                detail.description?.let { description ->
-                    Text(
-                        text = description,
-                        color = colorScheme.onSurface,
-                        fontSize = 14.sp,
-                        lineHeight = 20.sp,
-                    )
-                }
+                Text(
+                    text = detail.description?.takeIf { it.isNotBlank() } ?: "내용을 입력해주세요.",
+                    color = if (detail.description.isNullOrBlank()) {
+                        colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    } else {
+                        colorScheme.onSurface
+                    },
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                )
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
@@ -776,14 +726,16 @@ private fun SafetyCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             details.forEach { detail ->
-                detail.description?.let { description ->
-                    Text(
-                        text = description,
-                        color = colorScheme.onSurface,
-                        fontSize = 14.sp,
-                        lineHeight = 20.sp,
-                    )
-                }
+                Text(
+                    text = detail.description?.takeIf { it.isNotBlank() } ?: "내용을 입력해주세요.",
+                    color = if (detail.description.isNullOrBlank()) {
+                        colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    } else {
+                        colorScheme.onSurface
+                    },
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                )
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }

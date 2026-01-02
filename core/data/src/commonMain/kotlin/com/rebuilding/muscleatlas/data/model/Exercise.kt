@@ -27,6 +27,22 @@ data class ExerciseInsert(
 )
 
 /**
+ * 운동 상세 정보 추가용 DTO (id는 Supabase에서 자동 생성)
+ */
+@Serializable
+data class ExerciseDetailInsert(
+    @SerialName("exercise_id")
+    val exerciseId: String,
+    @SerialName("movement_type")
+    val movementType: String,
+    @SerialName("contraction_type")
+    val contractionType: String,
+    @SerialName("detail_category")
+    val detailCategory: String? = null,
+    val description: String? = null,
+)
+
+/**
  * Supabase exercise_details 테이블 매핑 모델
  *
  * @property id 상세 정보 고유 ID

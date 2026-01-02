@@ -19,6 +19,14 @@ data class Exercise(
 )
 
 /**
+ * 운동 추가용 DTO (id는 Supabase에서 자동 생성)
+ */
+@Serializable
+data class ExerciseInsert(
+    val name: String,
+)
+
+/**
  * Supabase exercise_details 테이블 매핑 모델
  *
  * @property id 상세 정보 고유 ID

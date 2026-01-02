@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.data.repository
 
 import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
+import com.rebuilding.muscleatlas.data.model.ExerciseInsert
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,6 +36,11 @@ interface ExerciseRepository {
      * 여러 운동 상세 정보 일괄 업데이트
      */
     suspend fun updateExerciseDetails(details: List<ExerciseDetail>)
+    
+    /**
+     * 운동 추가
+     */
+    suspend fun insertExercise(name: String): Exercise
 }
 
 class ExerciseRepositoryImpl(
@@ -102,5 +108,14 @@ class ExerciseRepositoryImpl(
                     }
             }
         }
+    }
+    
+    override suspend fun insertExercise(name: String): Exercise = withContext(ioDispatcher) {
+        supabaseClient
+            .from(EXERCISES_TABLE)
+            .insert(ExerciseInsert(name = name)) {
+                select()
+            }
+            .decodeSingle<Exercise>()
     }
 }

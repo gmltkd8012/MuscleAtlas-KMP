@@ -29,6 +29,32 @@ class WorkoutViewModel(
                 }
         }
     }
+    
+    /**
+     * 운동 추가 버튼 클릭
+     */
+    fun onAddExerciseClick() {
+        launch {
+            sendSideEffect(WorkoutSideEffect.ShowAddExerciseSheet)
+        }
+    }
+    
+    /**
+     * 운동 추가
+     */
+    fun addExercise(name: String) {
+        launch {
+            try {
+                reduceState { copy(isLoading = true) }
+                exerciseRepository.insertExercise(name)
+                sendSideEffect(WorkoutSideEffect.HideAddExerciseSheet)
+                // 목록 다시 로드
+                loadExercises()
+            } catch (e: Exception) {
+                reduceState { copy(isLoading = false, error = e.message) }
+            }
+        }
+    }
 }
 
 data class WorkoutState(
@@ -37,4 +63,7 @@ data class WorkoutState(
     val error: String? = null,
 )
 
-sealed interface WorkoutSideEffect
+sealed interface WorkoutSideEffect {
+    data object ShowAddExerciseSheet : WorkoutSideEffect
+    data object HideAddExerciseSheet : WorkoutSideEffect
+}

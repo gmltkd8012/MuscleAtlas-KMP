@@ -33,6 +33,8 @@ fun WorkoutListItem(
     modifier: Modifier = Modifier,
     imageContent: @Composable (BoxScope.() -> Unit)? = null,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -45,7 +47,7 @@ fun WorkoutListItem(
                 modifier = Modifier
                     .size(64.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.secondary),
+                    .background(colorScheme.surface),
                 contentAlignment = Alignment.Center,
             ) {
                 if (imageContent != null) {
@@ -54,7 +56,7 @@ fun WorkoutListItem(
                     Text(
                         text = title.firstOrNull()?.uppercase() ?: "",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = colorScheme.primary,
                     )
                 }
             }
@@ -64,13 +66,13 @@ fun WorkoutListItem(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = colorScheme.onBackground,
             )
         }
 
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 16.dp),
-            color = MaterialTheme.colorScheme.secondary,
+            color = colorScheme.outline,
             thickness = 1.dp,
         )
     }

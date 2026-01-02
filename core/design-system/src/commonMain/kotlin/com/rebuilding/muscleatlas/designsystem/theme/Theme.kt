@@ -8,24 +8,82 @@ import androidx.compose.runtime.Composable
 
 private val DarkColorScheme =
     darkColorScheme(
+        // Primary
         primary = AppColors.primaryDark,
         onPrimary = AppColors.onPrimaryDark,
+        primaryContainer = AppColors.primaryContainerDark,
+        onPrimaryContainer = AppColors.onPrimaryContainerDark,
+
+        // Secondary
         secondary = AppColors.secondaryDark,
         onSecondary = AppColors.onSecondaryDark,
-        primaryContainer = AppColors.primaryButtonDark,
-        onPrimaryContainer = AppColors.primaryButtonTextDark,
-        error = AppColors.warning
+        secondaryContainer = AppColors.secondaryContainerDark,
+        onSecondaryContainer = AppColors.onSecondaryContainerDark,
+
+        // Tertiary
+        tertiary = AppColors.tertiaryDark,
+        onTertiary = AppColors.onTertiaryDark,
+        tertiaryContainer = AppColors.tertiaryContainerDark,
+        onTertiaryContainer = AppColors.onTertiaryContainerDark,
+
+        // Background
+        background = AppColors.backgroundDark,
+        onBackground = AppColors.onBackgroundDark,
+
+        // Surface
+        surface = AppColors.surfaceDark,
+        onSurface = AppColors.onSurfaceDark,
+        surfaceVariant = AppColors.surfaceVariantDark,
+        onSurfaceVariant = AppColors.onSurfaceVariantDark,
+        surfaceContainerHighest = AppColors.surfaceContainerDark,
+
+        // Outline
+        outline = AppColors.outlineDark,
+        outlineVariant = AppColors.outlineVariantDark,
+
+        // Error
+        error = AppColors.error,
+        onError = AppColors.fixedWhite,
     )
 
 private val LightColorScheme =
     lightColorScheme(
+        // Primary
         primary = AppColors.primaryLight,
         onPrimary = AppColors.onPrimaryLight,
+        primaryContainer = AppColors.primaryContainerLight,
+        onPrimaryContainer = AppColors.onPrimaryContainerLight,
+
+        // Secondary
         secondary = AppColors.secondaryLight,
         onSecondary = AppColors.onSecondaryLight,
-        primaryContainer = AppColors.primaryButtonLight,
-        onPrimaryContainer = AppColors.primaryButtonTextLight,
-        error = AppColors.warning
+        secondaryContainer = AppColors.secondaryContainerLight,
+        onSecondaryContainer = AppColors.onSecondaryContainerLight,
+
+        // Tertiary
+        tertiary = AppColors.tertiaryLight,
+        onTertiary = AppColors.onTertiaryLight,
+        tertiaryContainer = AppColors.tertiaryContainerLight,
+        onTertiaryContainer = AppColors.onTertiaryContainerLight,
+
+        // Background
+        background = AppColors.backgroundLight,
+        onBackground = AppColors.onBackgroundLight,
+
+        // Surface
+        surface = AppColors.surfaceLight,
+        onSurface = AppColors.onSurfaceLight,
+        surfaceVariant = AppColors.surfaceVariantLight,
+        onSurfaceVariant = AppColors.onSurfaceVariantLight,
+        surfaceContainerHighest = AppColors.surfaceContainerLight,
+
+        // Outline
+        outline = AppColors.outlineLight,
+        outlineVariant = AppColors.outlineVariantLight,
+
+        // Error
+        error = AppColors.error,
+        onError = AppColors.fixedWhite,
     )
 
 @Composable

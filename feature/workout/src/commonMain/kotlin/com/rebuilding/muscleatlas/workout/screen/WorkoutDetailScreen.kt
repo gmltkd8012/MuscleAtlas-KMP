@@ -19,8 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -29,6 +29,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -46,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
-import com.rebuilding.muscleatlas.designsystem.theme.AppColors
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,19 +58,20 @@ fun WorkoutDetailScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(exerciseId) {
         viewModel.loadExerciseDetail(exerciseId)
     }
 
     Scaffold(
-        containerColor = AppColors.exerciseDetailBackground,
+        containerColor = colorScheme.background,
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Exercise Detail",
-                        color = Color.White,
+                        color = colorScheme.onBackground,
                         fontWeight = FontWeight.SemiBold,
                     )
                 },
@@ -79,7 +80,7 @@ fun WorkoutDetailScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "뒤로가기",
-                            tint = Color.White,
+                            tint = colorScheme.onBackground,
                         )
                     }
                 },
@@ -88,12 +89,12 @@ fun WorkoutDetailScreen(
                         Icon(
                             imageVector = Icons.Default.BookmarkBorder,
                             contentDescription = "북마크",
-                            tint = Color.White,
+                            tint = colorScheme.onBackground,
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = AppColors.exerciseDetailBackground,
+                    containerColor = colorScheme.background,
                 ),
             )
         },
@@ -102,7 +103,7 @@ fun WorkoutDetailScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(AppColors.exerciseDetailBackground)
+                    .background(colorScheme.background)
                     .padding(16.dp),
             ) {
                 Button(
@@ -112,18 +113,18 @@ fun WorkoutDetailScreen(
                         .height(52.dp),
                     shape = RoundedCornerShape(26.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = AppColors.accentCyan,
+                        containerColor = colorScheme.primary,
                     ),
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = colorScheme.onPrimary,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Add to Routine",
-                        color = Color.White,
+                        color = colorScheme.onPrimary,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
                     )
@@ -139,7 +140,7 @@ fun WorkoutDetailScreen(
                         .padding(innerPadding),
                     contentAlignment = Alignment.Center,
                 ) {
-                    CircularProgressIndicator(color = AppColors.accentCyan)
+                    CircularProgressIndicator(color = colorScheme.primary)
                 }
             }
 
@@ -153,7 +154,7 @@ fun WorkoutDetailScreen(
                 ) {
                     Text(
                         text = "오류: ${state.error}",
-                        color = Color.White,
+                        color = colorScheme.onBackground,
                     )
                 }
             }
@@ -175,7 +176,7 @@ fun WorkoutDetailScreen(
                     item {
                         Text(
                             text = state.exercise?.name ?: "운동",
-                            color = Color.White,
+                            color = colorScheme.onBackground,
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                         )
@@ -218,7 +219,6 @@ fun WorkoutDetailScreen(
                                 TechnicalCard(
                                     title = contractionType,
                                     details = details,
-                                    iconColor = AppColors.accentCyan,
                                 )
                             }
                         }
@@ -252,6 +252,8 @@ fun WorkoutDetailScreen(
 
 @Composable
 private fun HeroImageSection() {
+    val colorScheme = MaterialTheme.colorScheme
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -260,8 +262,8 @@ private fun HeroImageSection() {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        AppColors.cardBackground,
-                        AppColors.exerciseDetailBackground,
+                        colorScheme.surface,
+                        colorScheme.background,
                     ),
                 ),
             ),
@@ -279,7 +281,7 @@ private fun HeroImageSection() {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Exercise Image",
-                color = AppColors.sectionTitle,
+                color = colorScheme.onSurfaceVariant,
                 fontSize = 14.sp,
             )
         }
@@ -304,18 +306,20 @@ private fun ExerciseTag(
     text: String,
     isPrimary: Boolean = false,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .background(
-                if (isPrimary) AppColors.accentCyan.copy(alpha = 0.2f)
-                else AppColors.cardBackground,
+                if (isPrimary) colorScheme.primary.copy(alpha = 0.2f)
+                else colorScheme.surface,
             )
             .padding(horizontal = 12.dp, vertical = 6.dp),
     ) {
         Text(
             text = text,
-            color = if (isPrimary) AppColors.accentCyan else AppColors.descriptionText,
+            color = if (isPrimary) colorScheme.primary else colorScheme.onSurface,
             fontSize = 12.sp,
             fontWeight = if (isPrimary) FontWeight.Bold else FontWeight.Medium,
         )
@@ -324,9 +328,11 @@ private fun ExerciseTag(
 
 @Composable
 private fun SectionTitle(title: String) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Text(
         text = title,
-        color = AppColors.sectionTitle,
+        color = colorScheme.onSurfaceVariant,
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
         letterSpacing = 1.sp,
@@ -338,6 +344,8 @@ private fun SectionTitle(title: String) {
 private fun MovementMechanicsCard(
     contractionGroups: Map<String, List<ExerciseDetail>>,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -349,7 +357,7 @@ private fun MovementMechanicsCard(
         PhaseCard(
             modifier = Modifier.weight(1f),
             title = "PHASE",
-            iconColor = AppColors.accentOrange,
+            iconColor = colorScheme.tertiary,
             items = listOf(
                 PhaseItem(
                     label = "DESCENDING",
@@ -368,7 +376,7 @@ private fun MovementMechanicsCard(
         PhaseCard(
             modifier = Modifier.weight(1f),
             title = "CONTRACTION",
-            iconColor = AppColors.accentCyan,
+            iconColor = colorScheme.primary,
             items = listOf(
                 PhaseItem(label = "LOWERING", value = "Eccentric"),
                 PhaseItem(label = "LIFTING", value = "Concentric"),
@@ -389,11 +397,13 @@ private fun PhaseCard(
     iconColor: Color,
     items: List<PhaseItem>,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.cardBackground,
+            containerColor = colorScheme.surface,
         ),
     ) {
         Column(
@@ -421,13 +431,13 @@ private fun PhaseCard(
             items.forEach { item ->
                 Text(
                     text = item.label,
-                    color = AppColors.sectionTitle,
+                    color = colorScheme.onSurfaceVariant,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium,
                 )
                 Text(
                     text = item.value,
-                    color = Color.White,
+                    color = colorScheme.onBackground,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -439,11 +449,13 @@ private fun PhaseCard(
 
 @Composable
 private fun MuscleAnalysisCard(muscleDetails: List<ExerciseDetail>) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.cardBackground,
+            containerColor = colorScheme.surface,
         ),
     ) {
         Column(
@@ -459,7 +471,7 @@ private fun MuscleAnalysisCard(muscleDetails: List<ExerciseDetail>) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Muscle Analysis",
-                    color = Color.White,
+                    color = colorScheme.onBackground,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -473,7 +485,7 @@ private fun MuscleAnalysisCard(muscleDetails: List<ExerciseDetail>) {
                 MuscleDetailRow(
                     label = "AGONIST (PRIME MOVER)",
                     value = it.description ?: "",
-                    accentColor = AppColors.accentCyan,
+                    accentColor = colorScheme.primary,
                 )
             }
 
@@ -485,7 +497,7 @@ private fun MuscleAnalysisCard(muscleDetails: List<ExerciseDetail>) {
                 MuscleDetailRow(
                     label = "ANTAGONIST",
                     value = it.description ?: "",
-                    accentColor = AppColors.sectionTitle,
+                    accentColor = colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -498,6 +510,8 @@ private fun MuscleDetailRow(
     value: String,
     accentColor: Color,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -518,7 +532,7 @@ private fun MuscleDetailRow(
         }
         Text(
             text = value,
-            color = Color.White,
+            color = colorScheme.onBackground,
             fontSize = 14.sp,
             modifier = Modifier.padding(start = 12.dp, top = 4.dp),
         )
@@ -529,13 +543,14 @@ private fun MuscleDetailRow(
 private fun TechnicalCard(
     title: String,
     details: List<ExerciseDetail>,
-    iconColor: Color,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.cardBackground,
+            containerColor = colorScheme.surface,
         ),
     ) {
         Column(
@@ -547,7 +562,10 @@ private fun TechnicalCard(
                 Box(
                     modifier = Modifier
                         .size(24.dp)
-                        .background(iconColor.copy(alpha = 0.2f), RoundedCornerShape(4.dp)),
+                        .background(
+                            colorScheme.primary.copy(alpha = 0.2f),
+                            RoundedCornerShape(4.dp)
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -558,7 +576,7 @@ private fun TechnicalCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = title,
-                    color = iconColor,
+                    color = colorScheme.primary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -570,7 +588,7 @@ private fun TechnicalCard(
                 detail.detailCategory?.let { category ->
                     Text(
                         text = category,
-                        color = AppColors.accentCyan,
+                        color = colorScheme.primary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                     )
@@ -579,7 +597,7 @@ private fun TechnicalCard(
                 detail.description?.let { description ->
                     Text(
                         text = description,
-                        color = AppColors.descriptionText,
+                        color = colorScheme.onSurface,
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
                     )
@@ -595,11 +613,13 @@ private fun SafetyCard(
     title: String,
     details: List<ExerciseDetail>,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppColors.cardBackground,
+            containerColor = colorScheme.surface,
         ),
     ) {
         Column(
@@ -614,8 +634,8 @@ private fun SafetyCard(
                     else -> "ℹ️"
                 }
                 val iconColor = when {
-                    title.contains("ROM", ignoreCase = true) -> AppColors.accentOrange
-                    else -> AppColors.accentBlue
+                    title.contains("ROM", ignoreCase = true) -> colorScheme.tertiary
+                    else -> colorScheme.secondary
                 }
 
                 Box(
@@ -632,7 +652,7 @@ private fun SafetyCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = getDisplayTitle(title),
-                    color = Color.White,
+                    color = colorScheme.onBackground,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -644,7 +664,7 @@ private fun SafetyCard(
                 detail.description?.let { description ->
                     Text(
                         text = description,
-                        color = AppColors.descriptionText,
+                        color = colorScheme.onSurface,
                         fontSize = 14.sp,
                         lineHeight = 20.sp,
                     )

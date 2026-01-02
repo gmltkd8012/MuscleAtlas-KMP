@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.login.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +33,7 @@ import io.github.jan.supabase.compose.auth.composeAuth
 import io.ktor.util.Platform
 import kotlinx.coroutines.launch
 import muscleatlas.core.design_system.generated.resources.Res
+import muscleatlas.core.design_system.generated.resources.app_icon_dark
 import muscleatlas.core.design_system.generated.resources.app_icon_light
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -40,8 +42,15 @@ import org.koin.compose.koinInject
 internal fun LoginScreen(
     viewModel: LoginViewModel,
     onNavigateToMain: () -> Unit,
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val appIcon =
+        if (isDarkTheme)
+            painterResource(Res.drawable.app_icon_dark)
+        else
+            painterResource(Res.drawable.app_icon_light)
     
     val scope = rememberCoroutineScope()
     val supabaseClient = koinInject<SupabaseClient>()
@@ -65,7 +74,7 @@ internal fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.primary),
+            .background(color = MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -76,7 +85,7 @@ internal fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
-                painter = painterResource(Res.drawable.app_icon_light),
+                painter = appIcon,
                 contentDescription = null,
                 modifier = Modifier.size(256.dp),
             )

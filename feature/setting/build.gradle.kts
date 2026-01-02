@@ -13,6 +13,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:ui"))
+            implementation(project(":core:design-system"))
             implementation(libs.bundles.supabase)
 
             implementation(compose.runtime)

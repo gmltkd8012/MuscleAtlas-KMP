@@ -2,10 +2,12 @@ package com.rebuilding.muscleatlas.app.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -44,7 +46,9 @@ fun MainScreen(
     }?.label ?: "메뉴"
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         topBar = {
             TopAppBar(
                 title = { Text(currentTitle) },
@@ -112,7 +116,9 @@ private fun MuscleAtlasBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+    ) {
         BottomNavItem.entries.forEach { item ->
             val selected = currentDestination?.hierarchy?.any {
                 it.hasRoute(item.route::class)

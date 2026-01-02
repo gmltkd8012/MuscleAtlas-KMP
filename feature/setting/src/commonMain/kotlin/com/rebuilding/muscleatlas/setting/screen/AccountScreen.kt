@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rebuilding.muscleatlas.designsystem.theme.AppColors
 import com.rebuilding.muscleatlas.setting.viewmodel.AccountViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.auth.providers.Google
@@ -138,7 +139,7 @@ fun AccountScreen(
                 Text(
                     text = "로그아웃",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = AppColors.surfaceLight,
                     fontWeight = FontWeight.Medium,
                 )
             }

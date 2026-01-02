@@ -20,10 +20,8 @@ class WorkoutDetailViewModel(
             // 기계적 움직임
             "Eccentric",
             "Concentric",
-            "근육 분석",
-            "하강",
-            "상승",
             "ROM 말단 고려",
+
             // 안정화 기전
             "NMC",
             "능동 안정화",

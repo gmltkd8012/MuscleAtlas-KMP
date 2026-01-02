@@ -86,7 +86,7 @@ fun WorkoutDetailScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Exercise Detail",
+                        text = "운동 종목 상세",
                         color = colorScheme.onBackground,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -236,10 +236,16 @@ fun WorkoutDetailScreen(
                                 TechnicalCard(
                                     title = contractionType,
                                     details = details,
-                                    onClick = {
-                                        selectedTechnicalTitle = contractionType
-                                        selectedTechnicalDetails = details
-                                        showEditSheet = true
+                                    onClick = { isRom ->
+                                        if (isRom) {
+                                            selectedTechnicalTitle = contractionType
+                                            selectedTechnicalDetails = details
+                                            showSafetyEditSheet = true
+                                        } else {
+                                            selectedTechnicalTitle = contractionType
+                                            selectedTechnicalDetails = details
+                                            showEditSheet = true
+                                        }
                                     },
                                 )
                             }
@@ -397,8 +403,8 @@ private fun ExerciseTagsRow() {
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         ExerciseTag(text = "COMPOUND", isPrimary = true)
-        ExerciseTag(text = "Strength")
-        ExerciseTag(text = "Legs")
+//        ExerciseTag(text = "Strength")
+//        ExerciseTag(text = "Legs")
     }
 }
 
@@ -644,14 +650,16 @@ private fun MuscleDetailRow(
 private fun TechnicalCard(
     title: String,
     details: List<ExerciseDetail>,
-    onClick: () -> Unit = {},
+    onClick: (isRom: Boolean) -> Unit = {},
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(
+                onClick = { onClick(title.contains("ROM")) }
+            ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorScheme.surface,

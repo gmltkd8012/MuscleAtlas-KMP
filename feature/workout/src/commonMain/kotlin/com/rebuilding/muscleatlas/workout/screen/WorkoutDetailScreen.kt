@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.workout.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,13 +32,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +67,14 @@ fun WorkoutDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colorScheme = MaterialTheme.colorScheme
+    
+    // BottomSheet 상태 관리
+    var showEditSheet by remember { mutableStateOf(false) }
+    var showSafetyEditSheet by remember { mutableStateOf(false) }
+    var selectedTechnicalTitle by remember { mutableStateOf("") }
+    var selectedTechnicalDetails by remember { mutableStateOf<List<ExerciseDetail>>(emptyList()) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val safetySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(exerciseId) {
         viewModel.loadExerciseDetail(exerciseId)
@@ -205,9 +221,10 @@ fun WorkoutDetailScreen(
                         }
                     }
 
-                    // Technical Breakdown Section
+                    // Technical Breakdown Section (순서 유지하면서 필터링)
                     val technicalDetails = state.groupedDetails["기계적 움직임"]
-                        ?.filterKeys { it != "Eccentric" && it != "Concentric" && it != "근육 분석" }
+                        ?.entries
+                        ?.filter { it.key != "Eccentric" && it.key != "Concentric" && it.key != "근육 분석" }
 
                     if (!technicalDetails.isNullOrEmpty()) {
                         item {
@@ -219,6 +236,11 @@ fun WorkoutDetailScreen(
                                 TechnicalCard(
                                     title = contractionType,
                                     details = details,
+                                    onClick = {
+                                        selectedTechnicalTitle = contractionType
+                                        selectedTechnicalDetails = details
+                                        showEditSheet = true
+                                    },
                                 )
                             }
                         }
@@ -235,6 +257,11 @@ fun WorkoutDetailScreen(
                                 SafetyCard(
                                     title = contractionType,
                                     details = details,
+                                    onClick = {
+                                        selectedTechnicalTitle = contractionType
+                                        selectedTechnicalDetails = details
+                                        showSafetyEditSheet = true
+                                    },
                                 )
                             }
                         }
@@ -246,6 +273,80 @@ fun WorkoutDetailScreen(
                     }
                 }
             }
+        }
+    }
+    
+    // Technical Breakdown 편집 BottomSheet
+    if (showEditSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showEditSheet = false },
+            sheetState = sheetState,
+            containerColor = colorScheme.surface,
+            dragHandle = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(colorScheme.surface)
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(32.dp)
+                            .height(4.dp)
+                            .background(
+                                colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                RoundedCornerShape(2.dp)
+                            ),
+                    )
+                }
+            },
+        ) {
+            TechnicalEditSheetContent(
+                title = selectedTechnicalTitle,
+                details = selectedTechnicalDetails,
+                onSaveClick = { updatedDetails ->
+                    viewModel.updateExerciseDetails(updatedDetails)
+                    showEditSheet = false
+                },
+            )
+        }
+    }
+    
+    // Safety 편집 BottomSheet
+    if (showSafetyEditSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showSafetyEditSheet = false },
+            sheetState = safetySheetState,
+            containerColor = colorScheme.surface,
+            dragHandle = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(colorScheme.surface)
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(32.dp)
+                            .height(4.dp)
+                            .background(
+                                colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                RoundedCornerShape(2.dp)
+                            ),
+                    )
+                }
+            },
+        ) {
+            SafetyEditSheetContent(
+                title = selectedTechnicalTitle,
+                details = selectedTechnicalDetails,
+                onSaveClick = { updatedDetails ->
+                    viewModel.updateExerciseDetails(updatedDetails)
+                    showSafetyEditSheet = false
+                },
+            )
         }
     }
 }
@@ -543,11 +644,14 @@ private fun MuscleDetailRow(
 private fun TechnicalCard(
     title: String,
     details: List<ExerciseDetail>,
+    onClick: () -> Unit = {},
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorScheme.surface,
@@ -612,11 +716,14 @@ private fun TechnicalCard(
 private fun SafetyCard(
     title: String,
     details: List<ExerciseDetail>,
+    onClick: () -> Unit = {},
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorScheme.surface,
@@ -680,5 +787,336 @@ private fun getDisplayTitle(title: String): String {
         title.contains("ROM", ignoreCase = true) -> "ROM End-Range Considerations"
         title.contains("NMC", ignoreCase = true) -> "Neuromuscular Control (NMC)"
         else -> title
+    }
+}
+
+/**
+ * Technical Breakdown 항목 편집용 BottomSheet 내용
+ */
+@Composable
+private fun TechnicalEditSheetContent(
+    title: String,
+    details: List<ExerciseDetail>,
+    onSaveClick: (List<ExerciseDetail>) -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+    
+    // 편집 가능한 상태들
+    var editTitle by remember { mutableStateOf(title) }
+    var primaryValue by remember { 
+        mutableStateOf(details.find { it.detailCategory == "Primary" }?.description ?: "") 
+    }
+    var secondaryValue by remember { 
+        mutableStateOf(details.find { it.detailCategory == "Secondary" }?.description ?: "") 
+    }
+    var proximalDistalValue by remember { 
+        mutableStateOf(details.find { it.detailCategory == "근위/원위" }?.description ?: "") 
+    }
+    var agonistValue by remember { 
+        mutableStateOf(details.find { it.detailCategory == "주동근" }?.description ?: "") 
+    }
+    var antagonistValue by remember { 
+        mutableStateOf(details.find { it.detailCategory == "길항근" }?.description ?: "") 
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorScheme.surface)
+            .padding(horizontal = 16.dp)
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp),
+    ) {
+        // 헤더
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        colorScheme.primary.copy(alpha = 0.2f),
+                        RoundedCornerShape(4.dp)
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "📋",
+                    fontSize = 12.sp,
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "편집",
+                color = colorScheme.onBackground,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(20.dp))
+        
+        // 제목 필드
+        OutlinedTextField(
+            value = editTitle,
+            onValueChange = { editTitle = it },
+            label = { Text("제목") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        // Primary 필드
+        OutlinedTextField(
+            value = primaryValue,
+            onValueChange = { primaryValue = it },
+            label = { Text("Primary") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        // Secondary 필드
+        OutlinedTextField(
+            value = secondaryValue,
+            onValueChange = { secondaryValue = it },
+            label = { Text("Secondary") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        // 근위/원위 필드
+        OutlinedTextField(
+            value = proximalDistalValue,
+            onValueChange = { proximalDistalValue = it },
+            label = { Text("근위/원위") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        // 주동근 필드
+        OutlinedTextField(
+            value = agonistValue,
+            onValueChange = { agonistValue = it },
+            label = { Text("주동근") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        // 길항근 필드
+        OutlinedTextField(
+            value = antagonistValue,
+            onValueChange = { antagonistValue = it },
+            label = { Text("길항근") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // 저장 버튼
+        Button(
+            onClick = {
+                // 편집된 내용으로 새로운 details 리스트 생성
+                val baseDetail = details.firstOrNull()
+                val updatedDetails = buildList {
+                    if (primaryValue.isNotBlank()) {
+                        add(
+                            ExerciseDetail(
+                                id = details.find { it.detailCategory == "Primary" }?.id ?: "",
+                                exerciseId = baseDetail?.exerciseId ?: "",
+                                movementType = baseDetail?.movementType ?: "",
+                                contractionType = baseDetail?.contractionType ?: "",
+                                detailCategory = "Primary",
+                                description = primaryValue,
+                            )
+                        )
+                    }
+                    if (secondaryValue.isNotBlank()) {
+                        add(ExerciseDetail(
+                            id = details.find { it.detailCategory == "Secondary" }?.id ?: "",
+                            exerciseId = baseDetail?.exerciseId ?: "",
+                            movementType = baseDetail?.movementType ?: "",
+                            contractionType = baseDetail?.contractionType ?: "",
+                            detailCategory = "Secondary",
+                            description = secondaryValue,
+                        ))
+                    }
+                    if (proximalDistalValue.isNotBlank()) {
+                        add(ExerciseDetail(
+                            id = details.find { it.detailCategory == "근위/원위" }?.id ?: "",
+                            exerciseId = baseDetail?.exerciseId ?: "",
+                            movementType = baseDetail?.movementType ?: "",
+                            contractionType = baseDetail?.contractionType ?: "",
+                            detailCategory = "근위/원위",
+                            description = proximalDistalValue,
+                        ))
+                    }
+                    if (agonistValue.isNotBlank()) {
+                        add(ExerciseDetail(
+                            id = details.find { it.detailCategory == "주동근" }?.id ?: "",
+                            exerciseId = baseDetail?.exerciseId ?: "",
+                            movementType = baseDetail?.movementType ?: "",
+                            contractionType = baseDetail?.contractionType ?: "",
+                            detailCategory = "주동근",
+                            description = agonistValue,
+                        ))
+                    }
+                    if (antagonistValue.isNotBlank()) {
+                        add(ExerciseDetail(
+                            id = details.find { it.detailCategory == "길항근" }?.id ?: "",
+                            exerciseId = baseDetail?.exerciseId ?: "",
+                            movementType = baseDetail?.movementType ?: "",
+                            contractionType = baseDetail?.contractionType ?: "",
+                            detailCategory = "길항근",
+                            description = antagonistValue,
+                        ))
+                    }
+                }
+                onSaveClick(updatedDetails)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+                .height(52.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorScheme.primary,
+            ),
+        ) {
+            Text(
+                text = "저장",
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+    }
+}
+
+/**
+ * Safety 항목 편집용 BottomSheet 내용 (제목, description만 수정)
+ */
+@Composable
+private fun SafetyEditSheetContent(
+    title: String,
+    details: List<ExerciseDetail>,
+    onSaveClick: (List<ExerciseDetail>) -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+    
+    // 편집 가능한 상태들
+    var editTitle by remember { mutableStateOf(title) }
+    var descriptionValue by remember { 
+        mutableStateOf(details.firstOrNull()?.description ?: "") 
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorScheme.surface)
+            .padding(horizontal = 16.dp)
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp),
+    ) {
+        // 헤더
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val iconEmoji = when {
+                title.contains("ROM", ignoreCase = true) -> "⚠️"
+                title.contains("NMC", ignoreCase = true) -> "🔵"
+                else -> "ℹ️"
+            }
+            
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        colorScheme.primary.copy(alpha = 0.2f),
+                        RoundedCornerShape(4.dp)
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = iconEmoji,
+                    fontSize = 12.sp,
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "편집",
+                color = colorScheme.onBackground,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(20.dp))
+        
+        // 제목 필드
+        OutlinedTextField(
+            value = editTitle,
+            onValueChange = { editTitle = it },
+            label = { Text("제목") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+        
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        // Description 필드
+        OutlinedTextField(
+            value = descriptionValue,
+            onValueChange = { descriptionValue = it },
+            label = { Text("설명") },
+            modifier = Modifier.fillMaxWidth(),
+            minLines = 3,
+            maxLines = 5,
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // 저장 버튼
+        Button(
+            onClick = {
+                val baseDetail = details.firstOrNull()
+                val updatedDetails = if (descriptionValue.isNotBlank() && baseDetail != null) {
+                    listOf(
+                        ExerciseDetail(
+                            id = baseDetail.id,
+                            exerciseId = baseDetail.exerciseId,
+                            movementType = baseDetail.movementType,
+                            contractionType = editTitle,
+                            detailCategory = baseDetail.detailCategory,
+                            description = descriptionValue,
+                        )
+                    )
+                } else {
+                    emptyList()
+                }
+                onSaveClick(updatedDetails)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorScheme.primary,
+            ),
+        ) {
+            Text(
+                text = "저장",
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
     }
 }

@@ -25,6 +25,16 @@ interface ExerciseRepository {
      * 특정 운동 조회
      */
     suspend fun getExercise(exerciseId: String): Exercise?
+    
+    /**
+     * 운동 상세 정보 업데이트
+     */
+    suspend fun updateExerciseDetail(detail: ExerciseDetail)
+    
+    /**
+     * 여러 운동 상세 정보 일괄 업데이트
+     */
+    suspend fun updateExerciseDetails(details: List<ExerciseDetail>)
 }
 
 class ExerciseRepositoryImpl(
@@ -66,5 +76,31 @@ class ExerciseRepositoryImpl(
                 }
             }
             .decodeSingleOrNull<Exercise>()
+    }
+    
+    override suspend fun updateExerciseDetail(detail: ExerciseDetail) {
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(EXERCISE_DETAILS_TABLE)
+                .update(detail) {
+                    filter {
+                        eq("id", detail.id)
+                    }
+                }
+        }
+    }
+    
+    override suspend fun updateExerciseDetails(details: List<ExerciseDetail>) {
+        withContext(ioDispatcher) {
+            details.forEach { detail ->
+                supabaseClient
+                    .from(EXERCISE_DETAILS_TABLE)
+                    .update(detail) {
+                        filter {
+                            eq("id", detail.id)
+                        }
+                    }
+            }
+        }
     }
 }

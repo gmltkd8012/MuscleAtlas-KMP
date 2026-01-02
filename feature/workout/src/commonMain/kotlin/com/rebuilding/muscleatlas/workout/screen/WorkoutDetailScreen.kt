@@ -808,9 +808,8 @@ private fun TechnicalEditSheetContent(
     onSaveClick: (List<ExerciseDetail>) -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    
-    // 편집 가능한 상태들
-    var editTitle by remember { mutableStateOf(title) }
+
+    // 편집 가능한 상태들 (제목은 수정 불가)
     var primaryValue by remember { 
         mutableStateOf(details.find { it.detailCategory == "Primary" }?.description ?: "") 
     }
@@ -856,7 +855,7 @@ private fun TechnicalEditSheetContent(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "편집",
+                text = title,
                 color = colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -864,18 +863,7 @@ private fun TechnicalEditSheetContent(
         }
         
         Spacer(modifier = Modifier.height(20.dp))
-        
-        // 제목 필드
-        OutlinedTextField(
-            value = editTitle,
-            onValueChange = { editTitle = it },
-            label = { Text("제목") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-        )
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
+
         // Primary 필드
         OutlinedTextField(
             value = primaryValue,
@@ -1019,11 +1007,10 @@ private fun SafetyEditSheetContent(
     onSaveClick: (List<ExerciseDetail>) -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    
-    // 편집 가능한 상태들
-    var editTitle by remember { mutableStateOf(title) }
-    var descriptionValue by remember { 
-        mutableStateOf(details.firstOrNull()?.description ?: "") 
+
+    // 편집 가능한 상태들 (제목은 수정 불가)
+    var descriptionValue by remember {
+        mutableStateOf(details.firstOrNull()?.description ?: "")
     }
 
     Column(
@@ -1061,7 +1048,7 @@ private fun SafetyEditSheetContent(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "편집",
+                text = title,
                 color = colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -1069,18 +1056,7 @@ private fun SafetyEditSheetContent(
         }
         
         Spacer(modifier = Modifier.height(20.dp))
-        
-        // 제목 필드
-        OutlinedTextField(
-            value = editTitle,
-            onValueChange = { editTitle = it },
-            label = { Text("제목") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-        )
-        
-        Spacer(modifier = Modifier.height(12.dp))
-        
+
         // Description 필드
         OutlinedTextField(
             value = descriptionValue,
@@ -1103,7 +1079,7 @@ private fun SafetyEditSheetContent(
                             id = baseDetail.id,
                             exerciseId = baseDetail.exerciseId,
                             movementType = baseDetail.movementType,
-                            contractionType = editTitle,
+                            contractionType = baseDetail.contractionType,
                             detailCategory = baseDetail.detailCategory,
                             description = descriptionValue,
                         )

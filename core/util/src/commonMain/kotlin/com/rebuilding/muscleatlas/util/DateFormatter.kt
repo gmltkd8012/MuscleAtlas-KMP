@@ -50,7 +50,7 @@ object DateFormatter {
      * 현재 시간을 Unix timestamp(밀리초)로 반환
      */
     fun getCurrentTimeMillis(): Long {
-        return Clock.System.now().toEpochMilliseconds()
+        return currentTimeMillis()
     }
     
     // ==================== String (ISO 8601) 기반 ====================

@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
 import com.rebuilding.muscleatlas.member.viewmodel.MemberExerciseItem
+import com.rebuilding.muscleatlas.ui.util.Logger
 import com.rebuilding.muscleatlas.util.DateFormatter
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -159,8 +160,10 @@ fun MemberDetailScreen(
                     item {
                         val formattedDate = state.member?.updatedAt?.let {
                             DateFormatter.formatMillisToKoreanDate(it)
-                        } ?: "최초 등록"
-                        
+                        } ?: state.member?.createdAt.let {
+                            DateFormatter.formatMillisToKoreanDate(it, "최초 등록")
+                        }
+
                         MemoCard(
                             memo = state.member?.memo ?: "",
                             formattedDate = formattedDate,

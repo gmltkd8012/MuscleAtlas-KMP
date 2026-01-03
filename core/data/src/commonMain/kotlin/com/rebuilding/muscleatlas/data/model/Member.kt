@@ -16,17 +16,13 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Member(
-    val id: String,
-    @SerialName("user_id")
-    val userId: String? = null,
-    @SerialName("img_url")
-    val imgUrl: String? = null,
-    val name: String,
-    val memo: String,
-    @SerialName("created_at")
-    val createdAt: String,
-    @SerialName("updated_at")
-    val updatedAt: Long? = null,
+    @SerialName("id") val id: String,
+    @SerialName("user_id") val userId: String? = null,
+    @SerialName("img_url") val imgUrl: String? = null,
+    @SerialName("name") val name: String,
+    @SerialName("memo") val memo: String,
+    @SerialName("created_at") val createdAt: Long,
+    @SerialName("updated_at") val updatedAt: Long? = null,
 )
 
 /**

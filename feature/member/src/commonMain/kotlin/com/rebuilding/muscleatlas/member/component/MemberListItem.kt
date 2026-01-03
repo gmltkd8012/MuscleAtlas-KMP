@@ -33,6 +33,8 @@ fun MemberListItem(
     modifier: Modifier = Modifier,
     profileContent: @Composable (BoxScope.() -> Unit)? = null,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -45,7 +47,7 @@ fun MemberListItem(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondary),
+                    .background(colorScheme.surface),
                 contentAlignment = Alignment.Center,
             ) {
                 if (profileContent != null) {
@@ -54,7 +56,7 @@ fun MemberListItem(
                     Text(
                         text = title.firstOrNull()?.uppercase() ?: "",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = colorScheme.primary,
                     )
                 }
             }
@@ -64,13 +66,13 @@ fun MemberListItem(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = colorScheme.onBackground,
             )
         }
 
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 16.dp),
-            color = MaterialTheme.colorScheme.secondary,
+            color = colorScheme.outline,
             thickness = 1.dp,
         )
     }

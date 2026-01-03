@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MuscleAtlas" parent="android:Theme.Material.NoActionBar" />
+
+    <!-- SplashScreen 테마 (다크 모드) -->
+    <style name="Theme.MuscleAtlas.Splash" parent="Theme.SplashScreen">
+        <!-- 스플래시 배경색 (다크 모드) -->
+        <item name="windowSplashScreenBackground">@android:color/black</item>
+        <!-- 중앙 아이콘 (시스템 테마에 따라 drawable/drawable-night 자동 선택) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+        <!-- 스플래시 후 전환될 테마 -->
+        <item name="postSplashScreenTheme">@style/Theme.MuscleAtlas</item>
+    </style>
+
+</resources>

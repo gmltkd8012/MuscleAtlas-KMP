@@ -4,9 +4,13 @@ import com.rebuilding.muscleatlas.data.model.CreateMemberRequest
 import com.rebuilding.muscleatlas.data.model.Member
 import com.rebuilding.muscleatlas.data.model.UpdateMemberRequest
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 interface MemberRepository {
     /**
@@ -37,6 +41,7 @@ interface MemberRepository {
 
 class MemberRepositoryImpl(
     private val supabaseClient: SupabaseClient,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : MemberRepository {
 
     companion object {
@@ -44,15 +49,24 @@ class MemberRepositoryImpl(
     }
 
     override fun getMembers(): Flow<List<Member>> = flow {
-        val members = supabaseClient
-            .from(TABLE_NAME)
-            .select()
-            .decodeList<Member>()
+        val userId = supabaseClient.auth.currentUserOrNull()?.id
+        val members = if (userId != null) {
+            supabaseClient
+                .from(TABLE_NAME)
+                .select {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<Member>()
+        } else {
+            emptyList()
+        }
         emit(members)
-    }
+    }.flowOn(ioDispatcher)
 
-    override suspend fun getMember(id: String): Member? {
-        return supabaseClient
+    override suspend fun getMember(id: String): Member? = withContext(ioDispatcher) {
+        supabaseClient
             .from(TABLE_NAME)
             .select {
                 filter {
@@ -62,34 +76,38 @@ class MemberRepositoryImpl(
             .decodeSingleOrNull<Member>()
     }
 
-    override suspend fun createMember(request: CreateMemberRequest): Member {
-        return supabaseClient
-            .from(TABLE_NAME)
-            .insert(request) {
-                select()
-            }
-            .decodeSingle<Member>()
-    }
-
-    override suspend fun updateMember(id: String, request: UpdateMemberRequest): Member {
-        return supabaseClient
-            .from(TABLE_NAME)
-            .update(request) {
-                select()
-                filter {
-                    eq("id", id)
+    override suspend fun createMember(request: CreateMemberRequest): Member =
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(TABLE_NAME)
+                .insert(request) {
+                    select()
                 }
-            }
-            .decodeSingle<Member>()
-    }
+                .decodeSingle<Member>()
+        }
+
+    override suspend fun updateMember(id: String, request: UpdateMemberRequest): Member =
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(TABLE_NAME)
+                .update(request) {
+                    select()
+                    filter {
+                        eq("id", id)
+                    }
+                }
+                .decodeSingle<Member>()
+        }
 
     override suspend fun deleteMember(id: String) {
-        supabaseClient
-            .from(TABLE_NAME)
-            .delete {
-                filter {
-                    eq("id", id)
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(TABLE_NAME)
+                .delete {
+                    filter {
+                        eq("id", id)
+                    }
                 }
-            }
+        }
     }
 }

@@ -13,6 +13,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:ui"))
+            implementation(project(":core:data"))
+            implementation(project(":core:design-system"))
         }
         androidMain.dependencies {
         }

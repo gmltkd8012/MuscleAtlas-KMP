@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
+import com.rebuilding.muscleatlas.ui.util.Logger
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
@@ -27,8 +28,9 @@ abstract class StateViewModel<State, SideEffect>(
 ) : ViewModel(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext =
-        viewModelScope.coroutineContext + CoroutineExceptionHandler() { _, throwable ->
-
+        viewModelScope.coroutineContext + CoroutineExceptionHandler { _, throwable ->
+            val tag = this@StateViewModel::class.simpleName ?: "StateViewModel"
+            Logger.e(tag, "Coroutine exception: ${throwable.message}", throwable)
         }
 
     private val reduceChannel = Channel<State.() -> State>()

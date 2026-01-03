@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.rebuilding.muscleatlas.app.App
 import com.rebuilding.muscleatlas.app.muscleAtlasAppDeclaration
 import com.rebuilding.muscleatlas.appconfig.AppConfig
@@ -21,6 +22,9 @@ class MainActivity : ComponentActivity() {
     private val supabaseClient: SupabaseClient by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 시스템 스플래시 화면 설정 (super.onCreate 전에 호출해야 함)
+        installSplashScreen()
+        
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 

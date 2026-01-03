@@ -2,4 +2,15 @@
 <resources>
 
     <style name="Theme.MuscleAtlas" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- SplashScreen 테마 -->
+    <style name="Theme.MuscleAtlas.Splash" parent="Theme.SplashScreen">
+        <!-- 스플래시 배경색 (라이트 모드) -->
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <!-- 중앙 아이콘 -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <!-- 스플래시 후 전환될 테마 -->
+        <item name="postSplashScreenTheme">@style/Theme.MuscleAtlas</item>
+    </style>
+
 </resources>

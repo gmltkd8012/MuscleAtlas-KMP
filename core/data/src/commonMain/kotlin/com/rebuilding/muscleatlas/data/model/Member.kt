@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
  * @property imgUrl 프로필 사진 URL
  * @property name 회원명
  * @property memo 부가 정보
+ * @property tags 회원 태그 목록 (JSONB)
  * @property createdAt 생성 시간
  * @property updatedAt 수정 시간 (메모 업데이트 시 갱신, Unix timestamp 밀리초)
  */
@@ -21,8 +22,23 @@ data class Member(
     @SerialName("img_url") val imgUrl: String? = null,
     @SerialName("name") val name: String,
     @SerialName("memo") val memo: String,
+    @SerialName("tags") val tags: List<MemberTagData>? = null,
     @SerialName("created_at") val createdAt: Long,
     @SerialName("updated_at") val updatedAt: Long? = null,
+)
+
+/**
+ * 회원 태그 데이터 (JSONB 저장용)
+ *
+ * @property text 태그 텍스트
+ * @property icon 태그 아이콘 (이모지)
+ * @property color 태그 색상 타입 ("PRIMARY", "WARNING", "SUCCESS")
+ */
+@Serializable
+data class MemberTagData(
+    val text: String,
+    val icon: String,
+    val color: String,
 )
 
 /**
@@ -45,6 +61,7 @@ data class UpdateMemberRequest(
     @SerialName("img_url") val imgUrl: String? = null,
     val name: String? = null,
     val memo: String? = null,
+    val tags: List<MemberTagData>? = null,
     @SerialName("updated_at") val updatedAt: Long? = null,
 )
 

@@ -282,14 +282,6 @@ private fun ProfileSection(
                     color = colorScheme.onSurfaceVariant,
                 )
             }
-            // 온라인 상태 표시
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF4CAF50))
-                    .align(Alignment.BottomEnd),
-            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

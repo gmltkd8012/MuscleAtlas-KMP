@@ -5,10 +5,17 @@ import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.functions.functions
+import io.ktor.client.call.body
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import kotlin.time.ExperimentalTime
 
 class AccountViewModel(
@@ -49,18 +56,88 @@ class AccountViewModel(
         }
     }
 
+    fun deleteAccount() {
+        viewModelScope.launch {
+            reduceState { copy(isDeleting = true, deleteError = null) }
+
+            try {
+                val userId = state.value.userId
+                if (userId == null) {
+                    reduceState { copy(isDeleting = false, deleteError = "사용자 정보를 찾을 수 없습니다.") }
+                    return@launch
+                }
+
+                // Edge Function을 호출하여 회원 탈퇴 처리
+                // Body로 userId 전달
+                val requestBody = buildJsonObject {
+                    put("user_id", userId)
+                }
+                
+                val response = supabaseClient.functions.invoke(
+                    function = "delete-user",
+                    body = requestBody,
+                )
+
+                val statusCode = response.status.value
+                if (statusCode in 200..299) {
+                    // 로그아웃 처리
+                    supabaseClient.auth.signOut()
+                    reduceState { copy(isDeleting = false, isDeleteSuccess = true) }
+                    sendSideEffect(AccountSideEffect.DeleteSuccess)
+                } else {
+                    val errorBody = response.body<DeleteUserResponse>()
+                    reduceState {
+                        copy(
+                            isDeleting = false,
+                            deleteError = errorBody.error ?: "회원 탈퇴에 실패했습니다."
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Logger.e(TAG, "회원 탈퇴 실패: ${e.message}")
+                reduceState {
+                    copy(
+                        isDeleting = false,
+                        deleteError = "회원 탈퇴 중 오류가 발생했습니다."
+                    )
+                }
+            }
+        }
+    }
+
+    fun clearDeleteError() {
+        viewModelScope.launch {
+            reduceState { copy(deleteError = null) }
+        }
+    }
+
     @OptIn(ExperimentalTime::class)
     private fun formatDate(instant: Instant): String {
         val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
         return "${localDateTime.year}년 ${localDateTime.monthNumber}월 ${localDateTime.dayOfMonth}일"
     }
+
+    companion object {
+        private const val TAG = "AccountViewModel"
+    }
 }
+
+@Serializable
+data class DeleteUserResponse(
+    val success: Boolean? = null,
+    val error: String? = null,
+)
 
 data class AccountState(
     val email: String? = null,
     val provider: String? = null,
     val createdAt: String? = null,
     val userId: String? = null,
+    val isDeleting: Boolean = false,
+    val isDeleteSuccess: Boolean = false,
+    val deleteError: String? = null,
 )
 
-sealed interface AccountSideEffect
+sealed interface AccountSideEffect {
+    data object DeleteSuccess : AccountSideEffect
+}

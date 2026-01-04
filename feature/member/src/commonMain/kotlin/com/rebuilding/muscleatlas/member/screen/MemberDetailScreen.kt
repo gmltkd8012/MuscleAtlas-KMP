@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.member.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -59,7 +63,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
 import com.rebuilding.muscleatlas.member.viewmodel.MemberExerciseItem
-import com.rebuilding.muscleatlas.ui.util.Logger
+import com.rebuilding.muscleatlas.member.viewmodel.MemberTag
+import com.rebuilding.muscleatlas.member.viewmodel.TagColorType
 import com.rebuilding.muscleatlas.util.DateFormatter
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -77,6 +82,10 @@ fun MemberDetailScreen(
     // 메모 편집 BottomSheet 상태
     var showMemoEditSheet by remember { mutableStateOf(false) }
     val memoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    
+    // 태그 추가 BottomSheet 상태
+    var showTagAddSheet by remember { mutableStateOf(false) }
+    val tagSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(memberId) {
         viewModel.loadMemberDetail(memberId)
@@ -152,7 +161,9 @@ fun MemberDetailScreen(
                     item {
                         ProfileSection(
                             name = state.member?.name ?: "",
-                            memo = state.member?.memo ?: "",
+                            tags = state.tags,
+                            onAddTagClick = { showTagAddSheet = true },
+                            onRemoveTagClick = { tagId -> viewModel.removeTag(tagId) },
                         )
                     }
 
@@ -247,13 +258,50 @@ fun MemberDetailScreen(
             )
         }
     }
+    
+    // 태그 추가 BottomSheet
+    if (showTagAddSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showTagAddSheet = false },
+            sheetState = tagSheetState,
+            containerColor = colorScheme.surface,
+            dragHandle = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(colorScheme.surface)
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(32.dp)
+                            .height(4.dp)
+                            .background(
+                                colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                RoundedCornerShape(2.dp)
+                            ),
+                    )
+                }
+            },
+        ) {
+            TagAddSheetContent(
+                onSaveClick = { text, icon, colorType ->
+                    viewModel.addTag(text, icon, colorType)
+                    showTagAddSheet = false
+                },
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ProfileSection(
     name: String,
-    memo: String,
+    tags: List<MemberTag>,
+    onAddTagClick: () -> Unit,
+    onRemoveTagClick: (String) -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
@@ -301,17 +349,69 @@ private fun ProfileSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            StatusTag(
-                text = "PT 10회 남음",
-                icon = "✨",
-                backgroundColor = colorScheme.primary.copy(alpha = 0.2f),
-                textColor = colorScheme.primary,
+            // 동적 태그 목록
+            tags.forEach { tag ->
+                val (backgroundColor, textColor) = getTagColors(tag.colorType)
+                StatusTag(
+                    text = tag.text,
+                    icon = tag.icon,
+                    backgroundColor = backgroundColor,
+                    textColor = textColor,
+                    showRemoveButton = true,
+                    onRemoveClick = { onRemoveTagClick(tag.id) },
+                )
+            }
+            
+            // 태그 추가 버튼
+            AddTagButton(onClick = onAddTagClick)
+        }
+    }
+}
+
+/**
+ * TagColorType에 따른 배경색과 텍스트색 반환
+ */
+@Composable
+private fun getTagColors(colorType: TagColorType): Pair<Color, Color> {
+    val colorScheme = MaterialTheme.colorScheme
+    return when (colorType) {
+        TagColorType.PRIMARY -> colorScheme.primary.copy(alpha = 0.2f) to colorScheme.primary
+        TagColorType.WARNING -> colorScheme.error.copy(alpha = 0.2f) to colorScheme.error
+        TagColorType.SUCCESS -> Color(0xFF4CAF50).copy(alpha = 0.2f) to Color(0xFF4CAF50)
+    }
+}
+
+/**
+ * 태그 추가 버튼
+ */
+@Composable
+private fun AddTagButton(
+    onClick: () -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+    
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(colorScheme.surfaceVariant)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "태그 추가",
+                modifier = Modifier.size(16.dp),
+                tint = colorScheme.onSurfaceVariant,
             )
-            StatusTag(
-                text = "허리 주의",
-                icon = "⚠️",
-                backgroundColor = colorScheme.error.copy(alpha = 0.2f),
-                textColor = colorScheme.error,
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "태그 추가",
+                color = colorScheme.onSurfaceVariant,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
             )
         }
     }
@@ -323,12 +423,14 @@ private fun StatusTag(
     icon: String,
     backgroundColor: Color,
     textColor: Color,
+    showRemoveButton: Boolean = false,
+    onRemoveClick: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .background(backgroundColor)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(start = 16.dp, end = if (showRemoveButton) 8.dp else 16.dp, top = 8.dp, bottom = 8.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -344,6 +446,24 @@ private fun StatusTag(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
             )
+            if (showRemoveButton) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(CircleShape)
+                        .background(textColor.copy(alpha = 0.2f))
+                        .clickable(onClick = onRemoveClick),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "삭제",
+                        modifier = Modifier.size(12.dp),
+                        tint = textColor,
+                    )
+                }
+            }
         }
     }
 }
@@ -452,6 +572,250 @@ private fun MemoEditSheetContent(
                 fontWeight = FontWeight.SemiBold,
             )
         }
+    }
+}
+
+/**
+ * 태그 추가 BottomSheet 내용
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun TagAddSheetContent(
+    onSaveClick: (text: String, icon: String, colorType: TagColorType) -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+    var tagText by remember { mutableStateOf("") }
+    var selectedColorType by remember { mutableStateOf(TagColorType.PRIMARY) }
+    var selectedIcon by remember { mutableStateOf("✨") }
+    
+    // 아이콘 옵션
+    val iconOptions = listOf("✨", "⚠️", "💪", "🎯", "⭐", "🔥", "💚", "📌")
+    
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorScheme.surface)
+            .padding(horizontal = 16.dp)
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp),
+    ) {
+        Text(
+            text = "태그 추가",
+            color = colorScheme.onSurface,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // 태그 텍스트 입력
+        OutlinedTextField(
+            value = tagText,
+            onValueChange = { tagText = it },
+            label = { Text("태그 내용") },
+            placeholder = { Text("예: PT 10회 남음, 허리 주의") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // 아이콘 선택
+        Text(
+            text = "아이콘 선택",
+            color = colorScheme.onSurface,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            iconOptions.forEach { icon ->
+                IconOptionItem(
+                    icon = icon,
+                    isSelected = selectedIcon == icon,
+                    onClick = { selectedIcon = icon },
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // 색상 선택
+        Text(
+            text = "색상 선택",
+            color = colorScheme.onSurface,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            ColorOptionItem(
+                colorType = TagColorType.PRIMARY,
+                label = "기본",
+                isSelected = selectedColorType == TagColorType.PRIMARY,
+                onClick = { selectedColorType = TagColorType.PRIMARY },
+            )
+            ColorOptionItem(
+                colorType = TagColorType.WARNING,
+                label = "주의",
+                isSelected = selectedColorType == TagColorType.WARNING,
+                onClick = { selectedColorType = TagColorType.WARNING },
+            )
+            ColorOptionItem(
+                colorType = TagColorType.SUCCESS,
+                label = "긍정",
+                isSelected = selectedColorType == TagColorType.SUCCESS,
+                onClick = { selectedColorType = TagColorType.SUCCESS },
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // 미리보기
+        Text(
+            text = "미리보기",
+            color = colorScheme.onSurface,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        if (tagText.isNotEmpty()) {
+            val (backgroundColor, textColor) = getTagColors(selectedColorType)
+            StatusTag(
+                text = tagText,
+                icon = selectedIcon,
+                backgroundColor = backgroundColor,
+                textColor = textColor,
+            )
+        } else {
+            Text(
+                text = "태그 내용을 입력하면 미리보기가 표시됩니다",
+                color = colorScheme.onSurfaceVariant,
+                fontSize = 13.sp,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { 
+                if (tagText.isNotEmpty()) {
+                    onSaveClick(tagText, selectedIcon, selectedColorType) 
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            shape = RoundedCornerShape(12.dp),
+            enabled = tagText.isNotEmpty(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorScheme.primary,
+                contentColor = colorScheme.onPrimary,
+            ),
+        ) {
+            Text(
+                text = "추가",
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+    }
+}
+
+/**
+ * 아이콘 선택 아이템
+ */
+@Composable
+private fun IconOptionItem(
+    icon: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+    
+    Box(
+        modifier = Modifier
+            .size(44.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                if (isSelected) colorScheme.primaryContainer 
+                else colorScheme.surfaceVariant
+            )
+            .border(
+                width = if (isSelected) 2.dp else 0.dp,
+                color = if (isSelected) colorScheme.primary else Color.Transparent,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = icon,
+            fontSize = 20.sp,
+        )
+    }
+}
+
+/**
+ * 색상 선택 아이템
+ */
+@Composable
+private fun ColorOptionItem(
+    colorType: TagColorType,
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+    val (backgroundColor, accentColor) = getTagColors(colorType)
+    
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .clip(CircleShape)
+                .background(backgroundColor)
+                .border(
+                    width = if (isSelected) 3.dp else 1.dp,
+                    color = if (isSelected) accentColor else colorScheme.outline.copy(alpha = 0.3f),
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    tint = accentColor,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        Text(
+            text = label,
+            color = if (isSelected) accentColor else colorScheme.onSurfaceVariant,
+            fontSize = 12.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+        )
     }
 }
 

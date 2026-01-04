@@ -117,6 +117,38 @@ class MemberDetailViewModel(
             }
         }
     }
+    
+    /**
+     * 태그 추가
+     */
+    fun addTag(text: String, icon: String, colorType: TagColorType) {
+        launch {
+            val newTag = MemberTag(
+                id = generateTagId(),
+                text = text,
+                icon = icon,
+                colorType = colorType,
+            )
+            reduceState {
+                copy(tags = tags + newTag)
+            }
+        }
+    }
+    
+    /**
+     * 태그 삭제
+     */
+    fun removeTag(tagId: String) {
+        launch {
+            reduceState {
+                copy(tags = tags.filter { it.id != tagId })
+            }
+        }
+    }
+    
+    private fun generateTagId(): String {
+        return "tag_${DateFormatter.getCurrentTimeMillis()}"
+    }
 }
 
 /**
@@ -127,10 +159,30 @@ data class MemberExerciseItem(
     val exercise: Exercise,
 )
 
+/**
+ * 회원 태그
+ */
+data class MemberTag(
+    val id: String,
+    val text: String,
+    val icon: String,
+    val colorType: TagColorType,
+)
+
+/**
+ * 태그 색상 타입
+ */
+enum class TagColorType {
+    PRIMARY,   // 기본 (파란색 계열)
+    WARNING,   // 주의 (빨간색 계열)
+    SUCCESS,   // 성공/긍정 (초록색 계열)
+}
+
 data class MemberDetailState(
     val isLoading: Boolean = false,
     val member: Member? = null,
     val exerciseItems: List<MemberExerciseItem> = emptyList(),
+    val tags: List<MemberTag> = emptyList(),
     val error: String? = null,
 )
 

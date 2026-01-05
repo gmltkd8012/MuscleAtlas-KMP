@@ -60,7 +60,7 @@ jetbrainsKotlinJvm = "2.2.0"
 navigation = "2.9.1"
 
 # kmp lifecycle
-navLifecycle = "2.8.4"
+navLifecycle = "2.9.1"
 
 # In App Browser - by yjyoon-dev
 kinappbrowser = "1.0.0"

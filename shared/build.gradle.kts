@@ -38,6 +38,9 @@ kotlin {
 
             // Serialization
             implementation(libs.kotlinx.serialization.json)
+            
+            // Feature modules
+            implementation(project(":feature:app"))
         }
 
         androidMain.dependencies {

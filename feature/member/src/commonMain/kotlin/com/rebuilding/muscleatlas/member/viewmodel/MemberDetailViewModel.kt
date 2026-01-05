@@ -4,10 +4,12 @@ import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.model.Member
 import com.rebuilding.muscleatlas.data.model.MemberExercise
 import com.rebuilding.muscleatlas.data.model.MemberExerciseUpdate
+import com.rebuilding.muscleatlas.data.model.MemberInvite
 import com.rebuilding.muscleatlas.data.model.MemberTagData
 import com.rebuilding.muscleatlas.data.model.UpdateMemberRequest
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.data.repository.MemberExerciseRepository
+import com.rebuilding.muscleatlas.data.repository.MemberInviteRepository
 import com.rebuilding.muscleatlas.data.repository.MemberRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.util.DateFormatter
@@ -18,6 +20,7 @@ class MemberDetailViewModel(
     private val memberRepository: MemberRepository,
     private val memberExerciseRepository: MemberExerciseRepository,
     private val exerciseRepository: ExerciseRepository,
+    private val memberInviteRepository: MemberInviteRepository,
 ) : StateViewModel<MemberDetailState, MemberDetailSideEffect>(MemberDetailState()) {
 
     fun loadMemberDetail(memberId: String) {
@@ -180,6 +183,47 @@ class MemberDetailViewModel(
         }
     }
     
+    /**
+     * 공유용 초대 코드 생성
+     */
+    fun createShareInvite() {
+        launch {
+            try {
+                val memberId = state.value.member?.id ?: return@launch
+                
+                reduceState { copy(isCreatingInvite = true) }
+                
+                // 초대 코드 생성 또는 기존 유효 코드 반환
+                val invite = memberInviteRepository.getOrCreateInvite(memberId)
+                
+                reduceState { 
+                    copy(
+                        isCreatingInvite = false,
+                        currentInvite = invite,
+                    ) 
+                }
+                
+                // SideEffect로 공유 UI 트리거
+                sendSideEffect(MemberDetailSideEffect.ShareInvite(invite))
+            } catch (e: Exception) {
+                reduceState { 
+                    copy(
+                        isCreatingInvite = false,
+                        error = e.message,
+                    ) 
+                }
+            }
+        }
+    }
+    
+    /**
+     * 공유 링크 URL 생성
+     */
+    fun getShareUrl(inviteCode: String): String {
+        // TODO: 실제 Edge Function URL로 교체
+        return "https://onpadytjzizosabsrsyp.supabase.co/functions/v1/member-invite?code=$inviteCode"
+    }
+    
     private fun generateTagId(): String {
         return "tag_${DateFormatter.getCurrentTimeMillis()}"
     }
@@ -242,7 +286,11 @@ data class MemberDetailState(
     val member: Member? = null,
     val exerciseItems: List<MemberExerciseItem> = emptyList(),
     val tags: List<MemberTag> = emptyList(),
+    val isCreatingInvite: Boolean = false,
+    val currentInvite: MemberInvite? = null,
     val error: String? = null,
 )
 
-sealed interface MemberDetailSideEffect
+sealed interface MemberDetailSideEffect {
+    data class ShareInvite(val invite: MemberInvite) : MemberDetailSideEffect
+}

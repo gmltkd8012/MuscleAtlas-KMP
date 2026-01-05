@@ -61,6 +61,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.touchlab.kermit.Logger
+import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
 import com.rebuilding.muscleatlas.member.viewmodel.MemberExerciseItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberTag
@@ -75,6 +77,7 @@ fun MemberDetailScreen(
     viewModel: MemberDetailViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToWorkoutDetail: (exerciseId: String) -> Unit,
+    onShareInvite: (memberName: String, inviteCode: String, shareUrl: String) -> Unit = { _, _, _ -> },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colorScheme = MaterialTheme.colorScheme
@@ -89,6 +92,17 @@ fun MemberDetailScreen(
 
     LaunchedEffect(memberId) {
         viewModel.loadMemberDetail(memberId)
+    }
+    
+    // SideEffect 처리
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is MemberDetailSideEffect.ShareInvite -> {
+                val memberName = state.member?.name ?: ""
+                val shareUrl = viewModel.getShareUrl(sideEffect.invite.inviteCode)
+                onShareInvite(memberName, sideEffect.invite.inviteCode, shareUrl)
+            }
+        }
     }
 
     Scaffold(
@@ -112,11 +126,22 @@ fun MemberDetailScreen(
                     }
                 },
                 actions = {
-                    TextButton(onClick = { /* TODO: 편집 */ }) {
-                        Text(
-                            text = "공유",
-                            color = colorScheme.primary,
-                        )
+                    TextButton(
+                        onClick = { viewModel.createShareInvite() },
+                        enabled = !state.isCreatingInvite,
+                    ) {
+                        if (state.isCreatingInvite) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp,
+                                color = colorScheme.primary,
+                            )
+                        } else {
+                            Text(
+                                text = "공유",
+                                color = colorScheme.primary,
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

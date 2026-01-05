@@ -108,3 +108,42 @@ data class MemberExerciseUpdate(
     @SerialName("can_perform")
     val canPerform: Boolean,
 )
+
+/**
+ * Supabase member_invite 테이블 매핑 모델
+ *
+ * @property id 고유 기본키 (invite-UUID 형태)
+ * @property memberId 회원 ID
+ * @property inviteCode 초대 코드 (8자리)
+ * @property createdBy 생성한 트레이너 ID
+ * @property expiresAt 만료 시간 (밀리초)
+ * @property createdAt 생성 시간 (밀리초)
+ */
+@Serializable
+data class MemberInvite(
+    val id: String,
+    @SerialName("member_id")
+    val memberId: String,
+    @SerialName("invite_code")
+    val inviteCode: String,
+    @SerialName("created_by")
+    val createdBy: String,
+    @SerialName("expires_at")
+    val expiresAt: Long,
+    @SerialName("created_at")
+    val createdAt: Long,
+)
+
+/**
+ * 회원 초대 생성 요청용 DTO
+ * id, expires_at, created_at은 Supabase DEFAULT로 자동 생성
+ */
+@Serializable
+data class CreateMemberInviteRequest(
+    @SerialName("member_id")
+    val memberId: String,
+    @SerialName("invite_code")
+    val inviteCode: String,
+    @SerialName("created_by")
+    val createdBy: String,
+)

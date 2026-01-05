@@ -115,39 +115,6 @@ fun WorkoutDetailScreen(
                 ),
             )
         },
-        bottomBar = {
-            // Add to Routine Button
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(colorScheme.background)
-                    .padding(16.dp),
-            ) {
-                Button(
-                    onClick = { /* TODO: Add to routine */ },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorScheme.primary,
-                    ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = colorScheme.onPrimary,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Add to Routine",
-                        color = colorScheme.onPrimary,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                    )
-                }
-            }
-        },
     ) { innerPadding ->
         when {
             state.isLoading -> {

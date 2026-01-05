@@ -65,6 +65,9 @@ navLifecycle = "2.8.4"
 # In App Browser - by yjyoon-dev
 kinappbrowser = "1.0.0"
 
+# Kakao SDK
+kakaoSdk = "2.20.6"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -128,6 +131,9 @@ buildkonfigGradlePlugin = { module = "com.codingfeline.buildkonfig:buildkonfig-g
 # In App Browser - by yjyoon-dev
 kinappbrowser = { module = "dev.yjyoon:kinappbrowser", version.ref = "kinappbrowser" }
 
+# Kakao SDK
+kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakaoSdk" }
+kakao-common = { group = "com.kakao.sdk", name = "v2-common", version.ref = "kakaoSdk" }
 
 [plugins]
 # Android
@@ -169,4 +175,9 @@ supabase = [
 buildKonfig = [
     "buildkonfig-compiler",
     "buildkonfigGradlePlugin",
+]
+
+kakaoShare = [
+    "kakao-share",
+    "kakao-common",
 ]

@@ -68,6 +68,7 @@ import com.rebuilding.muscleatlas.member.viewmodel.MemberExerciseItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberTag
 import com.rebuilding.muscleatlas.member.viewmodel.TagColorType
 import com.rebuilding.muscleatlas.util.DateFormatter
+import com.rebuilding.muscleatlas.util.rememberShareService
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,10 +78,12 @@ fun MemberDetailScreen(
     viewModel: MemberDetailViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToWorkoutDetail: (exerciseId: String) -> Unit,
-    onShareInvite: (memberName: String, inviteCode: String, shareUrl: String) -> Unit = { _, _, _ -> },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colorScheme = MaterialTheme.colorScheme
+    
+    // 공유 서비스
+    val shareService = rememberShareService()
     
     // 메모 편집 BottomSheet 상태
     var showMemoEditSheet by remember { mutableStateOf(false) }
@@ -100,7 +103,13 @@ fun MemberDetailScreen(
             is MemberDetailSideEffect.ShareInvite -> {
                 val memberName = state.member?.name ?: ""
                 val shareUrl = viewModel.getShareUrl(sideEffect.invite.inviteCode)
-                onShareInvite(memberName, sideEffect.invite.inviteCode, shareUrl)
+                
+                shareService.shareToKakao(
+                    title = "${memberName}님의 운동 정보",
+                    description = "MuscleAtlas에서 운동 정보를 확인하세요!",
+                    imageUrl = null,
+                    linkUrl = shareUrl,
+                )
             }
         }
     }

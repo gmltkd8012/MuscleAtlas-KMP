@@ -20,4 +20,7 @@ object AppConfig {
     // Google OAuth
     val GOOGLE_SERVER_CLIENT_ID: String
         get() = BuildKonfig.GOOGLE_SERVER_CLIENT_ID
+
+    val KAKAO_NATIVE_APP_KEY: String
+        get() = BuildKonfig.KAKAO_NATIVE_APP_KEY
 }

@@ -1,6 +1,7 @@
 package com.rebuilding.muscleatlas.setting.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.rebuilding.muscleatlas.data.repository.SessionRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.SupabaseClient
@@ -19,7 +20,7 @@ import kotlinx.serialization.json.put
 import kotlin.time.ExperimentalTime
 
 class AccountViewModel(
-    private val supabaseClient: SupabaseClient,
+    private val sessionRepository: SessionRepository,
 ) : StateViewModel<AccountState, AccountSideEffect>(AccountState()) {
 
     init {
@@ -29,7 +30,8 @@ class AccountViewModel(
     @OptIn(ExperimentalTime::class)
     private fun loadAccountInfo() {
         viewModelScope.launch {
-            val user = supabaseClient.auth.currentUserOrNull()
+            val user = sessionRepository.getSessionUserInfo().getOrNull()
+
             user?.let {
                 val provider = it.appMetadata?.get("provider")?.toString()
                     ?: it.identities?.firstOrNull()?.provider
@@ -50,13 +52,13 @@ class AccountViewModel(
         }
     }
 
-    fun signOut() {
+    internal fun signOut() {
         viewModelScope.launch {
-            supabaseClient.auth.signOut()
+            sessionRepository.signOut()
         }
     }
 
-    fun deleteAccount() {
+    internal fun deleteAccount() {
         viewModelScope.launch {
             reduceState { copy(isDeleting = true, deleteError = null) }
 
@@ -67,29 +69,18 @@ class AccountViewModel(
                     return@launch
                 }
 
-                // Edge Function을 호출하여 회원 탈퇴 처리
-                // Body로 userId 전달
-                val requestBody = buildJsonObject {
-                    put("user_id", userId)
-                }
-                
-                val response = supabaseClient.functions.invoke(
-                    function = "delete-user",
-                    body = requestBody,
-                )
+                val isDeleteSuccessed = sessionRepository.deleteUser(userId).getOrDefault(false)
 
-                val statusCode = response.status.value
-                if (statusCode in 200..299) {
+                if (isDeleteSuccessed) {
                     // 로그아웃 처리
-                    supabaseClient.auth.signOut()
+                    signOut()
                     reduceState { copy(isDeleting = false, isDeleteSuccess = true) }
                     sendSideEffect(AccountSideEffect.DeleteSuccess)
                 } else {
-                    val errorBody = response.body<DeleteUserResponse>()
                     reduceState {
                         copy(
                             isDeleting = false,
-                            deleteError = errorBody.error ?: "회원 탈퇴에 실패했습니다."
+                            deleteError = "회원 탈퇴에 실패했습니다."
                         )
                     }
                 }

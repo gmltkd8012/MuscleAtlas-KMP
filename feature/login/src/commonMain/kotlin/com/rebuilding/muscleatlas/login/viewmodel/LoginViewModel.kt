@@ -2,8 +2,11 @@ package com.rebuilding.muscleatlas.login.viewmodel
 
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
+import com.rebuilding.muscleatlas.util.Platform
+import com.rebuilding.muscleatlas.util.platform
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Apple
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.Kakao
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -13,9 +16,10 @@ import kotlinx.coroutines.launch
 
 internal class LoginViewModel(
     private val supabaseClient: SupabaseClient,
-) : StateViewModel<LoginState, LoginSideEffect>(LoginState()) {
+) : StateViewModel<LoginState, LoginSideEffect>(LoginState(platform = platform)) {
 
     init {
+        Logger.d("LoginViewModel", "Platform: $platform")
         observeSessionStatus()
     }
 
@@ -38,7 +42,7 @@ internal class LoginViewModel(
     /**
      * Google 로그인 (OAuth 방식)
      */
-    fun signInWithGoogle() {
+    internal fun signInWithGoogle() {
         launch {
             try {
                 Logger.d("LoginViewModel", "Starting Google sign in...")
@@ -50,9 +54,23 @@ internal class LoginViewModel(
     }
 
     /**
+     * Apple 로그인 (OAuth 방식)
+     */
+    internal fun signInWithApple() {
+        launch {
+            try {
+                Logger.d("LoginViewModel", "Starting Apple sign in...")
+                supabaseClient.auth.signInWith(Apple)
+            } catch (e: Exception) {
+                Logger.e("LoginViewModel", "Apple sign in failed: ${e.message}")
+            }
+        }
+    }
+
+    /**
      * Kakao 로그인 (OAuth 방식)
      */
-    fun signInWithKakao() {
+    internal fun signInWithKakao() {
         launch {
             try {
                 Logger.d("LoginViewModel", "Starting Kakao sign in...")
@@ -65,7 +83,7 @@ internal class LoginViewModel(
 }
 
 data class LoginState(
-    val isLoading: Boolean = false,
+    val platform: Platform = Platform.DEFAULT,
 )
 
 sealed interface LoginSideEffect {

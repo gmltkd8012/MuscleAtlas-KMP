@@ -24,8 +24,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.login.component.SignInButton
 import com.rebuilding.muscleatlas.login.viewmodel.LoginSideEffect
 import com.rebuilding.muscleatlas.login.viewmodel.LoginViewModel
+import com.rebuilding.muscleatlas.util.Platform
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Apple
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.Kakao
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -77,15 +79,31 @@ internal fun LoginScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Google 로그인 버튼
-            SignInButton(
-                onClick = { viewModel.signInWithGoogle() },
-                oAuthProvider = Google,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = true,
-            )
+            when (state.platform) {
+                Platform.ANDROID -> {
+                    // Google 로그인 버튼
+                    SignInButton(
+                        onClick = { viewModel.signInWithGoogle() },
+                        oAuthProvider = Google,
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = true,
+                    )
 
-            Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(8.dp))
+                }
+                Platform.IOS -> {
+                    // Apple 로그인 버튼
+                    SignInButton(
+                        onClick = { viewModel.signInWithApple() },
+                        oAuthProvider = Apple,
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = true,
+                    )
+
+                    Spacer(Modifier.height(8.dp))
+                }
+                else -> {}
+            }
 
             // Kakao 로그인 버튼
             SignInButton(
@@ -95,13 +113,5 @@ internal fun LoginScreen(
                 enabled = true,
             )
         }
-
-        // 로딩 인디케이터
-//        if (state.isLoading) {
-//            CircularProgressIndicator(
-//                modifier = Modifier.align(Alignment.Center),
-//                color = MaterialTheme.colorScheme.primary,
-//            )
-//        }
     }
 }

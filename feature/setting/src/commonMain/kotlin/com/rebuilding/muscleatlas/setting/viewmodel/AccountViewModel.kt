@@ -133,12 +133,6 @@ class AccountViewModel(
     }
 }
 
-@Serializable
-data class DeleteUserResponse(
-    val success: Boolean? = null,
-    val error: String? = null,
-)
-
 data class AccountState(
     val email: String? = null,
     val provider: String? = null,

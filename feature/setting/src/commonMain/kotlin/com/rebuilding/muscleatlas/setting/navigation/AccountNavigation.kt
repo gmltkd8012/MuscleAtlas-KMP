@@ -12,12 +12,12 @@ data object AccountRoute : Route
 
 fun NavGraphBuilder.accountScreen(
     onNavigateBack: () -> Unit,
-    onLogout: () -> Unit,
+    onBackToLogin: () -> Unit,
 ) {
     composable<AccountRoute> {
         AccountScreen(
             onNavigateBack = onNavigateBack,
-            onLogout = onLogout,
+            onBackToLogin = onBackToLogin,
         )
     }
 }

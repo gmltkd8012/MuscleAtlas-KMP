@@ -6,10 +6,13 @@ import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.functions.functions
 import io.ktor.client.call.body
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -20,12 +23,30 @@ import kotlinx.serialization.json.put
 import kotlin.time.ExperimentalTime
 
 class AccountViewModel(
+    private val supabaseClient: SupabaseClient,
     private val sessionRepository: SessionRepository,
 ) : StateViewModel<AccountState, AccountSideEffect>(AccountState()) {
 
     init {
         loadAccountInfo()
+        observeSessionState()
     }
+
+    private fun observeSessionState() {
+        supabaseClient.auth.sessionStatus
+            .onEach { status ->
+                Logger.d("AccountViewModel", "SessionStatus: $status")
+                when (status) {
+                    is SessionStatus.NotAuthenticated -> {
+                        reduceState { copy(isDeleting = false, isLogout = false, isDeleteSuccess = true) }
+                        sendSideEffect(AccountSideEffect.NotAuthenticated)
+                    }
+                    else -> Unit
+                }
+            }
+            .launchIn(this)
+    }
+
 
     @OptIn(ExperimentalTime::class)
     private fun loadAccountInfo() {
@@ -54,6 +75,7 @@ class AccountViewModel(
 
     internal fun signOut() {
         viewModelScope.launch {
+            reduceState { copy(isLogout = true, deleteError = null) }
             sessionRepository.signOut()
         }
     }
@@ -74,8 +96,6 @@ class AccountViewModel(
                 if (isDeleteSuccessed) {
                     // 로그아웃 처리
                     signOut()
-                    reduceState { copy(isDeleting = false, isDeleteSuccess = true) }
-                    sendSideEffect(AccountSideEffect.DeleteSuccess)
                 } else {
                     reduceState {
                         copy(
@@ -125,10 +145,11 @@ data class AccountState(
     val createdAt: String? = null,
     val userId: String? = null,
     val isDeleting: Boolean = false,
+    val isLogout: Boolean = false,
     val isDeleteSuccess: Boolean = false,
     val deleteError: String? = null,
 )
 
 sealed interface AccountSideEffect {
-    data object DeleteSuccess : AccountSideEffect
+    data object NotAuthenticated : AccountSideEffect
 }

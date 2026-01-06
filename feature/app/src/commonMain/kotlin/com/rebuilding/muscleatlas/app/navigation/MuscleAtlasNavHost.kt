@@ -116,7 +116,7 @@ fun MuscleAtlasNavHost(
             onNavigateBack = {
                 navController.popBackStack()
             },
-            onLogout = {
+            onBackToLogin = {
                 navController.navigate(LoginRoute) {
                     popUpTo(MainRoute) { inclusive = true }
                 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,8 +24,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.login.component.SignInButton
 import com.rebuilding.muscleatlas.login.viewmodel.LoginSideEffect
 import com.rebuilding.muscleatlas.login.viewmodel.LoginViewModel
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.Kakao
+import io.github.jan.supabase.auth.status.SessionStatus
 import muscleatlas.core.design_system.generated.resources.Res
 import muscleatlas.core.design_system.generated.resources.app_icon_dark
 import muscleatlas.core.design_system.generated.resources.app_icon_light
@@ -93,11 +97,11 @@ internal fun LoginScreen(
         }
 
         // 로딩 인디케이터
-        if (state.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
+//        if (state.isLoading) {
+//            CircularProgressIndicator(
+//                modifier = Modifier.align(Alignment.Center),
+//                color = MaterialTheme.colorScheme.primary,
+//            )
+//        }
     }
 }

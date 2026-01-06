@@ -2,6 +2,8 @@ package com.rebuilding.muscleatlas.supabase.di
 
 import com.rebuilding.muscleatlas.appconfig.AppConfig
 import com.rebuilding.muscleatlas.supabase.InAppBrowserLauncher
+import com.rebuilding.muscleatlas.supabase.SessionDataSource
+import com.rebuilding.muscleatlas.supabase.source.SessionDataSourceImpl
 import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.UrlLauncher
@@ -38,4 +40,5 @@ val supabaseModule =
                 defaultLogLevel = LogLevel.DEBUG
             }
         }
+        single<SessionDataSource> { SessionDataSourceImpl(get()) }
     }

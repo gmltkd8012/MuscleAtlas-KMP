@@ -215,7 +215,20 @@ class MemberDetailViewModel(
             }
         }
     }
-    
+
+    /**
+     * 회원 삭제
+     */
+    internal fun deleteMember(id: String) {
+        launch {
+            try {
+                memberRepository.deleteMember(id)
+            } catch (e: Exception) {
+                reduceState { copy(error = e.message) }
+            }
+        }
+    }
+
     /**
      * 공유 링크 URL 생성
      */

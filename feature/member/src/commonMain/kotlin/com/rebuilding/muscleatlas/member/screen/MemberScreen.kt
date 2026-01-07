@@ -33,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.member.component.MemberListItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberSideEffect
@@ -49,6 +51,10 @@ fun MemberScreen(
     val colorScheme = MaterialTheme.colorScheme
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        viewModel.loadMembers()
+    }
 
     // SideEffect 처리
     viewModel.collectSideEffect { sideEffect ->

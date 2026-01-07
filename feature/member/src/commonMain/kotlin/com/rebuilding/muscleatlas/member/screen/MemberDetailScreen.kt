@@ -27,6 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,6 +38,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -62,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
+import com.rebuilding.muscleatlas.designsystem.theme.AppColors
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
 import com.rebuilding.muscleatlas.member.viewmodel.MemberExerciseItem
@@ -92,6 +95,9 @@ fun MemberDetailScreen(
     // 태그 추가 BottomSheet 상태
     var showTagAddSheet by remember { mutableStateOf(false) }
     val tagSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    
+    // 삭제 확인 Dialog 상태
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(memberId) {
         viewModel.loadMemberDetail(memberId)
@@ -158,6 +164,33 @@ fun MemberDetailScreen(
                 ),
             )
         },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colorScheme.background)
+                    .padding(16.dp),
+            ) {
+                Button(
+                    onClick = { showDeleteDialog = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorScheme.error,
+                    ),
+                ) {
+                    Text(
+                        text = "삭제",
+                        color = AppColors.surfaceLight,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                    )
+                }
+            }
+        },
+        modifier = Modifier.navigationBarsPadding()
     ) { innerPadding ->
         when {
             state.isLoading -> {
@@ -326,6 +359,45 @@ fun MemberDetailScreen(
                 },
             )
         }
+    }
+    
+    // 삭제 확인 Dialog
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = {
+                Text(
+                    text = "회원 삭제",
+                    fontWeight = FontWeight.SemiBold,
+                )
+            },
+            text = {
+                Text(
+                    text = "${state.member?.name ?: "회원"}님을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.",
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteDialog = false
+                        viewModel.deleteMember(memberId)
+                        onNavigateBack()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorScheme.error,
+                    ),
+                ) {
+                    Text("삭제")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { showDeleteDialog = false },
+                ) {
+                    Text("취소")
+                }
+            },
+        )
     }
 }
 

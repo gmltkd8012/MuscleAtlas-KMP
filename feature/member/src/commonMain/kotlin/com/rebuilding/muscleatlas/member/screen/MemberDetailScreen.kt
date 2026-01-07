@@ -39,7 +39,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -64,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
+import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.designsystem.theme.AppColors
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
@@ -653,13 +653,13 @@ private fun MemoEditSheetContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        BaseTextField(
             value = memoText,
-            onValueChange = { memoText = it },
-            label = { Text("메모") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 4,
-            maxLines = 8,
+            labelText = "메모",
+            hintText = "메모를 입력하세요",
+            singleLine = false,
+            onValueChanged = { memoText = it },
+            onDelete = { memoText = "" }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -717,13 +717,12 @@ private fun TagAddSheetContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         // 태그 텍스트 입력
-        OutlinedTextField(
+        BaseTextField(
             value = tagText,
-            onValueChange = { tagText = it },
-            label = { Text("태그 내용") },
-            placeholder = { Text("예: PT 10회 남음, 허리 주의") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "태그 내용",
+            hintText = "내용을 입력하세요",
+            onValueChanged = { tagText = it },
+            onDelete = { tagText = "" }
         )
 
         Spacer(modifier = Modifier.height(20.dp))

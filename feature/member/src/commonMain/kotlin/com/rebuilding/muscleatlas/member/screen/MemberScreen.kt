@@ -20,7 +20,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.member.component.MemberListItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberViewModel
@@ -185,23 +185,23 @@ private fun AddMemberSheetContent(
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
-        OutlinedTextField(
+        BaseTextField(
             value = name,
-            onValueChange = { name = it },
-            label = { Text("회원 이름") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "회원 이름",
+            hintText = "이름을 입력하세요",
+            onValueChanged = { name = it },
+            onDelete = { name = "" }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
+        BaseTextField(
             value = memo,
-            onValueChange = { memo = it },
-            label = { Text("간략한 메모") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 2,
-            maxLines = 4,
+            labelText = "메모",
+            hintText = "메모를 입력하세요",
+            singleLine = false,
+            onValueChanged = { memo = it },
+            onDelete = { memo = "" }
         )
 
         Spacer(modifier = Modifier.height(24.dp))

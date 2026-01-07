@@ -138,6 +138,7 @@ fun WorkoutScreen(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
             containerColor = colorScheme.surface,
+            modifier = Modifier.fillMaxWidth(),
         ) {
             AddExerciseSheetContent(
                 onAddClick = { name ->

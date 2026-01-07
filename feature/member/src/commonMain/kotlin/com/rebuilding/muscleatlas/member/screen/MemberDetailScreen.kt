@@ -311,6 +311,7 @@ fun MemberDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             MemoEditSheetContent(
                 currentMemo = state.member?.memo ?: "",
@@ -351,6 +352,7 @@ fun MemberDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TagAddSheetContent(
                 onSaveClick = { text, icon, colorType ->

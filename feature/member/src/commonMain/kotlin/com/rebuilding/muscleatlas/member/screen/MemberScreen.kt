@@ -151,6 +151,7 @@ fun MemberScreen(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
             containerColor = colorScheme.surface,
+            modifier = Modifier.fillMaxWidth(),
         ) {
             AddMemberSheetContent(
                 onAddClick = { name, memo ->

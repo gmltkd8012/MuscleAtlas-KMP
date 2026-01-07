@@ -268,6 +268,7 @@ fun WorkoutDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TechnicalEditSheetContent(
                 title = selectedTechnicalTitle,
@@ -305,6 +306,7 @@ fun WorkoutDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             SafetyEditSheetContent(
                 title = selectedTechnicalTitle,

@@ -31,6 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.util.rememberExternalLinkLauncher
+
+private const val INSTAGRAM_USERNAME = "re._.building?igsh=MXN4M2htZWZjOWE0ZA=="
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +41,8 @@ fun AppInfoScreen(
     onNavigateBack: () -> Unit,
     onNavigateToOpenSource: () -> Unit,
 ) {
+    val externalLinkLauncher = rememberExternalLinkLauncher()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -97,13 +102,8 @@ fun AppInfoScreen(
                 // 고객 지원
                 AppInfoCard(title = "고객 지원") {
                     ClickableInfoRow(
-                        label = "문의하기",
-                        onClick = { /* TODO: 이메일 또는 문의 페이지로 이동 */ },
-                    )
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                    ClickableInfoRow(
-                        label = "자주 묻는 질문 (FAQ)",
-                        onClick = { /* TODO: FAQ 페이지로 이동 */ },
+                        label = "문의하기 (Instagram)",
+                        onClick = { externalLinkLauncher.openInstagram(INSTAGRAM_USERNAME) },
                     )
                 }
 

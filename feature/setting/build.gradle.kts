@@ -14,6 +14,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:ui"))
             implementation(project(":core:data"))
+            implementation(project(":core:util"))
             implementation(project(":core:design-system"))
             implementation(libs.bundles.supabase)
 

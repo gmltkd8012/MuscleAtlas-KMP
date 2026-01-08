@@ -11,10 +11,12 @@ data object SettingRoute : Route
 
 fun NavGraphBuilder.settingScreen(
     onNavigateToAccount: () -> Unit,
+    onNavigateToAppInfo: () -> Unit,
 ) {
     composable<SettingRoute> {
         SettingScreen(
             onNavigateToAccount = onNavigateToAccount,
+            onNavigateToAppInfo = onNavigateToAppInfo,
         )
     }
 }

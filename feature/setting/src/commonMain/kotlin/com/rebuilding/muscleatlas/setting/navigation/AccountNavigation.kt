@@ -21,7 +21,3 @@ fun NavGraphBuilder.accountScreen(
         )
     }
 }
-
-fun NavController.navigateToAccount() {
-    navigate(AccountRoute)
-}

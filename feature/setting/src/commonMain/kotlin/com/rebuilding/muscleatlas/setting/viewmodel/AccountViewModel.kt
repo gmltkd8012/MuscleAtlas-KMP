@@ -1,14 +1,18 @@
 package com.rebuilding.muscleatlas.setting.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.rebuilding.muscleatlas.data.repository.SessionRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.functions.functions
 import io.ktor.client.call.body
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -20,16 +24,35 @@ import kotlin.time.ExperimentalTime
 
 class AccountViewModel(
     private val supabaseClient: SupabaseClient,
+    private val sessionRepository: SessionRepository,
 ) : StateViewModel<AccountState, AccountSideEffect>(AccountState()) {
 
     init {
         loadAccountInfo()
+        observeSessionState()
     }
+
+    private fun observeSessionState() {
+        supabaseClient.auth.sessionStatus
+            .onEach { status ->
+                Logger.d("AccountViewModel", "SessionStatus: $status")
+                when (status) {
+                    is SessionStatus.NotAuthenticated -> {
+                        reduceState { copy(isDeleting = false, isLogout = false, isDeleteSuccess = true) }
+                        sendSideEffect(AccountSideEffect.NotAuthenticated)
+                    }
+                    else -> Unit
+                }
+            }
+            .launchIn(this)
+    }
+
 
     @OptIn(ExperimentalTime::class)
     private fun loadAccountInfo() {
         viewModelScope.launch {
-            val user = supabaseClient.auth.currentUserOrNull()
+            val user = sessionRepository.getSessionUserInfo().getOrNull()
+
             user?.let {
                 val provider = it.appMetadata?.get("provider")?.toString()
                     ?: it.identities?.firstOrNull()?.provider
@@ -50,13 +73,14 @@ class AccountViewModel(
         }
     }
 
-    fun signOut() {
+    internal fun signOut() {
         viewModelScope.launch {
-            supabaseClient.auth.signOut()
+            reduceState { copy(isLogout = true, deleteError = null) }
+            sessionRepository.signOut()
         }
     }
 
-    fun deleteAccount() {
+    internal fun deleteAccount() {
         viewModelScope.launch {
             reduceState { copy(isDeleting = true, deleteError = null) }
 
@@ -67,29 +91,16 @@ class AccountViewModel(
                     return@launch
                 }
 
-                // Edge Function을 호출하여 회원 탈퇴 처리
-                // Body로 userId 전달
-                val requestBody = buildJsonObject {
-                    put("user_id", userId)
-                }
-                
-                val response = supabaseClient.functions.invoke(
-                    function = "delete-user",
-                    body = requestBody,
-                )
+                val isDeleteSuccessed = sessionRepository.deleteUser(userId).getOrDefault(false)
 
-                val statusCode = response.status.value
-                if (statusCode in 200..299) {
+                if (isDeleteSuccessed) {
                     // 로그아웃 처리
-                    supabaseClient.auth.signOut()
-                    reduceState { copy(isDeleting = false, isDeleteSuccess = true) }
-                    sendSideEffect(AccountSideEffect.DeleteSuccess)
+                    signOut()
                 } else {
-                    val errorBody = response.body<DeleteUserResponse>()
                     reduceState {
                         copy(
                             isDeleting = false,
-                            deleteError = errorBody.error ?: "회원 탈퇴에 실패했습니다."
+                            deleteError = "회원 탈퇴에 실패했습니다."
                         )
                     }
                 }
@@ -122,22 +133,17 @@ class AccountViewModel(
     }
 }
 
-@Serializable
-data class DeleteUserResponse(
-    val success: Boolean? = null,
-    val error: String? = null,
-)
-
 data class AccountState(
     val email: String? = null,
     val provider: String? = null,
     val createdAt: String? = null,
     val userId: String? = null,
     val isDeleting: Boolean = false,
+    val isLogout: Boolean = false,
     val isDeleteSuccess: Boolean = false,
     val deleteError: String? = null,
 )
 
 sealed interface AccountSideEffect {
-    data object DeleteSuccess : AccountSideEffect
+    data object NotAuthenticated : AccountSideEffect
 }

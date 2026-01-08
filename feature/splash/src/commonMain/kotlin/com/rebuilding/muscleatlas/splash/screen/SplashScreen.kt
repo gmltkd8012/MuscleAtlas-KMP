@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.splash.viewmodel.SplashSideEffect
 import com.rebuilding.muscleatlas.splash.viewmodel.SplashViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -18,6 +20,8 @@ fun SplashScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToMain: () -> Unit,
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is SplashSideEffect.NavigateToLogin -> onNavigateToLogin()
@@ -31,8 +35,10 @@ fun SplashScreen(
             .background(color = MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(
-            color = MaterialTheme.colorScheme.onPrimary
-        )
+        if (state.isLoading) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }

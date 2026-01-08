@@ -19,7 +19,9 @@ import org.koin.core.context.startKoin
 
 class MainActivity : ComponentActivity() {
 
-    private val supabaseClient: SupabaseClient by inject()
+    private val supabaseClient: SupabaseClient by lazy { 
+        GlobalContext.get().get<SupabaseClient>() 
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // 시스템 스플래시 화면 설정 (super.onCreate 전에 호출해야 함)
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        // Koin 초기화 후 딥링크 처리
         supabaseClient.handleDeeplinks(intent)
 
         setContent {

@@ -1,23 +1,22 @@
 package com.rebuilding.muscleatlas.setting.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.rebuilding.muscleatlas.setting.screen.AccountScreen
+import com.rebuilding.muscleatlas.setting.screen.AppInfoScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AccountRoute : Route
+data object AppInfoRoute: Route
 
-fun NavGraphBuilder.accountScreen(
+fun NavGraphBuilder.appInfoScreen(
     onNavigateBack: () -> Unit,
-    onBackToLogin: () -> Unit,
+    onNavigateToOpenSource: () -> Unit,
 ) {
-    composable<AccountRoute> {
-        AccountScreen(
+    composable<AppInfoRoute> {
+        AppInfoScreen(
             onNavigateBack = onNavigateBack,
-            onBackToLogin = onBackToLogin,
+            onNavigateToOpenSource = onNavigateToOpenSource,
         )
     }
 }

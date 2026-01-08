@@ -25,11 +25,13 @@ fun SignInButton(
     onClick: () -> Unit,
     oAuthProvider: OAuthProvider,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     val buttonProperties = oAuthProvider.toButtonProperties()
 
     Button(
         onClick = onClick,
+        enabled = enabled,
         colors =
             ButtonDefaults.buttonColors(
                 containerColor = buttonProperties.containerColor,

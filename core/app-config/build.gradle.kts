@@ -33,6 +33,12 @@ buildkonfig {
             "GOOGLE_SERVER_CLIENT_ID",
             localProperties.getProperty("GOOGLE_SERVER_CLIENT_ID") ?: ""
         )
+
+        // Kakao SDK Native App Key
+        buildConfigField(
+            STRING,
+            "KAKAO_NATIVE_APP_KEY",
+            localProperties.getProperty("KAKAO_NATIVE_APP_KEY", "") ?: "")
     }
 }
 

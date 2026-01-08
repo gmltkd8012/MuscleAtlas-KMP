@@ -22,11 +22,7 @@ class MemberViewModel(
     private val memberExerciseRepository: MemberExerciseRepository,
 ) : StateViewModel<MemberState, MemberSideEffect>(MemberState()) {
 
-    init {
-        loadMembers()
-    }
-
-    fun loadMembers() {
+    internal fun loadMembers() {
         launch {
             memberRepository.getMembers()
                 .onStart {
@@ -85,18 +81,6 @@ class MemberViewModel(
             }
         }
     }
-
-    fun onDeleteMember(id: String) {
-        launch {
-            try {
-                memberRepository.deleteMember(id)
-                loadMembers()
-            } catch (e: Exception) {
-                reduceState { copy(error = e.message) }
-            }
-        }
-    }
-
 
     // Supabase 의 id
     private suspend fun getUserId(): String? =

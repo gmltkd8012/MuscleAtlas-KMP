@@ -60,10 +60,13 @@ jetbrainsKotlinJvm = "2.2.0"
 navigation = "2.9.1"
 
 # kmp lifecycle
-navLifecycle = "2.8.4"
+navLifecycle = "2.9.1"
 
 # In App Browser - by yjyoon-dev
 kinappbrowser = "1.0.0"
+
+# Kakao SDK
+kakaoSdk = "2.20.6"
 
 [libraries]
 # Gradle Plugins
@@ -128,6 +131,9 @@ buildkonfigGradlePlugin = { module = "com.codingfeline.buildkonfig:buildkonfig-g
 # In App Browser - by yjyoon-dev
 kinappbrowser = { module = "dev.yjyoon:kinappbrowser", version.ref = "kinappbrowser" }
 
+# Kakao SDK
+kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakaoSdk" }
+kakao-common = { group = "com.kakao.sdk", name = "v2-common", version.ref = "kakaoSdk" }
 
 [plugins]
 # Android
@@ -169,4 +175,9 @@ supabase = [
 buildKonfig = [
     "buildkonfig-compiler",
     "buildkonfigGradlePlugin",
+]
+
+kakaoShare = [
+    "kakao-share",
+    "kakao-common",
 ]

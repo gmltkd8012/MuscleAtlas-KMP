@@ -15,6 +15,9 @@ kotlin {
             implementation(libs.kotlinx.datetime)
         }
         androidMain.dependencies {
+            // Kakao SDK for sharing
+            implementation(libs.bundles.kakaoShare)
+            implementation(project(":core:ui"))
         }
         iosMain.dependencies {
         }

@@ -12,26 +12,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.login.component.SignInButton
+import com.rebuilding.muscleatlas.login.viewmodel.LoginSideEffect
 import com.rebuilding.muscleatlas.login.viewmodel.LoginViewModel
-import com.rebuilding.muscleatlas.ui.util.Logger
+import com.rebuilding.muscleatlas.util.Platform
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Apple
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.Kakao
-import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
-import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
-import io.github.jan.supabase.compose.auth.composeAuth
-import io.ktor.util.Platform
-import kotlinx.coroutines.launch
+import io.github.jan.supabase.auth.status.SessionStatus
 import muscleatlas.core.design_system.generated.resources.Res
 import muscleatlas.core.design_system.generated.resources.app_icon_dark
 import muscleatlas.core.design_system.generated.resources.app_icon_light
@@ -40,36 +40,24 @@ import org.koin.compose.koinInject
 
 @Composable
 internal fun LoginScreen(
-    viewModel: LoginViewModel,
+    viewModel: LoginViewModel = koinInject(),
     onNavigateToMain: () -> Unit,
     isDarkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    // SideEffect 처리
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            LoginSideEffect.NavigateToMain -> onNavigateToMain()
+        }
+    }
 
     val appIcon =
         if (isDarkTheme)
             painterResource(Res.drawable.app_icon_dark)
         else
             painterResource(Res.drawable.app_icon_light)
-    
-    val scope = rememberCoroutineScope()
-    val supabaseClient = koinInject<SupabaseClient>()
-    
-    val onNativeSignInResult: (NativeSignInResult) -> Unit = { result ->
-
-        Logger.d("LoginScreen", "onNativeSignInResult: $result")
-        when (result) {
-            NativeSignInResult.Success -> {
-                onNavigateToMain()
-            }
-            else -> {
-
-            }
-        }
-    }
-
-    val googleSignInAction =
-        supabaseClient.composeAuth.rememberSignInWithGoogle(onNativeSignInResult)
 
     Box(
         modifier = Modifier
@@ -92,25 +80,49 @@ internal fun LoginScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            SignInButton(
-                onClick = {
-                    googleSignInAction.startFlow()
-                },
-                oAuthProvider = Google,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            
-            Spacer(Modifier.height(8.dp))
+            when (state.platform) {
+                Platform.ANDROID -> {
+                    // Google 로그인 버튼
+                    SignInButton(
+                        onClick = { viewModel.signInWithGoogle() },
+                        oAuthProvider = Google,
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = true,
+                    )
 
+                    Spacer(Modifier.height(8.dp))
+                }
+                Platform.IOS -> {
+                    // Apple 로그인 버튼
+                    SignInButton(
+                        onClick = { viewModel.signInWithApple() },
+                        oAuthProvider = Apple,
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = true,
+                    )
+
+                    Spacer(Modifier.height(8.dp))
+                }
+                else -> {}
+            }
+
+            // Kakao 로그인 버튼
             SignInButton(
-                onClick = {
-                    scope.launch { 
-                        supabaseClient.auth.signInWith(Kakao)
-                    }
-                },
+                onClick = { viewModel.signInWithKakao() },
                 oAuthProvider = Kakao,
                 modifier = Modifier.fillMaxWidth(),
+                enabled = true,
             )
         }
+
+        // 하단 텍스트
+        Text(
+            text = "© 2026 LeeCoder",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 60.dp),
+        )
     }
 }

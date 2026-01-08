@@ -13,6 +13,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core:supabase"))
+            implementation(project(":core:util"))
         }
         androidMain.dependencies {
         }

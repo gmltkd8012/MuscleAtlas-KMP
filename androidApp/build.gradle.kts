@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -40,6 +42,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -69,4 +72,7 @@ dependencies {
 
     // In App Browser
     implementation(libs.kinappbrowser)
+    
+    // Kakao SDK
+    implementation(libs.bundles.kakaoShare)
 }

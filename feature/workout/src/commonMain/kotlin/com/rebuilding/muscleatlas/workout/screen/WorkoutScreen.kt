@@ -20,7 +20,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -32,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.workout.component.WorkoutListItem
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutSideEffect
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutViewModel
@@ -138,6 +138,7 @@ fun WorkoutScreen(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
             containerColor = colorScheme.surface,
+            modifier = Modifier.fillMaxWidth(),
         ) {
             AddExerciseSheetContent(
                 onAddClick = { name ->
@@ -168,12 +169,12 @@ private fun AddExerciseSheetContent(
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
-        OutlinedTextField(
+        BaseTextField(
             value = name,
-            onValueChange = { name = it },
-            label = { Text("운동 이름") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "웨이트 종목",
+            hintText = "종목을 입력하세요",
+            onValueChanged = { name = it },
+            onDelete = { name = "" }
         )
 
         Spacer(modifier = Modifier.height(24.dp))

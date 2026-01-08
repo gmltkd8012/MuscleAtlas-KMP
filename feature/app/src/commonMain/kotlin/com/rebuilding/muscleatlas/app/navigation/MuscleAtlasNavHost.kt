@@ -14,6 +14,10 @@ import com.rebuilding.muscleatlas.member.navigation.MemberDetailRoute
 import com.rebuilding.muscleatlas.member.navigation.memberDetailScreen
 import com.rebuilding.muscleatlas.setting.navigation.AccountRoute
 import com.rebuilding.muscleatlas.setting.navigation.accountScreen
+import com.rebuilding.muscleatlas.setting.navigation.AppInfoRoute
+import com.rebuilding.muscleatlas.setting.navigation.appInfoScreen
+import com.rebuilding.muscleatlas.setting.navigation.OpenSourceRoute
+import com.rebuilding.muscleatlas.setting.navigation.openSourceScreen
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.splash.navigation.splashScreen
 import com.rebuilding.muscleatlas.ui.navigation.Route
@@ -83,6 +87,9 @@ fun MuscleAtlasNavHost(
                 onNavigateToAccount = {
                     navController.navigate(AccountRoute)
                 },
+                onNavigateToAppInfo = {
+                    navController.navigate(AppInfoRoute)
+                },
                 onNavigateToWorkoutDetail = { exerciseId ->
                     navController.navigate(WorkoutDetailRoute(exerciseId))
                 },
@@ -116,10 +123,25 @@ fun MuscleAtlasNavHost(
             onNavigateBack = {
                 navController.popBackStack()
             },
-            onLogout = {
+            onBackToLogin = {
                 navController.navigate(LoginRoute) {
                     popUpTo(MainRoute) { inclusive = true }
                 }
+            },
+        )
+
+        appInfoScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateToOpenSource = {
+                navController.navigate(OpenSourceRoute)
+            },
+        )
+
+        openSourceScreen(
+            onNavigateBack = {
+                navController.popBackStack()
             },
         )
     }

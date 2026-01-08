@@ -16,6 +16,7 @@ kotlin {
             implementation(project(":core:data"))
             implementation(project(":core:supabase"))
             implementation(project(":core:util"))
+            implementation(project(":core:design-system"))
         }
         androidMain.dependencies {
         }

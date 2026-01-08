@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -33,7 +34,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
+import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -114,39 +115,6 @@ fun WorkoutDetailScreen(
                     containerColor = colorScheme.background,
                 ),
             )
-        },
-        bottomBar = {
-            // Add to Routine Button
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(colorScheme.background)
-                    .padding(16.dp),
-            ) {
-                Button(
-                    onClick = { /* TODO: Add to routine */ },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorScheme.primary,
-                    ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = colorScheme.onPrimary,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Add to Routine",
-                        color = colorScheme.onPrimary,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                    )
-                }
-            }
         },
     ) { innerPadding ->
         when {
@@ -301,6 +269,7 @@ fun WorkoutDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TechnicalEditSheetContent(
                 title = selectedTechnicalTitle,
@@ -338,6 +307,7 @@ fun WorkoutDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             SafetyEditSheetContent(
                 title = selectedTechnicalTitle,
@@ -818,56 +788,56 @@ private fun TechnicalEditSheetContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Primary 필드
-        OutlinedTextField(
+        BaseTextField(
             value = primaryValue,
-            onValueChange = { primaryValue = it },
-            label = { Text("Primary") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "Primary",
+            hintText = "Primary 내용을 입력하세요",
+            onValueChanged = { primaryValue = it },
+            onDelete = { primaryValue = "" }
         )
         
         Spacer(modifier = Modifier.height(12.dp))
         
         // Secondary 필드
-        OutlinedTextField(
+        BaseTextField(
             value = secondaryValue,
-            onValueChange = { secondaryValue = it },
-            label = { Text("Secondary") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "Secondary",
+            hintText = "Secondary 내용을 입력하세요",
+            onValueChanged = { secondaryValue = it },
+            onDelete = { secondaryValue = "" }
         )
         
         Spacer(modifier = Modifier.height(12.dp))
         
         // 근위/원위 필드
-        OutlinedTextField(
+        BaseTextField(
             value = proximalDistalValue,
-            onValueChange = { proximalDistalValue = it },
-            label = { Text("근위/원위") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "근위/원위",
+            hintText = "근위/원위 내용을 입력하세요",
+            onValueChanged = { proximalDistalValue = it },
+            onDelete = { proximalDistalValue = "" }
         )
         
         Spacer(modifier = Modifier.height(12.dp))
         
         // 주동근 필드
-        OutlinedTextField(
+        BaseTextField(
             value = agonistValue,
-            onValueChange = { agonistValue = it },
-            label = { Text("주동근") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "주동근",
+            hintText = "주동근 내용을 입력하세요",
+            onValueChanged = { agonistValue = it },
+            onDelete = { agonistValue = "" }
         )
         
         Spacer(modifier = Modifier.height(12.dp))
         
         // 길항근 필드
-        OutlinedTextField(
+        BaseTextField(
             value = antagonistValue,
-            onValueChange = { antagonistValue = it },
-            label = { Text("길항근") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "길항근",
+            hintText = "길항근 내용을 입력하세요",
+            onValueChanged = { antagonistValue = it },
+            onDelete = { antagonistValue = "" }
         )
         
         Spacer(modifier = Modifier.height(24.dp))
@@ -1011,13 +981,13 @@ private fun SafetyEditSheetContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Description 필드
-        OutlinedTextField(
+        BaseTextField(
             value = descriptionValue,
-            onValueChange = { descriptionValue = it },
-            label = { Text("설명") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 3,
-            maxLines = 5,
+            labelText = "설명",
+            hintText = "내용을 입력하세요",
+            singleLine = false,
+            onValueChanged = { descriptionValue = it },
+            onDelete = { descriptionValue = "" }
         )
         
         Spacer(modifier = Modifier.height(24.dp))

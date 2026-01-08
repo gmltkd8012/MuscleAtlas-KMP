@@ -54,17 +54,15 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AccountScreen(
     viewModel: AccountViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
-    onLogout: () -> Unit,
-    onAccountDeleted: () -> Unit = onLogout,
+    onBackToLogin: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     var showDeleteErrorDialog by remember { mutableStateOf(false) }
 
-    // 회원 탈퇴 성공 시 처리
-    LaunchedEffect(state.isDeleteSuccess) {
-        if (state.isDeleteSuccess) {
-            onAccountDeleted()
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is AccountSideEffect.NotAuthenticated -> onBackToLogin()
         }
     }
 
@@ -218,7 +216,6 @@ fun AccountScreen(
             Button(
                 onClick = {
                     viewModel.signOut()
-                    onLogout()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

@@ -2,6 +2,9 @@ package com.rebuilding.muscleatlas.supabase.di
 
 import com.rebuilding.muscleatlas.appconfig.AppConfig
 import com.rebuilding.muscleatlas.supabase.InAppBrowserLauncher
+import com.rebuilding.muscleatlas.supabase.SessionDataSource
+import com.rebuilding.muscleatlas.supabase.source.SessionDataSourceImpl
+import dev.yjyoon.kinappbrowser.KInAppBrowser
 import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.UrlLauncher
@@ -26,7 +29,7 @@ val supabaseModule =
                     host = AppConfig.SUPABASE_LOGIN_HOST
                     scheme = AppConfig.SUPABASE_LOGIN_SCHEME
                     urlLauncher = UrlLauncher { _, url ->
-                        InAppBrowserLauncher.open(url)
+                        KInAppBrowser.open(url)
                     }
                 }
                 install(ComposeAuth) {
@@ -38,4 +41,5 @@ val supabaseModule =
                 defaultLogLevel = LogLevel.DEBUG
             }
         }
+        single<SessionDataSource> { SessionDataSourceImpl(get()) }
     }

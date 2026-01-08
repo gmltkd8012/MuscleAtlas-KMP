@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,6 +34,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun SettingScreen(
     viewModel: SettingViewModel = koinViewModel(),
     onNavigateToAccount: () -> Unit = {},
+    onNavigateToAppInfo: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -45,6 +47,16 @@ fun SettingScreen(
             title = "계정 정보",
             subtitle = "로그인 정보 확인 및 로그아웃",
             onClick = onNavigateToAccount,
+        )
+
+        Spacer(modifier = Modifier.size(12.dp))
+
+        // 앱 정보 메뉴
+        SettingMenuItem(
+            icon = Icons.Default.Info,
+            title = "앱 정보",
+            subtitle = "버전 정보, 이용약관, 사업자 정보",
+            onClick = onNavigateToAppInfo,
         )
     }
 }

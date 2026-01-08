@@ -27,6 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,7 +38,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -61,11 +62,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.touchlab.kermit.Logger
+import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
+import com.rebuilding.muscleatlas.designsystem.theme.AppColors
+import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
 import com.rebuilding.muscleatlas.member.viewmodel.MemberExerciseItem
 import com.rebuilding.muscleatlas.member.viewmodel.MemberTag
 import com.rebuilding.muscleatlas.member.viewmodel.TagColorType
 import com.rebuilding.muscleatlas.util.DateFormatter
+import com.rebuilding.muscleatlas.util.rememberShareService
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,6 +85,9 @@ fun MemberDetailScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colorScheme = MaterialTheme.colorScheme
     
+    // 공유 서비스
+    val shareService = rememberShareService()
+    
     // 메모 편집 BottomSheet 상태
     var showMemoEditSheet by remember { mutableStateOf(false) }
     val memoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -86,9 +95,29 @@ fun MemberDetailScreen(
     // 태그 추가 BottomSheet 상태
     var showTagAddSheet by remember { mutableStateOf(false) }
     val tagSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    
+    // 삭제 확인 Dialog 상태
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(memberId) {
         viewModel.loadMemberDetail(memberId)
+    }
+    
+    // SideEffect 처리
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is MemberDetailSideEffect.ShareInvite -> {
+                val memberName = state.member?.name ?: ""
+                val shareUrl = viewModel.getShareUrl(sideEffect.invite.inviteCode)
+                
+                shareService.shareToKakao(
+                    title = "${memberName}님의 운동 정보",
+                    description = "MuscleAtlas에서 운동 정보를 확인하세요!",
+                    imageUrl = null,
+                    linkUrl = shareUrl,
+                )
+            }
+        }
     }
 
     Scaffold(
@@ -112,11 +141,22 @@ fun MemberDetailScreen(
                     }
                 },
                 actions = {
-                    TextButton(onClick = { /* TODO: 편집 */ }) {
-                        Text(
-                            text = "공유",
-                            color = colorScheme.primary,
-                        )
+                    TextButton(
+                        onClick = { viewModel.createShareInvite() },
+                        enabled = !state.isCreatingInvite,
+                    ) {
+                        if (state.isCreatingInvite) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp,
+                                color = colorScheme.primary,
+                            )
+                        } else {
+                            Text(
+                                text = "공유",
+                                color = colorScheme.primary,
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -124,6 +164,33 @@ fun MemberDetailScreen(
                 ),
             )
         },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colorScheme.background)
+                    .padding(16.dp),
+            ) {
+                Button(
+                    onClick = { showDeleteDialog = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorScheme.error,
+                    ),
+                ) {
+                    Text(
+                        text = "삭제",
+                        color = AppColors.surfaceLight,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                    )
+                }
+            }
+        },
+        modifier = Modifier.navigationBarsPadding()
     ) { innerPadding ->
         when {
             state.isLoading -> {
@@ -244,6 +311,7 @@ fun MemberDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             MemoEditSheetContent(
                 currentMemo = state.member?.memo ?: "",
@@ -284,6 +352,7 @@ fun MemberDetailScreen(
                     )
                 }
             },
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TagAddSheetContent(
                 onSaveClick = { text, icon, colorType ->
@@ -292,6 +361,45 @@ fun MemberDetailScreen(
                 },
             )
         }
+    }
+    
+    // 삭제 확인 Dialog
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = {
+                Text(
+                    text = "회원 삭제",
+                    fontWeight = FontWeight.SemiBold,
+                )
+            },
+            text = {
+                Text(
+                    text = "${state.member?.name ?: "회원"}님을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.",
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteDialog = false
+                        viewModel.deleteMember(memberId)
+                        onNavigateBack()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorScheme.error,
+                    ),
+                ) {
+                    Text("삭제")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { showDeleteDialog = false },
+                ) {
+                    Text("취소")
+                }
+            },
+        )
     }
 }
 
@@ -545,13 +653,13 @@ private fun MemoEditSheetContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        BaseTextField(
             value = memoText,
-            onValueChange = { memoText = it },
-            label = { Text("메모") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 4,
-            maxLines = 8,
+            labelText = "메모",
+            hintText = "메모를 입력하세요",
+            singleLine = false,
+            onValueChanged = { memoText = it },
+            onDelete = { memoText = "" }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -609,13 +717,12 @@ private fun TagAddSheetContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         // 태그 텍스트 입력
-        OutlinedTextField(
+        BaseTextField(
             value = tagText,
-            onValueChange = { tagText = it },
-            label = { Text("태그 내용") },
-            placeholder = { Text("예: PT 10회 남음, 허리 주의") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            labelText = "태그 내용",
+            hintText = "내용을 입력하세요",
+            onValueChanged = { tagText = it },
+            onDelete = { tagText = "" }
         )
 
         Spacer(modifier = Modifier.height(20.dp))

@@ -2,6 +2,7 @@ package com.rebuilding.muscleatlas.data.repository
 
 import com.rebuilding.muscleatlas.data.model.CreateMemberRequest
 import com.rebuilding.muscleatlas.data.model.Member
+import com.rebuilding.muscleatlas.data.model.MemberTagData
 import com.rebuilding.muscleatlas.data.model.UpdateMemberRequest
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -32,6 +33,11 @@ interface MemberRepository {
      * 회원 정보 수정
      */
     suspend fun updateMember(id: String, request: UpdateMemberRequest): Member
+
+    /**
+     * 회원 태그 업데이트
+     */
+    suspend fun updateMemberTags(id: String, tags: List<MemberTagData>): Member
 
     /**
      * 회원 삭제
@@ -91,6 +97,19 @@ class MemberRepositoryImpl(
             supabaseClient
                 .from(TABLE_NAME)
                 .update(request) {
+                    select()
+                    filter {
+                        eq("id", id)
+                    }
+                }
+                .decodeSingle<Member>()
+        }
+
+    override suspend fun updateMemberTags(id: String, tags: List<MemberTagData>): Member =
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(TABLE_NAME)
+                .update(UpdateMemberRequest(tags = tags)) {
                     select()
                     filter {
                         eq("id", id)

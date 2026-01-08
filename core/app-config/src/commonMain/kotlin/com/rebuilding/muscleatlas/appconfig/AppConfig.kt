@@ -12,12 +12,15 @@ object AppConfig {
         get() = BuildKonfig.SUPABASE_ANON_KEY
 
     val SUPABASE_LOGIN_HOST: String
-        get() = "com.rebuilding.muscleatlas"
+        get() = "login-callback"
 
     val SUPABASE_LOGIN_SCHEME: String
-        get() = "login-callback"
+        get() = "com.rebuilding.muscleatlas"
 
     // Google OAuth
     val GOOGLE_SERVER_CLIENT_ID: String
         get() = BuildKonfig.GOOGLE_SERVER_CLIENT_ID
+
+    val KAKAO_NATIVE_APP_KEY: String
+        get() = BuildKonfig.KAKAO_NATIVE_APP_KEY
 }

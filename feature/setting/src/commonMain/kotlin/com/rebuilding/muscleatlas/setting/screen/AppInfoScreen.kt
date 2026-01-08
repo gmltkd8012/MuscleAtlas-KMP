@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppInfoScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToOpenSource: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -87,7 +88,7 @@ fun AppInfoScreen(
                     HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                     ClickableInfoRow(
                         label = "오픈소스 라이선스",
-                        onClick = { /* TODO: 오픈소스 라이선스 페이지로 이동 */ },
+                        onClick = onNavigateToOpenSource,
                     )
                 }
 

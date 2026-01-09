@@ -234,7 +234,7 @@ class MemberDetailViewModel(
      */
     fun getShareUrl(inviteCode: String): String {
         // TODO: 실제 Edge Function URL로 교체
-        return "https://onpadytjzizosabsrsyp.supabase.co/functions/v1/member-invite?code=$inviteCode"
+        return "https://muscleatlas.vercel.app/member/$inviteCode"
     }
     
     private fun generateTagId(): String {

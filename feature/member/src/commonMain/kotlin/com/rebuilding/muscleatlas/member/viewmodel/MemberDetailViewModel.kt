@@ -38,7 +38,7 @@ class MemberDetailViewModel(
                 val exercises = exerciseRepository.getExercises().first()
                 val exerciseMap = exercises.associateBy { it.id }
                 
-                // 4. MemberExercise + Exercise 정보 결합
+                // 4. MemberExercise + Exercise 정보 결합 (운동 이름순 정렬로 순서 고정)
                 val exerciseItems = memberExercises.mapNotNull { memberExercise ->
                     exerciseMap[memberExercise.exerciseId]?.let { exercise ->
                         MemberExerciseItem(
@@ -46,7 +46,7 @@ class MemberDetailViewModel(
                             exercise = exercise,
                         )
                     }
-                }
+                }.sortedBy { it.exercise.name }
                 
                 // 5. DB에서 가져온 태그를 UI용 MemberTag로 변환
                 val tags = member?.tags?.mapIndexed { index, tagData ->

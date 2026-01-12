@@ -12,6 +12,7 @@ import com.rebuilding.muscleatlas.data.repository.MemberExerciseRepository
 import com.rebuilding.muscleatlas.data.repository.MemberInviteRepository
 import com.rebuilding.muscleatlas.data.repository.MemberRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
+import com.rebuilding.muscleatlas.ui.util.Logger
 import com.rebuilding.muscleatlas.util.DateFormatter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -22,6 +23,10 @@ class MemberDetailViewModel(
     private val exerciseRepository: ExerciseRepository,
     private val memberInviteRepository: MemberInviteRepository,
 ) : StateViewModel<MemberDetailState, MemberDetailSideEffect>(MemberDetailState()) {
+
+    companion object {
+        private const val TAG = "MemberDetailViewModel"
+    }
 
     fun loadMemberDetail(memberId: String) {
         launch {
@@ -59,16 +64,11 @@ class MemberDetailViewModel(
                         member = member,
                         exerciseItems = exerciseItems,
                         tags = tags,
-                        error = null,
                     )
                 }
             } catch (e: Exception) {
-                reduceState {
-                    copy(
-                        isLoading = false,
-                        error = e.message,
-                    )
-                }
+                Logger.e(TAG, "회원 상세 정보 로드 실패", e)
+                reduceState { copy(isLoading = false) }
             }
         }
     }
@@ -96,7 +96,7 @@ class MemberDetailViewModel(
                     )
                 }
             } catch (e: Exception) {
-                reduceState { copy(error = e.message) }
+                Logger.e(TAG, "운동 수행 가능 여부 업데이트 실패", e)
             }
         }
     }
@@ -123,7 +123,7 @@ class MemberDetailViewModel(
                     copy(member = updatedMember)
                 }
             } catch (e: Exception) {
-                reduceState { copy(error = e.message) }
+                Logger.e(TAG, "회원 메모 업데이트 실패", e)
             }
         }
     }
@@ -154,7 +154,7 @@ class MemberDetailViewModel(
                 // 서버 응답으로 상태 동기화
                 reduceState { copy(member = updatedMember) }
             } catch (e: Exception) {
-                reduceState { copy(error = e.message) }
+                Logger.e(TAG, "태그 추가 실패", e)
             }
         }
     }
@@ -178,7 +178,7 @@ class MemberDetailViewModel(
                 // 서버 응답으로 상태 동기화
                 reduceState { copy(member = updatedMember) }
             } catch (e: Exception) {
-                reduceState { copy(error = e.message) }
+                Logger.e(TAG, "태그 삭제 실패", e)
             }
         }
     }
@@ -206,12 +206,8 @@ class MemberDetailViewModel(
                 // SideEffect로 공유 UI 트리거
                 sendSideEffect(MemberDetailSideEffect.ShareInvite(invite))
             } catch (e: Exception) {
-                reduceState { 
-                    copy(
-                        isCreatingInvite = false,
-                        error = e.message,
-                    ) 
-                }
+                Logger.e(TAG, "초대 코드 생성 실패", e)
+                reduceState { copy(isCreatingInvite = false) }
             }
         }
     }
@@ -224,7 +220,7 @@ class MemberDetailViewModel(
             try {
                 memberRepository.deleteMember(id)
             } catch (e: Exception) {
-                reduceState { copy(error = e.message) }
+                Logger.e(TAG, "회원 삭제 실패", e)
             }
         }
     }
@@ -301,7 +297,6 @@ data class MemberDetailState(
     val tags: List<MemberTag> = emptyList(),
     val isCreatingInvite: Boolean = false,
     val currentInvite: MemberInvite? = null,
-    val error: String? = null,
 )
 
 sealed interface MemberDetailSideEffect {

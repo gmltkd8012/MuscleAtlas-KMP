@@ -105,7 +105,7 @@ class AccountViewModel(
                     }
                 }
             } catch (e: Exception) {
-                Logger.e(TAG, "회원 탈퇴 실패: ${e.message}")
+                Logger.e(TAG, "회원 탈퇴 실패", e)
                 reduceState {
                     copy(
                         isDeleting = false,

@@ -82,26 +82,6 @@ fun MemberScreen(
                     color = colorScheme.primary,
                 )
             }
-
-            state.error != null && state.members.isEmpty() -> {
-                // 에러 상태
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = state.error ?: "오류가 발생했습니다",
-                        color = colorScheme.error,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { viewModel.loadMembers() }) {
-                        Text("다시 시도")
-                    }
-                }
-            }
-
             state.members.isEmpty() -> {
                 // 빈 상태
                 Text(

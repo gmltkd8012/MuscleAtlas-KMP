@@ -3,6 +3,7 @@ package com.rebuilding.muscleatlas.workout.viewmodel
 import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
+import com.rebuilding.muscleatlas.ui.util.Logger
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -10,6 +11,10 @@ import kotlinx.coroutines.launch
 class WorkoutViewModel(
     private val exerciseRepository: ExerciseRepository,
 ) : StateViewModel<WorkoutState, WorkoutSideEffect>(WorkoutState()) {
+
+    companion object {
+        private const val TAG = "WorkoutViewModel"
+    }
 
     init {
         loadExercises()
@@ -22,10 +27,11 @@ class WorkoutViewModel(
                     reduceState { copy(isLoading = true) }
                 }
                 .catch { e ->
-                    reduceState { copy(isLoading = false, error = e.message) }
+                    Logger.e(TAG, "운동 목록 로드 실패", e)
+                    reduceState { copy(isLoading = false) }
                 }
                 .collect { exercises ->
-                    reduceState { copy(isLoading = false, exercises = exercises, error = null) }
+                    reduceState { copy(isLoading = false, exercises = exercises) }
                 }
         }
     }
@@ -51,7 +57,8 @@ class WorkoutViewModel(
                 // 목록 다시 로드
                 loadExercises()
             } catch (e: Exception) {
-                reduceState { copy(isLoading = false, error = e.message) }
+                Logger.e(TAG, "운동 추가 실패", e)
+                reduceState { copy(isLoading = false) }
             }
         }
     }
@@ -60,7 +67,6 @@ class WorkoutViewModel(
 data class WorkoutState(
     val isLoading: Boolean = false,
     val exercises: List<Exercise> = emptyList(),
-    val error: String? = null,
 )
 
 sealed interface WorkoutSideEffect {

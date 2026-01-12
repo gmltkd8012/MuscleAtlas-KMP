@@ -203,21 +203,6 @@ fun MemberDetailScreen(
                     CircularProgressIndicator(color = colorScheme.primary)
                 }
             }
-
-            state.error != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "오류: ${state.error}",
-                        color = colorScheme.error,
-                    )
-                }
-            }
-
             else -> {
                 LazyColumn(
                     modifier = Modifier

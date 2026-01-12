@@ -4,6 +4,7 @@ import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
+import com.rebuilding.muscleatlas.ui.util.Logger
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -15,6 +16,8 @@ class WorkoutDetailViewModel(
     private var currentExerciseId: String? = null
     
     companion object {
+        private const val TAG = "WorkoutDetailViewModel"
+        
         // contractionType 고정 순서 정의
         private val CONTRACTION_TYPE_ORDER = listOf(
             // 기계적 움직임
@@ -48,7 +51,8 @@ class WorkoutDetailViewModel(
                     reduceState { copy(isLoading = true) }
                 }
                 .catch { e ->
-                    reduceState { copy(isLoading = false, error = e.message) }
+                    Logger.e(TAG, "운동 상세 정보 로드 실패", e)
+                    reduceState { copy(isLoading = false) }
                 }
                 .collect { details ->
                     // movement_type, contraction_type 순서로 그룹핑 (고정 순서 적용, LinkedHashMap으로 순서 유지)
@@ -80,7 +84,6 @@ class WorkoutDetailViewModel(
                             isLoading = false,
                             details = details,
                             groupedDetails = groupedDetails,
-                            error = null,
                         )
                     }
                 }
@@ -98,7 +101,8 @@ class WorkoutDetailViewModel(
                 // 업데이트 후 데이터 다시 조회
                 currentExerciseId?.let { loadExerciseDetail(it) }
             } catch (e: Exception) {
-                reduceState { copy(isLoading = false, error = e.message) }
+                Logger.e(TAG, "운동 상세 정보 업데이트 실패", e)
+                reduceState { copy(isLoading = false) }
             }
         }
     }
@@ -109,7 +113,6 @@ data class WorkoutDetailState(
     val exercise: Exercise? = null,
     val details: List<ExerciseDetail> = emptyList(),
     val groupedDetails: Map<String, Map<String, List<ExerciseDetail>>> = emptyMap(),
-    val error: String? = null,
 )
 
 sealed interface WorkoutDetailSideEffect

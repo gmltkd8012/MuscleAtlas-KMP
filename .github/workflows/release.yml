@@ -33,10 +33,10 @@ jobs:
           echo 'sdk.dir=/usr/local/lib/android/sdk' > local.properties
           echo 'muscle_atlas_key_alias=${{ secrets.KEY_ALIAS }}' >> local.properties
           echo 'muscle_atlas_key_password=${{ secrets.KEY_PASSWORD }}' >> local.properties
-          echo 'SUPABASE_URL="${{ secrets.SUPABASE_URL }}"' >> local.properties
-          echo 'SUPABASE_ANON_KEY="${{ secrets.SUPABASE_ANON_KEY }}"' >> local.properties
-          echo 'GOOGLE_SERVER_CLIENT_ID="${{ secrets.GOOGLE_SERVER_CLIENT_ID }}"' >> local.properties
-          echo 'KAKAO_NATIVE_APP_KEY="${{ secrets.KAKAO_NATIVE_APP_KEY }}"' >> local.properties
+          echo 'SUPABASE_URL=${{ secrets.SUPABASE_URL }}' >> local.properties
+          echo 'SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}' >> local.properties
+          echo 'GOOGLE_SERVER_CLIENT_ID=${{ secrets.GOOGLE_SERVER_CLIENT_ID }}' >> local.properties
+          echo 'KAKAO_NATIVE_APP_KEY=${{ secrets.KAKAO_NATIVE_APP_KEY }}' >> local.properties
           cat local.properties
 
       - name: Build APK

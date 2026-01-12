@@ -68,6 +68,12 @@ kinappbrowser = "1.0.0"
 # Kakao SDK
 kakaoSdk = "2.20.6"
 
+# Firebase SDK
+googleServices = "4.4.2"
+firebaseCrashlyticsPlugin = "3.0.3"
+firebaseCrashlytics = "19.4.0"
+firebaseAnalytics = "22.2.0"
+
 [libraries]
 # Gradle Plugins
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -135,6 +141,10 @@ kinappbrowser = { module = "dev.yjyoon:kinappbrowser", version.ref = "kinappbrow
 kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakaoSdk" }
 kakao-common = { group = "com.kakao.sdk", name = "v2-common", version.ref = "kakaoSdk" }
 
+# Google SDK
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebaseAnalytics" }
+
 [plugins]
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -162,6 +172,10 @@ convention-kmp-compose = { id = "kmp.compose", version = "unspecified" }
 convention-android-app = { id = "android.app", version = "unspecified" }
 convention-kmp-koin = { id = "kmp.koin", version = "unspecified" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+
+# Google SDK
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 
 [bundles]
 

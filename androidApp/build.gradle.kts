@@ -9,6 +9,11 @@ plugins {
     alias(libs.plugins.firebase.crashlytics.plugin)
 }
 
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
 android {
     namespace = "com.rebuilding.muscleatlas"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -23,8 +28,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file("muscleatlas.keystore.jks")
+            storePassword = localProperties.getProperty("muscle_atlas_key_password")?.trim('"')
+            keyAlias = localProperties.getProperty("muscle_atlas_key_alias")?.trim('"')
+            keyPassword = localProperties.getProperty("muscle_atlas_key_password")?.trim('"')
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

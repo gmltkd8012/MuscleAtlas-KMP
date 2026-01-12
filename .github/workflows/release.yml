@@ -1,0 +1,86 @@
+name: MuscleAtlas Application Build and Release
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Decode Keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > muscleatlas.keystore.jks
+
+      - name: Create local.properties
+        run: |
+          echo 'sdk.dir=/usr/local/lib/android/sdk' > local.properties
+          echo 'muscle_atlas_key_alias=${{ secrets.KEY_ALIAS }}' >> local.properties
+          echo 'muscle_atlas_key_password=${{ secrets.KEY_PASSWORD }}' >> local.properties
+          echo 'SUPABASE_URL="${{ secrets.SUPABASE_URL }}"' >> local.properties
+          echo 'SUPABASE_ANON_KEY="${{ secrets.SUPABASE_ANON_KEY }}"' >> local.properties
+          echo 'GOOGLE_SERVER_CLIENT_ID="${{ secrets.GOOGLE_SERVER_CLIENT_ID }}"' >> local.properties
+          echo 'KAKAO_NATIVE_APP_KEY="${{ secrets.KAKAO_NATIVE_APP_KEY }}"' >> local.properties
+          cat local.properties
+
+      - name: Build APK
+        run: |
+          chmod +x gradlew
+          ./gradlew :androidApp:assembleRelease
+
+      - name: Set APK Path and Release Tag
+        run: |
+          echo "=== APK 파일 검색 ==="
+          find androidApp/build/outputs -name "*.apk" -type f
+          echo "====================="
+          APK_FILE=$(find androidApp/build/outputs -name "*.apk" -type f | head -n 1)
+          echo "Found APK: $APK_FILE"
+          echo "APK_PATH=$APK_FILE" >> $GITHUB_ENV
+          APK_NAME=$(basename $APK_FILE)
+          echo "APK_NAME=$APK_NAME" >> $GITHUB_ENV
+          # 릴리즈 태그 생성 (날짜 + 시간 기반)
+          RELEASE_TAG="v$(date +'%Y%m%d-%H%M%S')"
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: "Release ${{ env.RELEASE_TAG }}"
+          body: |
+            ## 빌드 정보
+            - **APK**: ${{ env.APK_NAME }}
+            - **브랜치**: release
+            - **커밋**: ${{ github.sha }}
+          files: ${{ env.APK_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send Discord Notification
+        run: |
+          DOWNLOAD_URL="${{ github.server_url }}/${{ github.repository }}/releases/download/${{ env.RELEASE_TAG }}/${{ env.APK_NAME }}"
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"✅ **빌드 성공!** (release) 📦 ${{ env.APK_NAME }}\n\n📥 **다운로드**: ${DOWNLOAD_URL}\"}" \
+            ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"content": "❌ **빌드 실패!** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
+            ${{ secrets.DISCORD_WEBHOOK }}

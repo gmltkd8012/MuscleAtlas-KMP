@@ -72,25 +72,6 @@ fun WorkoutScreen(
                     color = colorScheme.primary,
                 )
             }
-
-            state.error != null && state.exercises.isEmpty() -> {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = "오류: ${state.error}",
-                        color = colorScheme.error,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { viewModel.loadExercises() }) {
-                        Text("다시 시도")
-                    }
-                }
-            }
-
             state.exercises.isEmpty() -> {
                 Text(
                     text = "등록된 운동이 없습니다\n운동을 추가해보세요!",

@@ -48,7 +48,7 @@ internal class LoginViewModel(
                 Logger.d("LoginViewModel", "Starting Google sign in...")
                 supabaseClient.auth.signInWith(Google)
             } catch (e: Exception) {
-                Logger.e("LoginViewModel", "Google sign in failed: ${e.message}")
+                Logger.e("LoginViewModel", "Google sign in failed", e)
             }
         }
     }
@@ -62,7 +62,7 @@ internal class LoginViewModel(
                 Logger.d("LoginViewModel", "Starting Apple sign in...")
                 supabaseClient.auth.signInWith(Apple)
             } catch (e: Exception) {
-                Logger.e("LoginViewModel", "Apple sign in failed: ${e.message}")
+                Logger.e("LoginViewModel", "Apple sign in failed", e)
             }
         }
     }
@@ -76,7 +76,7 @@ internal class LoginViewModel(
                 Logger.d("LoginViewModel", "Starting Kakao sign in...")
                 supabaseClient.auth.signInWith(Kakao)
             } catch (e: Exception) {
-                Logger.e("LoginViewModel", "Kakao sign in failed: ${e.message}")
+                Logger.e("LoginViewModel", "Kakao sign in failed", e)
             }
         }
     }

@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics.plugin)
 }
 
 android {
@@ -75,4 +77,8 @@ dependencies {
     
     // Kakao SDK
     implementation(libs.bundles.kakaoShare)
+
+    // Google SDK
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 }

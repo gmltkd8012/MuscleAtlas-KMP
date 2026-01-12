@@ -128,22 +128,6 @@ fun WorkoutDetailScreen(
                     CircularProgressIndicator(color = colorScheme.primary)
                 }
             }
-
-            state.error != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "오류: ${state.error}",
-                        color = colorScheme.onBackground,
-                    )
-                }
-            }
-
             else -> {
                 LazyColumn(
                     modifier = Modifier

@@ -14,6 +14,7 @@ kotlin {
         commonMain.dependencies {
         }
         androidMain.dependencies {
+            implementation(libs.firebase.crashlytics)
         }
         iosMain.dependencies {
         }

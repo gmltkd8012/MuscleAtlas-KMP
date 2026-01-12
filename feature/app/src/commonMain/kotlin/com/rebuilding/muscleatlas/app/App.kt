@@ -12,6 +12,7 @@ import com.rebuilding.muscleatlas.setting.di.settingModule
 import com.rebuilding.muscleatlas.splash.di.splashModule
 import com.rebuilding.muscleatlas.splash.navigation.SplashRoute
 import com.rebuilding.muscleatlas.supabase.di.supabaseModule
+import com.rebuilding.muscleatlas.ui.di.uiModule
 import com.rebuilding.muscleatlas.workout.di.workoutModule
 import org.koin.core.KoinApplication
 import org.koin.dsl.KoinAppDeclaration
@@ -30,6 +31,12 @@ fun muscleAtlasAppDeclaration(
     platformDeclaration: KoinApplication.() -> Unit = {},
 ): KoinAppDeclaration = {
 
+    /* Core 모듈 의존성 */
+    modules(
+        uiModule,
+        supabaseModule,
+    )
+
     /* Feature 모듈 의존성 */
     modules(
         appModule,
@@ -39,7 +46,5 @@ fun muscleAtlasAppDeclaration(
         settingModule,
         workoutModule,
     )
-
-    modules(supabaseModule)
     platformDeclaration()
 }

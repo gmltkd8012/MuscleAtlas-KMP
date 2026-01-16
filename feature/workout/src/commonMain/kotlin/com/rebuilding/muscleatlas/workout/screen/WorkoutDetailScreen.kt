@@ -56,6 +56,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
+import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
+import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -138,7 +140,9 @@ fun WorkoutDetailScreen(
                 ) {
                     // Hero Image Section
                     item {
-                        HeroImageSection()
+                        HeroImageSection(
+                            enabled = fromWorkoutScreen
+                        )
                     }
 
                     // Exercise Name
@@ -306,39 +310,49 @@ fun WorkoutDetailScreen(
 }
 
 @Composable
-private fun HeroImageSection() {
+private fun HeroImageSection(
+    enabled: Boolean = true,
+) {
     val colorScheme = MaterialTheme.colorScheme
+    val photoBoxState = rememberPhotoBoxState()
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        colorScheme.surface,
-                        colorScheme.background,
-                    ),
-                ),
-            ),
+        modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        // Placeholder for exercise image
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = "🏋️",
-                fontSize = 64.sp,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Exercise Image",
-                color = colorScheme.onSurfaceVariant,
-                fontSize = 14.sp,
-            )
+        PhotoBox(
+            state = photoBoxState,
+            modifier = Modifier.fillMaxWidth(),
+            size = 200.dp,
+            shape = RoundedCornerShape(16.dp),
+            placeholderColor = colorScheme.surface,
+            borderColor = colorScheme.outline.copy(alpha = 0.3f),
+            borderWidth = 1.dp,
+            showAddIcon = false,
+            enabled = enabled,
+            onImageSelected = { imageBytes ->
+                // 이미지 선택 완료 시 처리
+                // 필요시 ViewModel에 업로드 로직 추가
+            },
+        )
+
+        // PhotoBox가 이미지가 없을 때만 placeholder 표시
+        if (!photoBoxState.hasImage) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "🏋️",
+                    fontSize = 64.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = if (enabled) "터치하여 이미지 추가" else "Exercise Image",
+                    color = colorScheme.onSurfaceVariant,
+                    fontSize = 14.sp,
+                )
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ import com.rebuilding.muscleatlas.data.repository.MemberRepository
 import com.rebuilding.muscleatlas.data.repository.MemberRepositoryImpl
 import com.rebuilding.muscleatlas.data.repository.SessionRepository
 import com.rebuilding.muscleatlas.data.repository.SessionRepositoryImpl
+import com.rebuilding.muscleatlas.data.repository.StorageRepository
+import com.rebuilding.muscleatlas.data.repository.StorageRepositoryImpl
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -41,6 +43,12 @@ val dataModule = module {
     single<SessionRepository> {
         SessionRepositoryImpl(
             sessionDataSource = get(),
+            ioDispatcher = get(DispatcherQualifier.Io),
+        )
+    }
+    single<StorageRepository> {
+        StorageRepositoryImpl(
+            supabaseClient = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
         )
     }

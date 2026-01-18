@@ -15,6 +15,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.functions.Functions
 import io.github.jan.supabase.logging.LogLevel
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
 import org.koin.dsl.module
 
 @OptIn(SupabaseExperimental::class)
@@ -38,6 +39,7 @@ val supabaseModule =
                 }
                 install(Postgrest)
                 install(Functions)
+                install(Storage)
                 defaultLogLevel = LogLevel.DEBUG
             }
         }

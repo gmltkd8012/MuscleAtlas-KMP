@@ -141,8 +141,49 @@ fun WorkoutDetailScreen(
                     // Hero Image Section
                     item {
                         HeroImageSection(
-                            enabled = fromWorkoutScreen
+                            exerciseId = exerciseId,
+                            imageUrl = state.exercise?.exerciseImg,
+                            isUploadingImage = state.isUploadingImage,
+                            enabled = fromWorkoutScreen,
+                            onImageSelected = { imageBytes ->
+                                viewModel.uploadExerciseImage(exerciseId, imageBytes)
+                            },
+                            onImageDelete = {
+                                state.exercise?.exerciseImg?.let { url ->
+                                    viewModel.deleteExerciseImage(exerciseId, url)
+                                }
+                            }
                         )
+                    }
+
+                    // Error display
+                    state.uploadError?.let { error ->
+                        item {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = colorScheme.errorContainer
+                                )
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = null,
+                                        tint = colorScheme.error,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = error,
+                                        color = colorScheme.onErrorContainer,
+                                        fontSize = 14.sp
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     // Exercise Name
@@ -311,10 +352,25 @@ fun WorkoutDetailScreen(
 
 @Composable
 private fun HeroImageSection(
+    exerciseId: String,
+    imageUrl: String?,
+    isUploadingImage: Boolean,
     enabled: Boolean = true,
+    onImageSelected: (ByteArray) -> Unit,
+    onImageDelete: () -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val photoBoxState = rememberPhotoBoxState()
+    val photoBoxState = rememberPhotoBoxState(initialUrl = imageUrl)
+
+    // Update state when imageUrl changes
+    LaunchedEffect(imageUrl) {
+        photoBoxState.setImageUrl(imageUrl)
+    }
+
+    // Update loading state
+    LaunchedEffect(isUploadingImage) {
+        photoBoxState.setLoading(isUploadingImage)
+    }
 
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -329,15 +385,12 @@ private fun HeroImageSection(
             borderColor = colorScheme.outline.copy(alpha = 0.3f),
             borderWidth = 1.dp,
             showAddIcon = false,
-            enabled = enabled,
-            onImageSelected = { imageBytes ->
-                // 이미지 선택 완료 시 처리
-                // 필요시 ViewModel에 업로드 로직 추가
-            },
+            enabled = enabled && !isUploadingImage,
+            onImageSelected = onImageSelected,
         )
 
-        // PhotoBox가 이미지가 없을 때만 placeholder 표시
-        if (!photoBoxState.hasImage) {
+        // Placeholder when no image and not uploading
+        if (!photoBoxState.hasImage && !isUploadingImage) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -351,6 +404,28 @@ private fun HeroImageSection(
                     text = if (enabled) "터치하여 이미지 추가" else "Exercise Image",
                     color = colorScheme.onSurfaceVariant,
                     fontSize = 14.sp,
+                )
+            }
+        }
+
+        // Delete button when image exists
+        if (photoBoxState.hasImage && enabled && !isUploadingImage) {
+            IconButton(
+                onClick = onImageDelete,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .size(32.dp)
+                    .background(
+                        colorScheme.surface.copy(alpha = 0.9f),
+                        RoundedCornerShape(16.dp)
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = "이미지 삭제",
+                    tint = colorScheme.error,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }

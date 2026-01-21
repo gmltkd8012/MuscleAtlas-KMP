@@ -90,6 +90,7 @@ fun WorkoutScreen(
                     ) { exercise ->
                         WorkoutListItem(
                             title = exercise.name,
+                            imgUrl = exercise.exerciseImg,
                             onClick = { onNavigateToDetail(exercise.id) },
                         )
                     }

@@ -70,7 +70,9 @@ class PhotoBoxState {
      * 로딩 상태 설정
      */
     fun setLoading(loading: Boolean) {
-        _isLoading = loading
+        if (_isLoading != loading) {
+            _isLoading = loading
+        }
     }
 
     /**
@@ -172,13 +174,6 @@ fun PhotoBox(
         contentAlignment = Alignment.Center,
     ) {
         when {
-            state.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(size / 3),
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-
             state.imageBytes != null -> {
                 AsyncImage(
                     model = state.imageBytes,
@@ -197,6 +192,13 @@ fun PhotoBox(
                     onState = { painterState ->
                         state.setLoading(painterState is AsyncImagePainter.State.Loading)
                     },
+                )
+            }
+
+            state.isLoading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(size / 3),
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
 
@@ -266,7 +268,10 @@ fun PhotoBoxReadOnly(
                     modifier = Modifier.fillMaxSize(),
                     contentScale = contentScale,
                     onState = { painterState ->
-                        isLoading = painterState is AsyncImagePainter.State.Loading
+                        val newLoadingState = painterState is AsyncImagePainter.State.Loading
+                        if (isLoading != newLoadingState) {
+                            isLoading = newLoadingState
+                        }
                     },
                 )
             }

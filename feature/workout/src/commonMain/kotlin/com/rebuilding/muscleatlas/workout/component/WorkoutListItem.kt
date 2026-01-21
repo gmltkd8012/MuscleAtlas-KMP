@@ -16,10 +16,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
+import com.rebuilding.muscleatlas.designsystem.component.PhotoBoxState
 
 /**
  * Workout 모듈용 리스트 아이템
@@ -29,11 +32,18 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun WorkoutListItem(
     title: String,
+    imgUrl: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    imageContent: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     val colorScheme = MaterialTheme.colorScheme
+    val photoBoxState = remember(imgUrl) {
+        PhotoBoxState().apply {
+            if (imgUrl != null) {
+                setImageUrl(imgUrl)
+            }
+        }
+    }
 
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -50,8 +60,12 @@ fun WorkoutListItem(
                     .background(colorScheme.surface),
                 contentAlignment = Alignment.Center,
             ) {
-                if (imageContent != null) {
-                    imageContent()
+                if (imgUrl != null) {
+                    PhotoBox(
+                        state = photoBoxState,
+                        modifier = Modifier.size(64.dp),
+                        enabled = false,
+                    )
                 } else {
                     Text(
                         text = title.firstOrNull()?.uppercase() ?: "",

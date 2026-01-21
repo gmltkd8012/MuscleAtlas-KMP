@@ -64,6 +64,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
+import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
+import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
 import com.rebuilding.muscleatlas.designsystem.theme.AppColors
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailSideEffect
 import com.rebuilding.muscleatlas.member.viewmodel.MemberDetailViewModel
@@ -918,6 +920,9 @@ private fun ExerciseListItem(
     onCanPerformChange: (Boolean) -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
+
+    val imgUrl = item.exercise.exerciseImg
+    val photoBoxState = rememberPhotoBoxState(initialUrl = imgUrl)
     
     // 운동별 색상 및 아이콘
     val (iconColor, iconEmoji) = getExerciseIconAndColor(item.exercise.name)
@@ -946,10 +951,19 @@ private fun ExerciseListItem(
                     .background(iconColor.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = iconEmoji,
-                    fontSize = 24.sp,
-                )
+                if (imgUrl != null) {
+                    PhotoBox(
+                        state = photoBoxState,
+                        modifier = Modifier.fillMaxSize(),
+                        shape = RoundedCornerShape(12.dp),
+                        enabled = false,
+                    )
+                } else {
+                    Text(
+                        text = iconEmoji,
+                        fontSize = 24.sp,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(16.dp))

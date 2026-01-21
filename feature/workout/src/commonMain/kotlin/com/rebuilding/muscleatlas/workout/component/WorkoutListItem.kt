@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
 import com.rebuilding.muscleatlas.designsystem.component.PhotoBoxState
+import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
 
 /**
  * Workout 모듈용 리스트 아이템
@@ -37,13 +38,7 @@ fun WorkoutListItem(
     modifier: Modifier = Modifier,
 ) {
     val colorScheme = MaterialTheme.colorScheme
-    val photoBoxState = remember(imgUrl) {
-        PhotoBoxState().apply {
-            if (imgUrl != null) {
-                setImageUrl(imgUrl)
-            }
-        }
-    }
+    val photoBoxState = rememberPhotoBoxState(initialUrl = imgUrl)
 
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -64,6 +59,7 @@ fun WorkoutListItem(
                     PhotoBox(
                         state = photoBoxState,
                         modifier = Modifier.size(64.dp),
+                        shape = RoundedCornerShape(8.dp),
                         enabled = false,
                     )
                 } else {

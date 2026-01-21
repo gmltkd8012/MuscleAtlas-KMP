@@ -30,6 +30,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.workout.component.WorkoutListItem
@@ -47,7 +49,12 @@ fun WorkoutScreen(
     val colorScheme = MaterialTheme.colorScheme
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    
+    var isNavigating by remember { mutableStateOf(false) }
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        isNavigating = false
+    }
+
     // SideEffect 처리
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -90,7 +97,13 @@ fun WorkoutScreen(
                     ) { exercise ->
                         WorkoutListItem(
                             title = exercise.name,
-                            onClick = { onNavigateToDetail(exercise.id) },
+                            imgUrl = exercise.exerciseImg,
+                            onClick = {
+                                if (!isNavigating) {
+                                    isNavigating = true
+                                    onNavigateToDetail(exercise.id)
+                                }
+                            },
                         )
                     }
                 }

@@ -68,6 +68,9 @@ kinappbrowser = "1.0.0"
 # Kakao SDK
 kakaoSdk = "2.20.6"
 
+# Coil (Image Loading - KMP)
+coil = "3.1.0"
+
 # Firebase SDK
 googleServices = "4.4.2"
 firebaseCrashlyticsPlugin = "3.0.3"
@@ -127,6 +130,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 supabase-auth = { group = "io.github.jan-tennert.supabase", name = "auth-kt", version.ref = "supabase" }
 supabase-postgrest = { group = "io.github.jan-tennert.supabase", name = "postgrest-kt", version.ref = "supabase" }
 supabase-functions = { group = "io.github.jan-tennert.supabase", name = "functions-kt", version.ref = "supabase" }
+supabase-storage = { group = "io.github.jan-tennert.supabase", name = "storage-kt", version.ref = "supabase" }
 supabase-compose-auth = { group = "io.github.jan-tennert.supabase", name = "compose-auth", version.ref = "supabase" }
 supabase-compose-auth-ui = { group = "io.github.jan-tennert.supabase", name = "compose-auth-ui", version.ref = "supabase" }
 
@@ -140,6 +144,10 @@ kinappbrowser = { module = "dev.yjyoon:kinappbrowser", version.ref = "kinappbrow
 # Kakao SDK
 kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakaoSdk" }
 kakao-common = { group = "com.kakao.sdk", name = "v2-common", version.ref = "kakaoSdk" }
+
+# Coil (Image Loading - KMP)
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }
 
 # Google SDK
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlytics" }
@@ -184,6 +192,7 @@ supabase = [
     "supabase-postgrest",
     "supabase-functions",
     "supabase-compose-auth",
+    "supabase-storage",
 ]
 
 buildKonfig = [

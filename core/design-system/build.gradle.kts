@@ -17,7 +17,9 @@ compose.resources {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            // Compose dependencies are provided by kmp.compose plugin
+            // Coil for image loading (KMP)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
         }
         androidMain.dependencies {
         }

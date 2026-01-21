@@ -47,6 +47,11 @@ interface ExerciseRepository {
      * 운동 상세 정보 일괄 추가
      */
     suspend fun insertExerciseDetails(details: List<ExerciseDetailInsert>)
+
+    /**
+     * 운동 이미지 URL 업데이트
+     */
+    suspend fun updateExerciseImageUrl(exerciseId: String, exerciseImg: String?): Exercise
 }
 
 class ExerciseRepositoryImpl(
@@ -139,7 +144,20 @@ class ExerciseRepositoryImpl(
                 .insert(details)
         }
     }
-    
+
+    override suspend fun updateExerciseImageUrl(
+        exerciseId: String,
+        exerciseImg: String?
+    ): Exercise = withContext(ioDispatcher) {
+        supabaseClient
+            .from(EXERCISES_TABLE)
+            .update(mapOf("exercise_img" to exerciseImg)) {
+                select()
+                filter { eq("id", exerciseId) }
+            }
+            .decodeSingle<Exercise>()
+    }
+
     /**
      * 새 운동에 대한 기본 exercise_details 템플릿 생성
      */

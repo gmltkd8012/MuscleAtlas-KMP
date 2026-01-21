@@ -12,10 +12,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Exercise(
-    val id: String,
-    val name: String,
-    @SerialName("created_at")
-    val createdAt: String? = null,
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("exercise_img") val exerciseImg: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
 )
 
 /**
@@ -23,7 +23,8 @@ data class Exercise(
  */
 @Serializable
 data class ExerciseInsert(
-    val name: String,
+    @SerialName("name") val name: String,
+    @SerialName("exercise_img") val exerciseImg: String? = null,
 )
 
 /**

@@ -51,8 +51,10 @@ fun MemberScreen(
     val colorScheme = MaterialTheme.colorScheme
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isNavigating by remember { mutableStateOf(false) }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        isNavigating = false
         viewModel.loadMembers()
     }
 
@@ -102,7 +104,12 @@ fun MemberScreen(
                     ) { member ->
                         MemberListItem(
                             title = member.name,
-                            onClick = { onNavigateToDetail(member.id) },
+                            onClick = {
+                                if (!isNavigating) {
+                                    isNavigating = true
+                                    onNavigateToDetail(member.id)
+                                }
+                            },
                         )
                     }
                 }

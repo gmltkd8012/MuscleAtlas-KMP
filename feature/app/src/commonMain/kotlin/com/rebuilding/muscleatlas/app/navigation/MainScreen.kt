@@ -37,7 +37,7 @@ fun MainScreen(
     onNavigateToAppInfo: () -> Unit = {},
     onNavigateToWorkoutDetail: (exerciseId: String) -> Unit,
     onNavigateToMemberDetail: (memberId: String) -> Unit,
-    onNavigateToGroup: () -> Unit,
+    onNavigateToGroup: (groupId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -55,7 +55,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun WorkoutScreen(
     viewModel: WorkoutViewModel = koinViewModel(),
     onNavigateToDetail: (exerciseId: String) -> Unit,
-    onNavigateToGroup: () -> Unit,
+    onNavigateToGroup: (groupId: String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colorScheme = MaterialTheme.colorScheme
@@ -63,18 +63,10 @@ fun WorkoutScreen(
     val exerciseSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isNavigating by remember { mutableStateOf(false) }
 
-    var selectedGroupId by remember { mutableStateOf("") }
-
     // 이벤트 처리
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         isNavigating = false
         viewModel.loadExerciseGroups()
-    }
-
-    LaunchedEffect(state.exerciseGroups) {
-        if (state.exerciseGroups.isNotEmpty()) {
-            selectedGroupId = state.exerciseGroups.first().id
-        }
     }
 
     // SideEffect 처리
@@ -112,10 +104,10 @@ fun WorkoutScreen(
                         items = state.exerciseGroups,
                         key = { it.id }
                     ) { group ->
-                        val isSelected = selectedGroupId == group.id
+                        val isSelected = state.selectedGroupId == group.id
                         FilterChip(
                             selected = isSelected,
-                            onClick = { selectedGroupId = group.id },
+                            onClick = { viewModel.selectGroup(group.id) },
                             label = {
                                 Text(
                                     text = group.name,
@@ -157,7 +149,7 @@ fun WorkoutScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     IconButton(
-                        onClick = onNavigateToGroup,
+                        onClick = { onNavigateToGroup(state.selectedGroupId) },
                         modifier = Modifier.size(40.dp)
                     ) {
                         Icon(

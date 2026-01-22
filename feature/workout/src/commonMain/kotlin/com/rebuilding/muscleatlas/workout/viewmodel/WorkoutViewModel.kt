@@ -47,8 +47,26 @@ class WorkoutViewModel(
                     Logger.e(TAG, "운동 그룹 목록 로드 실패", e)
                 }
                 .collect { groups ->
-                    reduceState { copy(exerciseGroups = groups) }
+                    reduceState {
+                        copy(
+                            exerciseGroups = groups,
+                            selectedGroupId = if (selectedGroupId.isEmpty() && groups.isNotEmpty()) {
+                                groups.first().id
+                            } else {
+                                selectedGroupId
+                            }
+                        )
+                    }
                 }
+        }
+    }
+
+    /**
+     * 그룹 선택
+     */
+    fun selectGroup(groupId: String) {
+        launch {
+            reduceState { copy(selectedGroupId = groupId) }
         }
     }
 
@@ -84,6 +102,7 @@ data class WorkoutState(
     val isLoading: Boolean = false,
     val exercises: List<Exercise> = emptyList(),
     val exerciseGroups: List<ExerciseGroup> = emptyList(),
+    val selectedGroupId: String = "",
 )
 
 sealed interface WorkoutSideEffect {

@@ -38,11 +38,10 @@ class GroupViewModel(
                     Logger.e(TAG, "운동 그룹 목록 로드 실패", e)
                 }
                 .collect { groups ->
-                    Logger.d(TAG, "데이터가져옴 $groups")
                     reduceState {
                         copy(
                             isLoading = false,
-                            exerciseGroups = groups
+                            exerciseGroups = groups.sortedBy { it.createdAt }
                         )
                     }
                 }

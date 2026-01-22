@@ -33,6 +33,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,17 +55,26 @@ import org.koin.compose.viewmodel.koinViewModel
 fun WorkoutScreen(
     viewModel: WorkoutViewModel = koinViewModel(),
     onNavigateToDetail: (exerciseId: String) -> Unit,
+    onNavigateToGroup: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val colorScheme = MaterialTheme.colorScheme
     var showExerciseBottomSheet by remember { mutableStateOf(false) }
-    var showGroupBottomSheet by remember { mutableStateOf(false) }
     val exerciseSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val groupSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isNavigating by remember { mutableStateOf(false) }
 
+    var selectedGroupId by remember { mutableStateOf("") }
+
+    // 이벤트 처리
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         isNavigating = false
+        viewModel.loadExerciseGroups()
+    }
+
+    LaunchedEffect(state.exerciseGroups) {
+        if (state.exerciseGroups.isNotEmpty()) {
+            selectedGroupId = state.exerciseGroups.first().id
+        }
     }
 
     // SideEffect 처리
@@ -75,12 +85,6 @@ fun WorkoutScreen(
             }
             is WorkoutSideEffect.HideAddExerciseSheet -> {
                 showExerciseBottomSheet = false
-            }
-            is WorkoutSideEffect.ShowAddGroupSheet -> {
-                showGroupBottomSheet = true
-            }
-            is WorkoutSideEffect.HideAddGroupSheet -> {
-                showGroupBottomSheet = false
             }
         }
     }
@@ -93,72 +97,76 @@ fun WorkoutScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // 즐겨찾기 그룹 LazyRow
-            LazyRow(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                // 추가 버튼
-                item {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .background(
-                                color = colorScheme.primaryContainer,
-                                shape = CircleShape
-                            )
-                            .border(
-                                width = 1.dp,
-                                color = colorScheme.outline.copy(alpha = 0.2f),
-                                shape = CircleShape
+                LazyRow(
+                    modifier = Modifier.weight(1f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    // 그룹 목록
+                    items(
+                        items = state.exerciseGroups,
+                        key = { it.id }
+                    ) { group ->
+                        val isSelected = selectedGroupId == group.id
+                        FilterChip(
+                            selected = isSelected,
+                            onClick = { selectedGroupId = group.id },
+                            label = {
+                                Text(
+                                    text = group.name,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            },
+                            colors = FilterChipDefaults.filterChipColors(
+                                containerColor = colorScheme.surface,
+                                labelColor = colorScheme.onSurface,
+                                selectedContainerColor = colorScheme.primaryContainer,
+                                selectedLabelColor = colorScheme.onPrimaryContainer,
                             ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        IconButton(
-                            onClick = { viewModel.onAddGroupClick() },
-                            modifier = Modifier.size(40.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "그룹 추가",
-                                tint = colorScheme.onPrimaryContainer,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
+                            border = FilterChipDefaults.filterChipBorder(
+                                enabled = true,
+                                selected = isSelected,
+                                borderColor = colorScheme.outline.copy(alpha = 0.3f),
+                                selectedBorderColor = colorScheme.primary,
+                                borderWidth = 1.dp,
+                                selectedBorderWidth = 1.5.dp,
+                            ),
+                            shape = RoundedCornerShape(20.dp)
+                        )
                     }
                 }
 
-                // 그룹 목록
-                items(
-                    items = state.exerciseGroups,
-                    key = { it.id }
-                ) { group ->
-                    FilterChip(
-                        selected = false,
-                        onClick = { },
-                        label = {
-                            Text(
-                                text = group.name,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = colorScheme.surface,
-                            labelColor = colorScheme.onSurface,
-                            selectedContainerColor = colorScheme.primaryContainer,
-                            selectedLabelColor = colorScheme.onPrimaryContainer,
-                        ),
-                        border = FilterChipDefaults.filterChipBorder(
-                            enabled = true,
-                            selected = true,
-                            borderColor = colorScheme.outline.copy(alpha = 0.3f),
-                            selectedBorderColor = colorScheme.primary,
-                            borderWidth = 1.dp,
-                            selectedBorderWidth = 1.dp,
+                // 추가 버튼 오른쪽 고정
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(
+                            color = colorScheme.primaryContainer,
+                            shape = CircleShape
                         )
-                    )
+                        .border(
+                            width = 1.dp,
+                            color = colorScheme.outline.copy(alpha = 0.2f),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    IconButton(
+                        onClick = onNavigateToGroup,
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "그룹 추가",
+                            tint = colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
             }
 
@@ -241,22 +249,6 @@ fun WorkoutScreen(
             )
         }
     }
-
-    // 그룹 추가 BottomSheet
-    if (showGroupBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showGroupBottomSheet = false },
-            sheetState = groupSheetState,
-            containerColor = colorScheme.surface,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            AddGroupSheetContent(
-                onAddClick = { name ->
-                    viewModel.addExerciseGroup(name)
-                },
-            )
-        }
-    }
 }
 
 @Composable
@@ -283,47 +275,6 @@ private fun AddExerciseSheetContent(
             value = name,
             labelText = "웨이트 종목",
             hintText = "종목을 입력하세요",
-            onValueChanged = { name = it },
-            onDelete = { name = "" }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = { onAddClick(name) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = name.isNotBlank(),
-            shape = RoundedCornerShape(12.dp),
-        ) {
-            Text("추가")
-        }
-    }
-}
-
-@Composable
-private fun AddGroupSheetContent(
-    onAddClick: (name: String) -> Unit,
-) {
-    var name by remember { mutableStateOf("") }
-    val colorScheme = MaterialTheme.colorScheme
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorScheme.surface)
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 32.dp),
-    ) {
-        Text(
-            text = "그룹 추가",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(bottom = 16.dp),
-        )
-
-        BaseTextField(
-            value = name,
-            labelText = "그룹명",
-            hintText = "그룹명을 입력하세요",
             onValueChanged = { name = it },
             onDelete = { name = "" }
         )

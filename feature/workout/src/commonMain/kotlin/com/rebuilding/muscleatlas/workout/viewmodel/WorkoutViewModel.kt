@@ -60,15 +60,6 @@ class WorkoutViewModel(
             sendSideEffect(WorkoutSideEffect.ShowAddExerciseSheet)
         }
     }
-
-    /**
-     * 그룹 추가 버튼 클릭
-     */
-    fun onAddGroupClick() {
-        launch {
-            sendSideEffect(WorkoutSideEffect.ShowAddGroupSheet)
-        }
-    }
     
     /**
      * 운동 추가
@@ -87,22 +78,6 @@ class WorkoutViewModel(
             }
         }
     }
-
-    /**
-     * 운동 그룹 추가
-     */
-    fun addExerciseGroup(name: String) {
-        launch {
-            try {
-                exerciseGroupRepository.insertExerciseGroup(name)
-                sendSideEffect(WorkoutSideEffect.HideAddGroupSheet)
-                // 목록 다시 로드
-                loadExerciseGroups()
-            } catch (e: Exception) {
-                Logger.e(TAG, "운동 그룹 추가 실패", e)
-            }
-        }
-    }
 }
 
 data class WorkoutState(
@@ -114,6 +89,4 @@ data class WorkoutState(
 sealed interface WorkoutSideEffect {
     data object ShowAddExerciseSheet : WorkoutSideEffect
     data object HideAddExerciseSheet : WorkoutSideEffect
-    data object ShowAddGroupSheet : WorkoutSideEffect
-    data object HideAddGroupSheet : WorkoutSideEffect
 }

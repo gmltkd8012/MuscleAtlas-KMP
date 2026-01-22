@@ -4,6 +4,7 @@ import com.rebuilding.muscleatlas.data.model.ExerciseGroup
 import com.rebuilding.muscleatlas.data.model.ExerciseGroupInsert
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -39,9 +40,7 @@ class ExerciseGroupRepositoryImpl(
     override fun getExerciseGroups(): Flow<List<ExerciseGroup>> = flow {
         val groups = supabaseClient
             .from(EXERCISE_GROUPS_TABLE)
-            .select {
-                //order("created_at")
-            }
+            .select()
             .decodeList<ExerciseGroup>()
         emit(groups)
     }.flowOn(ioDispatcher)

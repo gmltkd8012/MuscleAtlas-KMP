@@ -1,5 +1,7 @@
 package com.rebuilding.muscleatlas.data.di
 
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupRepository
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupRepositoryImpl
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepositoryImpl
 import com.rebuilding.muscleatlas.data.repository.MemberExerciseRepository
@@ -24,6 +26,12 @@ val dataModule = module {
     }
     single<ExerciseRepository> {
         ExerciseRepositoryImpl(
+            supabaseClient = get(),
+            ioDispatcher = get(DispatcherQualifier.Io),
+        )
+    }
+    single<ExerciseGroupRepository> {
+        ExerciseGroupRepositoryImpl(
             supabaseClient = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
         )

@@ -1,6 +1,8 @@
 package com.rebuilding.muscleatlas.workout.viewmodel
 
 import com.rebuilding.muscleatlas.data.model.Exercise
+import com.rebuilding.muscleatlas.data.model.ExerciseGroup
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupRepository
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
 import com.rebuilding.muscleatlas.ui.util.Logger
@@ -10,6 +12,7 @@ import kotlinx.coroutines.launch
 
 class WorkoutViewModel(
     private val exerciseRepository: ExerciseRepository,
+    private val exerciseGroupRepository: ExerciseGroupRepository,
 ) : StateViewModel<WorkoutState, WorkoutSideEffect>(WorkoutState()) {
 
     companion object {
@@ -18,6 +21,7 @@ class WorkoutViewModel(
 
     init {
         loadExercises()
+        loadExerciseGroups()
     }
 
     fun loadExercises() {
@@ -36,12 +40,33 @@ class WorkoutViewModel(
         }
     }
     
+    fun loadExerciseGroups() {
+        launch {
+            exerciseGroupRepository.getExerciseGroups()
+                .catch { e ->
+                    Logger.e(TAG, "운동 그룹 목록 로드 실패", e)
+                }
+                .collect { groups ->
+                    reduceState { copy(exerciseGroups = groups) }
+                }
+        }
+    }
+
     /**
      * 운동 추가 버튼 클릭
      */
     fun onAddExerciseClick() {
         launch {
             sendSideEffect(WorkoutSideEffect.ShowAddExerciseSheet)
+        }
+    }
+
+    /**
+     * 그룹 추가 버튼 클릭
+     */
+    fun onAddGroupClick() {
+        launch {
+            sendSideEffect(WorkoutSideEffect.ShowAddGroupSheet)
         }
     }
     
@@ -62,14 +87,33 @@ class WorkoutViewModel(
             }
         }
     }
+
+    /**
+     * 운동 그룹 추가
+     */
+    fun addExerciseGroup(name: String) {
+        launch {
+            try {
+                exerciseGroupRepository.insertExerciseGroup(name)
+                sendSideEffect(WorkoutSideEffect.HideAddGroupSheet)
+                // 목록 다시 로드
+                loadExerciseGroups()
+            } catch (e: Exception) {
+                Logger.e(TAG, "운동 그룹 추가 실패", e)
+            }
+        }
+    }
 }
 
 data class WorkoutState(
     val isLoading: Boolean = false,
     val exercises: List<Exercise> = emptyList(),
+    val exerciseGroups: List<ExerciseGroup> = emptyList(),
 )
 
 sealed interface WorkoutSideEffect {
     data object ShowAddExerciseSheet : WorkoutSideEffect
     data object HideAddExerciseSheet : WorkoutSideEffect
+    data object ShowAddGroupSheet : WorkoutSideEffect
+    data object HideAddGroupSheet : WorkoutSideEffect
 }

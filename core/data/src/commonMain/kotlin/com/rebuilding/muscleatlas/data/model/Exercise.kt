@@ -69,3 +69,25 @@ data class ExerciseDetail(
     @SerialName("created_at")
     val createdAt: String? = null,
 )
+
+/**
+ * Supabase exercise_groups 테이블 매핑 모델
+ *
+ * @property id 그룹 고유 ID
+ * @property name 그룹명
+ * @property createdAt 생성 시간
+ */
+@Serializable
+data class ExerciseGroup(
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("created_at") val createdAt: Long,
+)
+
+/**
+ * 운동 그룹 추가용 DTO (id는 Supabase에서 자동 생성)
+ */
+@Serializable
+data class ExerciseGroupInsert(
+    @SerialName("name") val name: String,
+)

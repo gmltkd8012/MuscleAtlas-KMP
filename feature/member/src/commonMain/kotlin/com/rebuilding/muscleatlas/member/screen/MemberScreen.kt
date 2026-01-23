@@ -10,17 +10,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,64 +76,71 @@ fun MemberScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorScheme.background),
-    ) {
-        when {
-            state.isLoading && state.members.isEmpty() -> {
-                // 초기 로딩
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center),
-                    color = colorScheme.primary,
-                )
-            }
-            state.members.isEmpty() -> {
-                // 빈 상태
-                Text(
-                    text = "등록된 회원이 없습니다\n회원을 추가해보세요!",
-                    modifier = Modifier.align(Alignment.Center),
-                    color = colorScheme.onSurfaceVariant,
-                )
-            }
-
-            else -> {
-                // 회원 목록
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    items(
-                        items = state.members,
-                        key = { it.id }
-                    ) { member ->
-                        MemberListItem(
-                            title = member.name,
-                            onClick = {
-                                if (!isNavigating) {
-                                    isNavigating = true
-                                    onNavigateToDetail(member.id)
-                                }
-                            },
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("회원") },
+                actions = {
+                    TextButton(
+                        onClick = { viewModel.onAddMemberClick() },
+                        enabled = true,
+                    ) {
+                        Text(
+                            text = "추가",
+                            color = colorScheme.primary,
                         )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = colorScheme.background,
+                ),
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            when {
+                state.isLoading && state.members.isEmpty() -> {
+                    // 초기 로딩
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = colorScheme.primary,
+                    )
+                }
+                state.members.isEmpty() -> {
+                    // 빈 상태
+                    Text(
+                        text = "등록된 회원이 없습니다\n회원을 추가해보세요!",
+                        modifier = Modifier.align(Alignment.Center),
+                        color = colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                else -> {
+                    // 회원 목록
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        items(
+                            items = state.members,
+                            key = { it.id }
+                        ) { member ->
+                            MemberListItem(
+                                title = member.name,
+                                onClick = {
+                                    if (!isNavigating) {
+                                        isNavigating = true
+                                        onNavigateToDetail(member.id)
+                                    }
+                                },
+                            )
+                        }
                     }
                 }
             }
-        }
-
-        // 회원 추가 FAB
-        FloatingActionButton(
-            onClick = { viewModel.onAddMemberClick() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            containerColor = colorScheme.primary,
-            contentColor = colorScheme.onPrimary,
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "회원 추가",
-            )
         }
     }
 
@@ -195,8 +207,9 @@ private fun AddMemberSheetContent(
 
         Button(
             onClick = { onAddClick(name, memo) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(56.dp),
             enabled = name.isNotBlank(),
+            shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorScheme.primary,
                 contentColor = colorScheme.onPrimary,

@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,28 +37,40 @@ fun SettingScreen(
     onNavigateToAccount: () -> Unit = {},
     onNavigateToAppInfo: () -> Unit = {},
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-    ) {
-        // 계정 정보 메뉴
-        SettingMenuItem(
-            icon = Icons.Default.Person,
-            title = "계정 정보",
-            subtitle = "로그인 정보 확인 및 로그아웃",
-            onClick = onNavigateToAccount,
-        )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("설정") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+        ) {
+            // 계정 정보 메뉴
+            SettingMenuItem(
+                icon = Icons.Default.Person,
+                title = "계정 정보",
+                subtitle = "로그인 정보 확인 및 로그아웃",
+                onClick = onNavigateToAccount,
+            )
 
-        Spacer(modifier = Modifier.size(12.dp))
+            Spacer(modifier = Modifier.size(12.dp))
 
-        // 앱 정보 메뉴
-        SettingMenuItem(
-            icon = Icons.Default.Info,
-            title = "앱 정보",
-            subtitle = "버전 정보, 이용약관, 사업자 정보",
-            onClick = onNavigateToAppInfo,
-        )
+            // 앱 정보 메뉴
+            SettingMenuItem(
+                icon = Icons.Default.Info,
+                title = "앱 정보",
+                subtitle = "버전 정보, 이용약관, 사업자 정보",
+                onClick = onNavigateToAppInfo,
+            )
+        }
     }
 }
 

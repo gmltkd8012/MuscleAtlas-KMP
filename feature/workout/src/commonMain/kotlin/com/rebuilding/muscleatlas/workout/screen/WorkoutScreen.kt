@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
@@ -29,10 +30,10 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -91,13 +92,31 @@ fun WorkoutScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorScheme.background),
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("운동") },
+                actions = {
+                    TextButton(
+                        onClick = { viewModel.onAddExerciseClick() },
+                        enabled = true,
+                    ) {
+                        Text(
+                            text = "추가",
+                            color = colorScheme.primary,
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = colorScheme.background,
+                ),
+            )
+        }
+    ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
             Row(
                 modifier = Modifier
@@ -221,21 +240,6 @@ fun WorkoutScreen(
                     }
                 }
             }
-        }
-        
-        // 운동 추가 FAB
-        FloatingActionButton(
-            onClick = { viewModel.onAddExerciseClick() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            containerColor = colorScheme.primary,
-            contentColor = colorScheme.onPrimary,
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "운동 추가",
-            )
         }
     }
     

@@ -23,7 +23,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -31,20 +34,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rebuilding.muscleatlas.data.model.ExerciseGroup
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.workout.component.WorkoutListItem
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutSideEffect
@@ -239,20 +248,28 @@ fun WorkoutScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             AddExerciseSheetContent(
-                onAddClick = { name ->
-                    viewModel.addExercise(name)
+                groups = state.exerciseGroups,
+                onAddClick = { name, groupId ->
+                    viewModel.addExercise(name, groupId)
                 },
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddExerciseSheetContent(
-    onAddClick: (name: String) -> Unit,
+    groups: List<ExerciseGroup>,
+    onAddClick: (name: String, groupId: String?) -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
+    var selectedGroup by remember { mutableStateOf<ExerciseGroup?>(null) }
+    var expanded by remember { mutableStateOf(false) }
     val colorScheme = MaterialTheme.colorScheme
+
+    // "전체" 그룹 제외한 실제 그룹 목록만 필터링
+    val actualGroups = groups.filter { it.id.isNotEmpty() }
 
     Column(
         modifier = Modifier
@@ -275,11 +292,63 @@ private fun AddExerciseSheetContent(
             onDelete = { name = "" }
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // 그룹 선택 드롭다운
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = selectedGroup?.name ?: "그룹 선택 (선택사항)",
+                onValueChange = { },
+                readOnly = true,
+                label = { Text("그룹") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.background(colorScheme.background),
+            ) {
+                // "선택 안함" 옵션
+                DropdownMenuItem(
+                    text = { Text("선택 안함") },
+                    onClick = {
+                        selectedGroup = null
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
+
+                // 그룹 목록
+                actualGroups.forEach { group ->
+                    DropdownMenuItem(
+                        text = { Text(group.name) },
+                        onClick = {
+                            selectedGroup = group
+                            expanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { onAddClick(name) },
-            modifier = Modifier.fillMaxWidth(),
+            onClick = { onAddClick(name, selectedGroup?.id) },
+            modifier = Modifier.fillMaxWidth().height(56.dp),
             enabled = name.isNotBlank(),
             shape = RoundedCornerShape(12.dp),
         ) {

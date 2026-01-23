@@ -120,14 +120,23 @@ class WorkoutViewModel(
     /**
      * 운동 추가
      */
-    fun addExercise(name: String) {
+    fun addExercise(name: String, groupId: String?) {
         launch {
             try {
                 reduceState { copy(isLoading = true) }
-                exerciseRepository.insertExercise(name)
+                val newExercise = exerciseRepository.insertExercise(name)
+
+                // 그룹이 선택된 경우, 해당 그룹에 운동 추가
+                if (!groupId.isNullOrEmpty()) {
+                    exerciseGroupExerciseRepository.addExercisesToGroup(
+                        groupId = groupId,
+                        exerciseIds = listOf(newExercise.id)
+                    )
+                }
+
                 sendSideEffect(WorkoutSideEffect.HideAddExerciseSheet)
                 // 목록 다시 로드
-                loadExercisesByGroup(state.value.selectedGroupId)
+                loadExerciseGroups()
             } catch (e: Exception) {
                 Logger.e(TAG, "운동 추가 실패", e)
                 reduceState { copy(isLoading = false) }

@@ -82,7 +82,18 @@ data class ExerciseGroup(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("created_at") val createdAt: Long,
-)
+) {
+    companion object {
+        /**
+         * 전체 운동을 표시하는 가상 그룹 (필터링 없음)
+         */
+        val ALL = ExerciseGroup(
+            id = "",
+            name = "전체",
+            createdAt = 0L
+        )
+    }
+}
 
 /**
  * 운동 그룹 추가용 DTO (id는 Supabase에서 자동 생성)
@@ -90,4 +101,30 @@ data class ExerciseGroup(
 @Serializable
 data class ExerciseGroupInsert(
     @SerialName("name") val name: String,
+)
+
+/**
+ * Supabase exercise_group_exercises junction table model
+ * 운동과 그룹 간의 관계를 나타내는 중간 테이블
+ *
+ * @property id 관계 고유 ID
+ * @property groupId 그룹 ID (exercise_groups 테이블 참조)
+ * @property exerciseId 운동 ID (exercises 테이블 참조)
+ * @property createdBy 생성 시간 (Unix timestamp, nullable)
+ */
+@Serializable
+data class ExerciseGroupExercise(
+    @SerialName("id") val id: String,
+    @SerialName("group_id") val groupId: String,
+    @SerialName("exercise_id") val exerciseId: String,
+    @SerialName("created_by") val createdBy: Long? = null,
+)
+
+/**
+ * 운동-그룹 관계 추가용 DTO (id, created_by는 Supabase에서 자동 생성)
+ */
+@Serializable
+data class ExerciseGroupExerciseInsert(
+    @SerialName("group_id") val groupId: String,
+    @SerialName("exercise_id") val exerciseId: String,
 )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -94,6 +95,7 @@ fun WorkoutScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 LazyRow(
                     modifier = Modifier.weight(1f),
@@ -132,6 +134,8 @@ fun WorkoutScreen(
                         )
                     }
                 }
+
+                Spacer(Modifier.width(8.dp))
 
                 // 추가 버튼 오른쪽 고정
                 Box(

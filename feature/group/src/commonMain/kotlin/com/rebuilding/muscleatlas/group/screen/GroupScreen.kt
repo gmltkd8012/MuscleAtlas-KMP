@@ -3,6 +3,7 @@ package com.rebuilding.muscleatlas.group.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.group.component.GroupListItem
+import com.rebuilding.muscleatlas.group.component.WorkoutInGroupItem
 import com.rebuilding.muscleatlas.group.viewmodel.GroupSideEffect
 import com.rebuilding.muscleatlas.group.viewmodel.GroupViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,6 +57,9 @@ fun GroupScreen(
     var showGroupAddBottomSheet by remember { mutableStateOf(false) }
     val groupAddSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    var showExerciseSelectBottomSheet by remember { mutableStateOf(false) }
+    val exerciseSelectSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is GroupSideEffect.ShowAddGroupSheet -> {
@@ -62,6 +67,12 @@ fun GroupScreen(
             }
             is GroupSideEffect.HideAddGroupSheet -> {
                 showGroupAddBottomSheet = false
+            }
+            is GroupSideEffect.ShowExerciseSelectSheet -> {
+                showExerciseSelectBottomSheet = true
+            }
+            is GroupSideEffect.HideExerciseSelectSheet -> {
+                showExerciseSelectBottomSheet = false
             }
         }
     }
@@ -72,7 +83,7 @@ fun GroupScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "그룹 추가",
+                        text = "대분류 관리",
                         color = colorScheme.onBackground,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -142,7 +153,8 @@ fun GroupScreen(
                         ) { group ->
                             GroupListItem(
                                 title = group.name,
-                                onClick = {}
+                                onClick = { viewModel.onSelectExercisesClick(group.id) },
+                                exerciseCount = state.groupExerciseCounts[group.id] ?: 0
                             )
                         }
                     }
@@ -165,6 +177,101 @@ fun GroupScreen(
                     viewModel.addExerciseGroup(name)
                 },
             )
+        }
+    }
+
+    // 운동 선택 BottomSheet
+    if (showExerciseSelectBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showExerciseSelectBottomSheet = false },
+            sheetState = exerciseSelectSheetState,
+            containerColor = colorScheme.surface,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            ExerciseSelectSheetContent(
+                exercises = state.exercises,
+                selectedExerciseIds = state.selectedExerciseIds,
+                onExerciseToggle = { exerciseId ->
+                    viewModel.toggleExerciseSelection(exerciseId)
+                },
+                onSaveClick = {
+                    viewModel.saveSelectedExercises()
+                },
+                onDeleteClick = {
+                    viewModel.deleteExerciseGroup()
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ExerciseSelectSheetContent(
+    exercises: List<com.rebuilding.muscleatlas.data.model.Exercise>,
+    selectedExerciseIds: Set<String>,
+    onExerciseToggle: (String) -> Unit,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorScheme.surface)
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 32.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "운동 선택",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.weight(1f),
+            )
+
+            TextButton(onClick = onDeleteClick) {
+                Text(
+                    text = "삭제",
+                    color = colorScheme.error,
+                )
+            }
+        }
+
+        // 운동 목록
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f, fill = false)
+                .height(400.dp),
+        ) {
+            items(
+                items = exercises,
+                key = { it.id }
+            ) { exercise ->
+                WorkoutInGroupItem(
+                    title = exercise.name,
+                    imgUrl = exercise.exerciseImg,
+                    isChecked = selectedExerciseIds.contains(exercise.id),
+                    onCheckedChange = { onExerciseToggle(exercise.id) }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 저장 버튼
+        Button(
+            onClick = onSaveClick,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            enabled = selectedExerciseIds.isNotEmpty(),
+            shape = RoundedCornerShape(12.dp),
+        ) {
+            Text("저장 (${selectedExerciseIds.size})")
         }
     }
 }

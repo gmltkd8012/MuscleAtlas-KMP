@@ -7,49 +7,67 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
+import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
 
+/**
+ * Group 모듈용 운동 선택 리스트 아이템 (체크박스 포함)
+ * - WorkoutListItem과 동일한 디자인에 체크박스 추가
+ */
 @Composable
-internal fun GroupListItem(
+fun WorkoutInGroupItem(
     title: String,
-    onClick: () -> Unit,
+    imgUrl: String?,
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    exerciseCount: Int = 0,
 ) {
     val colorScheme = MaterialTheme.colorScheme
+    val photoBoxState = rememberPhotoBoxState(initialUrl = imgUrl)
 
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(72.dp)
-                .clickable(onClick = onClick)
+                .clickable { onCheckedChange(!isChecked) }
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Star,
-                contentDescription = "그룹",
-                tint = colorScheme.onBackground,
-            )
+            Box(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(colorScheme.surface),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (imgUrl != null) {
+                    PhotoBox(
+                        state = photoBoxState,
+                        modifier = Modifier.size(64.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        enabled = false,
+                    )
+                } else {
+                    Text(
+                        text = title.firstOrNull()?.uppercase() ?: "",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = colorScheme.primary,
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.width(16.dp))
 
@@ -60,11 +78,9 @@ internal fun GroupListItem(
                 modifier = Modifier.weight(1f),
             )
 
-            Text(
-                text = "$exerciseCount",
-                style = MaterialTheme.typography.bodyLarge,
-                color = colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(end = 8.dp)
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
             )
         }
 

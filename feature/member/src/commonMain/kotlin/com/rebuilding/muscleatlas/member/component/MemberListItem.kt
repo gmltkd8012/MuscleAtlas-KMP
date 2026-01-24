@@ -45,7 +45,7 @@ fun MemberListItem(
         ) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(64.dp)
                     .clip(CircleShape)
                     .background(colorScheme.surface),
                 contentAlignment = Alignment.Center,
@@ -61,11 +61,11 @@ fun MemberListItem(
                 }
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleMedium,
                 color = colorScheme.onBackground,
             )
         }

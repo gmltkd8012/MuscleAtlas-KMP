@@ -219,6 +219,8 @@ fun WorkoutScreen(
                 }
 
                 else -> {
+                    Spacer(Modifier.height(4.dp))
+
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                     ) {

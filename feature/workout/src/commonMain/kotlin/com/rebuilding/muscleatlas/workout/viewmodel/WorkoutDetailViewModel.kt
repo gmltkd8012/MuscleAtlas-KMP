@@ -2,6 +2,8 @@ package com.rebuilding.muscleatlas.workout.viewmodel
 
 import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
+import com.rebuilding.muscleatlas.data.model.ExerciseMovementMechanic
+import com.rebuilding.muscleatlas.data.repository.ExerciseMovementMechanicRepository
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.data.repository.StorageRepository
 import com.rebuilding.muscleatlas.ui.base.StateViewModel
@@ -12,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class WorkoutDetailViewModel(
     private val exerciseRepository: ExerciseRepository,
+    private val movementMechanicRepository: ExerciseMovementMechanicRepository,
     private val storageRepository: StorageRepository,
 ) : StateViewModel<WorkoutDetailState, WorkoutDetailSideEffect>(WorkoutDetailState()) {
 
@@ -57,39 +60,50 @@ class WorkoutDetailViewModel(
                     reduceState { copy(isLoading = false) }
                 }
                 .collect { details ->
-                    // movement_type, contraction_type 순서로 그룹핑 (고정 순서 적용, LinkedHashMap으로 순서 유지)
-                    val groupedDetails = details
-                        .groupBy { it.movementType }
-                        .entries
-                        .sortedBy { (key, _) ->
-                            MOVEMENT_TYPE_ORDER.indexOfFirst { order -> key.contains(order) }
-                                .takeIf { it >= 0 } ?: Int.MAX_VALUE
+                    // Movement Mechanics 조회
+                    movementMechanicRepository.getMovementMechanics(exerciseId)
+                        .collect { mechanics ->
+                            val groupedDetails = groupAndSortDetails(details)
+                            reduceState {
+                                copy(
+                                    isLoading = false,
+                                    details = details,
+                                    groupedDetails = groupedDetails,
+                                    movementMechanics = mechanics,
+                                )
+                            }
                         }
-                        .fold(linkedMapOf<String, Map<String, List<ExerciseDetail>>>()) { acc, (movementType, items) ->
-                            val sortedContractionMap = items
-                                .groupBy { it.contractionType }
-                                .entries
-                                .sortedBy { (key, _) ->
-                                    // key가 ORDER 항목을 포함하는지 체크 (예: "Eccentric (내림)"이 "Eccentric" 포함)
-                                    CONTRACTION_TYPE_ORDER.indexOfFirst { order -> key.contains(order) }
-                                        .takeIf { it >= 0 } ?: Int.MAX_VALUE
-                                }
-                                .fold(linkedMapOf<String, List<ExerciseDetail>>()) { innerAcc, (contractionType, detailList) ->
-                                    innerAcc[contractionType] = detailList
-                                    innerAcc
-                                }
-                            acc[movementType] = sortedContractionMap
-                            acc
-                        }
-                    reduceState {
-                        copy(
-                            isLoading = false,
-                            details = details,
-                            groupedDetails = groupedDetails,
-                        )
-                    }
                 }
         }
+    }
+
+    /**
+     * ExerciseDetail 리스트를 movement_type, contraction_type 순서로 그룹핑
+     */
+    private fun groupAndSortDetails(details: List<ExerciseDetail>): Map<String, Map<String, List<ExerciseDetail>>> {
+        return details
+            .groupBy { it.movementType }
+            .entries
+            .sortedBy { (key, _) ->
+                MOVEMENT_TYPE_ORDER.indexOfFirst { order -> key.contains(order) }
+                    .takeIf { it >= 0 } ?: Int.MAX_VALUE
+            }
+            .fold(linkedMapOf<String, Map<String, List<ExerciseDetail>>>()) { acc, (movementType, items) ->
+                val sortedContractionMap = items
+                    .groupBy { it.contractionType }
+                    .entries
+                    .sortedBy { (key, _) ->
+                        // key가 ORDER 항목을 포함하는지 체크 (예: "Eccentric (내림)"이 "Eccentric" 포함)
+                        CONTRACTION_TYPE_ORDER.indexOfFirst { order -> key.contains(order) }
+                            .takeIf { it >= 0 } ?: Int.MAX_VALUE
+                    }
+                    .fold(linkedMapOf<String, List<ExerciseDetail>>()) { innerAcc, (contractionType, detailList) ->
+                        innerAcc[contractionType] = detailList
+                        innerAcc
+                    }
+                acc[movementType] = sortedContractionMap
+                acc
+            }
     }
 
     /**
@@ -183,6 +197,7 @@ data class WorkoutDetailState(
     val exercise: Exercise? = null,
     val details: List<ExerciseDetail> = emptyList(),
     val groupedDetails: Map<String, Map<String, List<ExerciseDetail>>> = emptyMap(),
+    val movementMechanics: List<ExerciseMovementMechanic> = emptyList(),
 )
 
 sealed interface WorkoutDetailSideEffect

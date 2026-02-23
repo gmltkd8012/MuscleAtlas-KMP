@@ -128,3 +128,46 @@ data class ExerciseGroupExerciseInsert(
     @SerialName("group_id") val groupId: String,
     @SerialName("exercise_id") val exerciseId: String,
 )
+
+/**
+ * Supabase exercise_movement_mechanics 테이블 매핑 모델
+ *
+ * @property id 고유 ID
+ * @property exerciseId 운동 종목 ID (exercises 테이블 참조)
+ * @property cardType 카드 유형 (PHASE, CONTRACTION)
+ * @property displayOrder 표시 순서
+ * @property label 레이블 (DESCENDING, ASCENDING, LOWERING, LIFTING)
+ * @property value 값 (Flexion, Extension, Eccentric, Concentric)
+ */
+@Serializable
+data class ExerciseMovementMechanic(
+    @SerialName("id")
+    val id: String,
+    @SerialName("exercise_id")
+    val exerciseId: String,
+    @SerialName("card_type")
+    val cardType: String,
+    @SerialName("display_order")
+    val displayOrder: Int,
+    @SerialName("label")
+    val label: String,
+    @SerialName("value")
+    val value: String,
+)
+
+/**
+ * Insert용 DTO (id는 Supabase에서 자동 생성)
+ */
+@Serializable
+data class ExerciseMovementMechanicInsert(
+    @SerialName("exercise_id")
+    val exerciseId: String,
+    @SerialName("card_type")
+    val cardType: String,
+    @SerialName("display_order")
+    val displayOrder: Int,
+    @SerialName("label")
+    val label: String,
+    @SerialName("value")
+    val value: String,
+)

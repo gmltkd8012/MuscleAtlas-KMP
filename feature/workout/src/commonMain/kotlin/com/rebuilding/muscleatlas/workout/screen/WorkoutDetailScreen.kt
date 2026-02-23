@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
+import com.rebuilding.muscleatlas.data.model.ExerciseMovementMechanic
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
 import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
 import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
@@ -208,7 +209,10 @@ fun WorkoutDetailScreen(
                         }
 
                         item {
-                            MovementMechanicsCard(contractionGroups)
+                            MovementMechanicsCard(
+                                contractionGroups = contractionGroups,
+                                movementMechanics = state.movementMechanics
+                            )
                         }
                     }
 
@@ -487,6 +491,7 @@ private fun SectionTitle(title: String) {
 @Composable
 private fun MovementMechanicsCard(
     contractionGroups: Map<String, List<ExerciseDetail>>,
+    movementMechanics: List<ExerciseMovementMechanic>,
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
@@ -494,38 +499,72 @@ private fun MovementMechanicsCard(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Phase Card (Eccentric/Concentric movement phases)
-        val eccentricDetails = contractionGroups["Eccentric"] ?: emptyList()
-        val concentricDetails = contractionGroups["Concentric"] ?: emptyList()
+        if (movementMechanics.isNotEmpty()) {
+            // DB 데이터로 PhaseCard 렌더링
+            val mechanicsByCardType = movementMechanics.groupBy { it.cardType }
 
-        PhaseCard(
-            modifier = Modifier.weight(1f),
-            title = "PHASE",
-            iconColor = colorScheme.tertiary,
-            items = listOf(
-                PhaseItem(
-                    label = "DESCENDING",
-                    value = eccentricDetails.find { it.detailCategory == "Primary" }?.description
-                        ?: "Flexion",
-                ),
-                PhaseItem(
-                    label = "ASCENDING",
-                    value = concentricDetails.find { it.detailCategory == "Primary" }?.description
-                        ?: "Extension",
-                ),
-            ),
-        )
+            // PHASE 카드
+            mechanicsByCardType["PHASE"]?.let { phaseItems ->
+                PhaseCard(
+                    modifier = Modifier.weight(1f),
+                    title = "PHASE",
+                    iconColor = colorScheme.tertiary,
+                    items = phaseItems.map { mechanic ->
+                        PhaseItem(
+                            label = mechanic.label,
+                            value = mechanic.value
+                        )
+                    },
+                )
+            }
 
-        // Contraction Card
-        PhaseCard(
-            modifier = Modifier.weight(1f),
-            title = "CONTRACTION",
-            iconColor = colorScheme.primary,
-            items = listOf(
-                PhaseItem(label = "LOWERING", value = "Eccentric"),
-                PhaseItem(label = "LIFTING", value = "Concentric"),
-            ),
-        )
+            // CONTRACTION 카드
+            mechanicsByCardType["CONTRACTION"]?.let { contractionItems ->
+                PhaseCard(
+                    modifier = Modifier.weight(1f),
+                    title = "CONTRACTION",
+                    iconColor = colorScheme.primary,
+                    items = contractionItems.map { mechanic ->
+                        PhaseItem(
+                            label = mechanic.label,
+                            value = mechanic.value
+                        )
+                    },
+                )
+            }
+        } else {
+            // Fallback: movementMechanics가 없으면 기존 하드코딩 로직 (마이그레이션 중)
+            val eccentricDetails = contractionGroups["Eccentric"] ?: emptyList()
+            val concentricDetails = contractionGroups["Concentric"] ?: emptyList()
+
+            PhaseCard(
+                modifier = Modifier.weight(1f),
+                title = "PHASE",
+                iconColor = colorScheme.tertiary,
+                items = listOf(
+                    PhaseItem(
+                        label = "DESCENDING",
+                        value = eccentricDetails.find { it.detailCategory == "Primary" }?.description
+                            ?: "Flexion"
+                    ),
+                    PhaseItem(
+                        label = "ASCENDING",
+                        value = concentricDetails.find { it.detailCategory == "Primary" }?.description
+                            ?: "Extension"
+                    ),
+                ),
+            )
+
+            PhaseCard(
+                modifier = Modifier.weight(1f),
+                title = "CONTRACTION",
+                iconColor = colorScheme.primary,
+                items = listOf(
+                    PhaseItem(label = "LOWERING", value = "Eccentric"),
+                    PhaseItem(label = "LIFTING", value = "Concentric"),
+                ),
+            )
+        }
     }
 }
 

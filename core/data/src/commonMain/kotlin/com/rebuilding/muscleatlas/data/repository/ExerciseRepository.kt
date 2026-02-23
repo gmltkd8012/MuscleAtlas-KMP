@@ -4,6 +4,7 @@ import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
 import com.rebuilding.muscleatlas.data.model.ExerciseDetailInsert
 import com.rebuilding.muscleatlas.data.model.ExerciseInsert
+import com.rebuilding.muscleatlas.data.model.ExerciseMovementMechanicInsert
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineDispatcher
@@ -56,6 +57,7 @@ interface ExerciseRepository {
 
 class ExerciseRepositoryImpl(
     private val supabaseClient: SupabaseClient,
+    private val movementMechanicRepository: ExerciseMovementMechanicRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) : ExerciseRepository {
 
@@ -129,11 +131,14 @@ class ExerciseRepositoryImpl(
                 select()
             }
             .decodeSingle<Exercise>()
-        
+
         // 2. 기본 exercise_details 템플릿 생성
         val defaultDetails = createDefaultExerciseDetails(exercise.id)
         insertExerciseDetails(defaultDetails)
-        
+
+        // 3. 기본 movement_mechanics 생성
+        createDefaultMovementMechanics(exercise.id)
+
         exercise
     }
     
@@ -276,5 +281,45 @@ class ExerciseRepositoryImpl(
                 description = null,
             ),
         )
+    }
+
+    /**
+     * 새 운동에 대한 기본 movement_mechanics 생성
+     */
+    private suspend fun createDefaultMovementMechanics(exerciseId: String) {
+        val defaultMechanics = listOf(
+            // PHASE 카드
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "PHASE",
+                displayOrder = 0,
+                label = "DESCENDING",
+                value = "Flexion"
+            ),
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "PHASE",
+                displayOrder = 1,
+                label = "ASCENDING",
+                value = "Extension"
+            ),
+            // CONTRACTION 카드
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "CONTRACTION",
+                displayOrder = 0,
+                label = "LOWERING",
+                value = "Eccentric"
+            ),
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "CONTRACTION",
+                displayOrder = 1,
+                label = "LIFTING",
+                value = "Concentric"
+            ),
+        )
+
+        movementMechanicRepository.insertMovementMechanics(defaultMechanics)
     }
 }

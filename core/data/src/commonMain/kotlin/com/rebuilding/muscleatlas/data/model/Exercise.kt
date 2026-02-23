@@ -135,9 +135,10 @@ data class ExerciseGroupExerciseInsert(
  * @property id 고유 ID
  * @property exerciseId 운동 종목 ID (exercises 테이블 참조)
  * @property cardType 카드 유형 (PHASE, CONTRACTION)
+ * @property cardTitle 카드 제목 (동작 구간(Phase), 수축 유형(Contraction))
  * @property displayOrder 표시 순서
- * @property label 레이블 (DESCENDING, ASCENDING, LOWERING, LIFTING)
- * @property value 값 (Flexion, Extension, Eccentric, Concentric)
+ * @property label 레이블 (DESCENDING, ASCENDING, LOWERING, LIFTING) - nullable
+ * @property value 값 (Flexion, Extension, Eccentric, Concentric) - nullable
  */
 @Serializable
 data class ExerciseMovementMechanic(
@@ -147,12 +148,14 @@ data class ExerciseMovementMechanic(
     val exerciseId: String,
     @SerialName("card_type")
     val cardType: String,
+    @SerialName("card_title")
+    val cardTitle: String,
     @SerialName("display_order")
     val displayOrder: Int,
     @SerialName("label")
-    val label: String,
+    val label: String? = null,
     @SerialName("value")
-    val value: String,
+    val value: String? = null,
 )
 
 /**
@@ -164,10 +167,12 @@ data class ExerciseMovementMechanicInsert(
     val exerciseId: String,
     @SerialName("card_type")
     val cardType: String,
+    @SerialName("card_title")
+    val cardTitle: String,
     @SerialName("display_order")
     val displayOrder: Int,
     @SerialName("label")
-    val label: String,
+    val label: String?,
     @SerialName("value")
-    val value: String,
+    val value: String?,
 )

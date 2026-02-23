@@ -292,31 +292,35 @@ class ExerciseRepositoryImpl(
             ExerciseMovementMechanicInsert(
                 exerciseId = exerciseId,
                 cardType = "PHASE",
+                cardTitle = "동작 구간(Phase)",
                 displayOrder = 0,
-                label = "DESCENDING",
-                value = "Flexion"
+                label = null,
+                value = null,
             ),
             ExerciseMovementMechanicInsert(
                 exerciseId = exerciseId,
                 cardType = "PHASE",
+                cardTitle = "동작 구간(Phase)",
                 displayOrder = 1,
-                label = "ASCENDING",
-                value = "Extension"
+                label = null,
+                value = null,
             ),
             // CONTRACTION 카드
             ExerciseMovementMechanicInsert(
                 exerciseId = exerciseId,
                 cardType = "CONTRACTION",
+                cardTitle = "수축 유형(Contraction)",
                 displayOrder = 0,
-                label = "LOWERING",
-                value = "Eccentric"
+                label = null,
+                value = null,
             ),
             ExerciseMovementMechanicInsert(
                 exerciseId = exerciseId,
                 cardType = "CONTRACTION",
+                cardTitle = "수축 유형(Contraction)",
                 displayOrder = 1,
-                label = "LIFTING",
-                value = "Concentric"
+                label = null,
+                value = null,
             ),
         )
 

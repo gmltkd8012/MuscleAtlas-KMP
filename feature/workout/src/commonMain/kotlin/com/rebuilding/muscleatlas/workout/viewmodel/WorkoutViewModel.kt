@@ -135,8 +135,9 @@ class WorkoutViewModel(
                 }
 
                 sendSideEffect(WorkoutSideEffect.HideAddExerciseSheet)
-                // 목록 다시 로드
-                loadExerciseGroups()
+
+                // 현재 선택된 그룹의 운동 목록 다시 로드
+                loadExercisesByGroup(state.value.selectedGroupId)
             } catch (e: Exception) {
                 Logger.e(TAG, "운동 추가 실패", e)
                 reduceState { copy(isLoading = false) }

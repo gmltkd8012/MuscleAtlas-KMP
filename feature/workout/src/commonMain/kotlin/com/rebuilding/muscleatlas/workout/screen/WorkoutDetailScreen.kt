@@ -557,12 +557,12 @@ private fun MovementMechanicsCard(
             mechanicsByCardType["PHASE"]?.let { phaseItems ->
                 PhaseCard(
                     modifier = Modifier.weight(1f),
-                    title = "PHASE",
+                    title = phaseItems.first().cardTitle,
                     iconColor = colorScheme.tertiary,
                     items = phaseItems.map { mechanic ->
                         PhaseItem(
-                            label = mechanic.label,
-                            value = mechanic.value
+                            label = mechanic.label ?: "유형을 입력해주세요.",
+                            value = mechanic.value ?: "내용을 입력해주세요."
                         )
                     },
                     onClick = { onCardClick("PHASE", phaseItems) }
@@ -573,51 +573,17 @@ private fun MovementMechanicsCard(
             mechanicsByCardType["CONTRACTION"]?.let { contractionItems ->
                 PhaseCard(
                     modifier = Modifier.weight(1f),
-                    title = "CONTRACTION",
+                    title = contractionItems.first().cardTitle,
                     iconColor = colorScheme.primary,
                     items = contractionItems.map { mechanic ->
                         PhaseItem(
-                            label = mechanic.label,
-                            value = mechanic.value
+                            label = mechanic.label ?: "유형을 입력해주세요.",
+                            value = mechanic.value ?: "내용을 입력해주세요."
                         )
                     },
                     onClick = { onCardClick("CONTRACTION", contractionItems) }
                 )
             }
-        } else {
-            // Fallback: movementMechanics가 없으면 기존 하드코딩 로직 (마이그레이션 중)
-            val eccentricDetails = contractionGroups["Eccentric"] ?: emptyList()
-            val concentricDetails = contractionGroups["Concentric"] ?: emptyList()
-
-            PhaseCard(
-                modifier = Modifier.weight(1f),
-                title = "PHASE",
-                iconColor = colorScheme.tertiary,
-                items = listOf(
-                    PhaseItem(
-                        label = "DESCENDING",
-                        value = eccentricDetails.find { it.detailCategory == "Primary" }?.description
-                            ?: "Flexion"
-                    ),
-                    PhaseItem(
-                        label = "ASCENDING",
-                        value = concentricDetails.find { it.detailCategory == "Primary" }?.description
-                            ?: "Extension"
-                    ),
-                ),
-                onClick = { onCardClick("PHASE", emptyList()) }
-            )
-
-            PhaseCard(
-                modifier = Modifier.weight(1f),
-                title = "CONTRACTION",
-                iconColor = colorScheme.primary,
-                items = listOf(
-                    PhaseItem(label = "LOWERING", value = "Eccentric"),
-                    PhaseItem(label = "LIFTING", value = "Concentric"),
-                ),
-                onClick = { onCardClick("CONTRACTION", emptyList()) }
-            )
         }
     }
 }
@@ -1233,10 +1199,15 @@ private fun MovementMechanicsEditSheetContent(
         return
     }
 
-    // 각 mechanic의 label과 value를 수정 가능한 상태로 관리
+    // Type 으로 표기 Title 찾아서 표기
+    val cardTitle = remember(mechanics) {
+        mechanics.find { it.cardType == cardType }?.cardTitle ?: ""
+    }
+
+    // 각 mechanic의 title 및 label과 value를 수정 가능한 상태로 관리
     val editableStates = remember(mechanics) {
         mechanics.map { mechanic ->
-            mutableStateOf(mechanic.label to mechanic.value)
+            mutableStateOf((mechanic.label ?: "") to (mechanic.value ?: ""))
         }
     }
 
@@ -1276,22 +1247,12 @@ private fun MovementMechanicsEditSheetContent(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "$cardType 편집",
+                text = "$cardTitle 편집",
                 color = colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
             )
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Card Type 정보 (수정 불가)
-        Text(
-            text = "카드 타입: $cardType (수정 불가)",
-            color = colorScheme.onSurfaceVariant,
-            fontSize = 12.sp,
-            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -1308,9 +1269,9 @@ private fun MovementMechanicsEditSheetContent(
 
             // Label 입력 필드
             BaseTextField(
-                value = editableStates[index].value.first,
-                labelText = "레이블",
-                hintText = "레이블을 입력하세요 (예: DESCENDING)",
+                value = editableStates[index].value.second,
+                labelText = "유형",
+                hintText = "유형을 입력해주세요.",
                 singleLine = true,
                 onValueChanged = { newLabel ->
                     editableStates[index].value = newLabel to editableStates[index].value.second
@@ -1325,8 +1286,8 @@ private fun MovementMechanicsEditSheetContent(
             // Value 입력 필드
             BaseTextField(
                 value = editableStates[index].value.second,
-                labelText = "값",
-                hintText = "값을 입력하세요 (예: Flexion)",
+                labelText = "내용",
+                hintText = "내용을 입력해주세요.",
                 singleLine = true,
                 onValueChanged = { newValue ->
                     editableStates[index].value = editableStates[index].value.first to newValue

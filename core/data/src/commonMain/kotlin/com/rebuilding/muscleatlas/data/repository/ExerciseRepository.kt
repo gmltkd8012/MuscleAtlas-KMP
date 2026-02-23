@@ -53,6 +53,11 @@ interface ExerciseRepository {
      * 운동 이미지 URL 업데이트
      */
     suspend fun updateExerciseImageUrl(exerciseId: String, exerciseImg: String?): Exercise
+
+    /**
+     * 운동 삭제
+     */
+    suspend fun deleteExercise(exerciseId: String)
 }
 
 class ExerciseRepositoryImpl(
@@ -325,5 +330,17 @@ class ExerciseRepositoryImpl(
         )
 
         movementMechanicRepository.insertMovementMechanics(defaultMechanics)
+    }
+
+    override suspend fun deleteExercise(exerciseId: String) {
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(EXERCISES_TABLE)
+                .delete {
+                    filter {
+                        eq("id", exerciseId)
+                    }
+                }
+        }
     }
 }

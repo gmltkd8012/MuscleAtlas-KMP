@@ -207,6 +207,19 @@ class WorkoutDetailViewModel(
             }
         }
     }
+
+    /**
+     * 운동 삭제
+     */
+    fun deleteExercise(exerciseId: String) {
+        launch {
+            try {
+                exerciseRepository.deleteExercise(exerciseId)
+            } catch (e: Exception) {
+                Logger.e(TAG, "운동 삭제 실패", e)
+            }
+        }
+    }
 }
 
 data class WorkoutDetailState(

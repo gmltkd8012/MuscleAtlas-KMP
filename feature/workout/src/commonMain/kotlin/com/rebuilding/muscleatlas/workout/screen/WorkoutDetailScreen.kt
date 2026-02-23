@@ -24,6 +24,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -34,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -85,6 +88,9 @@ fun WorkoutDetailScreen(
     val safetySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val movementMechanicsSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    // 삭제 확인 Dialog 상태
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(exerciseId) {
         viewModel.loadExerciseDetail(exerciseId)
     }
@@ -110,12 +116,14 @@ fun WorkoutDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO: Bookmark */ }) {
-                        Icon(
-                            imageVector = Icons.Default.BookmarkBorder,
-                            contentDescription = "북마크",
-                            tint = colorScheme.onBackground,
-                        )
+                    if (fromWorkoutScreen) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "삭제",
+                                tint = colorScheme.error,
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -400,6 +408,45 @@ fun WorkoutDetailScreen(
                 },
             )
         }
+    }
+
+    // 삭제 확인 Dialog
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = {
+                Text(
+                    text = "운동 삭제",
+                    fontWeight = FontWeight.SemiBold,
+                )
+            },
+            text = {
+                Text(
+                    text = "이 운동을 삭제하시겠습니까?\n관련된 모든 데이터가 함께 삭제됩니다.",
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteDialog = false
+                        viewModel.deleteExercise(exerciseId)
+                        onNavigateBack()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorScheme.error,
+                    ),
+                ) {
+                    Text("삭제")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { showDeleteDialog = false },
+                ) {
+                    Text("취소")
+                }
+            },
+        )
     }
 }
 

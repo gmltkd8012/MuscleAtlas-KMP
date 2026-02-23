@@ -10,7 +10,15 @@ import org.koin.dsl.module
 val workoutModule =
     module {
         includes(dataModule)
-        viewModelOf(::WorkoutViewModel)
+        viewModel {
+            WorkoutViewModel(
+                exerciseRepository = get(),
+                exerciseGroupRepository = get(),
+                exerciseGroupExerciseRepository = get(),
+                memberRepository = get(),
+                memberExerciseRepository = get()
+            )
+        }
         viewModel {
             WorkoutDetailViewModel(
                 exerciseRepository = get(),

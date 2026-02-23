@@ -76,10 +76,14 @@ fun WorkoutDetailScreen(
     // BottomSheet 상태 관리
     var showEditSheet by remember { mutableStateOf(false) }
     var showSafetyEditSheet by remember { mutableStateOf(false) }
+    var showMovementMechanicsSheet by remember { mutableStateOf(false) }
     var selectedTechnicalTitle by remember { mutableStateOf("") }
     var selectedTechnicalDetails by remember { mutableStateOf<List<ExerciseDetail>>(emptyList()) }
+    var selectedCardType by remember { mutableStateOf("") }
+    var selectedMechanics by remember { mutableStateOf<List<ExerciseMovementMechanic>>(emptyList()) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val safetySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val movementMechanicsSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(exerciseId) {
         viewModel.loadExerciseDetail(exerciseId)
@@ -211,7 +215,14 @@ fun WorkoutDetailScreen(
                         item {
                             MovementMechanicsCard(
                                 contractionGroups = contractionGroups,
-                                movementMechanics = state.movementMechanics
+                                movementMechanics = state.movementMechanics,
+                                onCardClick = { cardType, mechanics ->
+                                    if (fromWorkoutScreen) {
+                                        selectedCardType = cardType
+                                        selectedMechanics = mechanics
+                                        showMovementMechanicsSheet = true
+                                    }
+                                }
                             )
                         }
                     }
@@ -348,6 +359,44 @@ fun WorkoutDetailScreen(
                 onSaveClick = { updatedDetails ->
                     viewModel.updateExerciseDetails(updatedDetails)
                     showSafetyEditSheet = false
+                },
+            )
+        }
+    }
+
+    // Movement Mechanics 편집 BottomSheet
+    if (showMovementMechanicsSheet && fromWorkoutScreen) {
+        ModalBottomSheet(
+            onDismissRequest = { showMovementMechanicsSheet = false },
+            sheetState = movementMechanicsSheetState,
+            containerColor = colorScheme.surface,
+            dragHandle = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(colorScheme.surface)
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(32.dp)
+                            .height(4.dp)
+                            .background(
+                                colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                RoundedCornerShape(2.dp)
+                            ),
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            MovementMechanicsEditSheetContent(
+                cardType = selectedCardType,
+                mechanics = selectedMechanics,
+                onSaveClick = { updatedMechanics ->
+                    viewModel.updateMovementMechanics(updatedMechanics)
+                    showMovementMechanicsSheet = false
                 },
             )
         }
@@ -492,6 +541,7 @@ private fun SectionTitle(title: String) {
 private fun MovementMechanicsCard(
     contractionGroups: Map<String, List<ExerciseDetail>>,
     movementMechanics: List<ExerciseMovementMechanic>,
+    onCardClick: (cardType: String, mechanics: List<ExerciseMovementMechanic>) -> Unit = { _, _ -> },
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
@@ -515,6 +565,7 @@ private fun MovementMechanicsCard(
                             value = mechanic.value
                         )
                     },
+                    onClick = { onCardClick("PHASE", phaseItems) }
                 )
             }
 
@@ -530,6 +581,7 @@ private fun MovementMechanicsCard(
                             value = mechanic.value
                         )
                     },
+                    onClick = { onCardClick("CONTRACTION", contractionItems) }
                 )
             }
         } else {
@@ -553,6 +605,7 @@ private fun MovementMechanicsCard(
                             ?: "Extension"
                     ),
                 ),
+                onClick = { onCardClick("PHASE", emptyList()) }
             )
 
             PhaseCard(
@@ -563,6 +616,7 @@ private fun MovementMechanicsCard(
                     PhaseItem(label = "LOWERING", value = "Eccentric"),
                     PhaseItem(label = "LIFTING", value = "Concentric"),
                 ),
+                onClick = { onCardClick("CONTRACTION", emptyList()) }
             )
         }
     }
@@ -579,10 +633,12 @@ private fun PhaseCard(
     title: String,
     iconColor: Color,
     items: List<PhaseItem>,
+    onClick: () -> Unit = {},
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     Card(
+        onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -1123,6 +1179,181 @@ private fun SafetyEditSheetContent(
                     emptyList()
                 }
                 onSaveClick(updatedDetails)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorScheme.primary,
+            ),
+        ) {
+            Text(
+                text = "저장",
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+    }
+}
+
+/**
+ * Movement Mechanics 편집용 BottomSheet 내용
+ */
+@Composable
+private fun MovementMechanicsEditSheetContent(
+    cardType: String,
+    mechanics: List<ExerciseMovementMechanic>,
+    onSaveClick: (List<ExerciseMovementMechanic>) -> Unit,
+) {
+    val colorScheme = MaterialTheme.colorScheme
+
+    // 데이터가 없는 경우 안내 메시지 표시
+    if (mechanics.isEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorScheme.surface)
+                .padding(horizontal = 16.dp)
+                .navigationBarsPadding()
+                .padding(vertical = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "편집할 데이터가 없습니다",
+                color = colorScheme.onSurfaceVariant,
+                fontSize = 16.sp,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "DB 마이그레이션을 먼저 실행해주세요",
+                color = colorScheme.onSurfaceVariant,
+                fontSize = 12.sp,
+            )
+        }
+        return
+    }
+
+    // 각 mechanic의 label과 value를 수정 가능한 상태로 관리
+    val editableStates = remember(mechanics) {
+        mechanics.map { mechanic ->
+            mutableStateOf(mechanic.label to mechanic.value)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorScheme.surface)
+            .padding(horizontal = 16.dp)
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp),
+    ) {
+        // 헤더
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val (iconEmoji, iconColor) = when (cardType) {
+                "PHASE" -> "⇅" to colorScheme.tertiary
+                "CONTRACTION" -> "⇅" to colorScheme.primary
+                else -> "⇅" to colorScheme.primary
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        iconColor.copy(alpha = 0.2f),
+                        RoundedCornerShape(4.dp)
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = iconEmoji,
+                    fontSize = 12.sp,
+                    color = iconColor,
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "$cardType 편집",
+                color = colorScheme.onBackground,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Card Type 정보 (수정 불가)
+        Text(
+            text = "카드 타입: $cardType (수정 불가)",
+            color = colorScheme.onSurfaceVariant,
+            fontSize = 12.sp,
+            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // 각 mechanic의 label과 value 편집 필드
+        mechanics.forEachIndexed { index, mechanic ->
+            Text(
+                text = "항목 ${index + 1}",
+                color = colorScheme.onBackground,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Label 입력 필드
+            BaseTextField(
+                value = editableStates[index].value.first,
+                labelText = "레이블",
+                hintText = "레이블을 입력하세요 (예: DESCENDING)",
+                singleLine = true,
+                onValueChanged = { newLabel ->
+                    editableStates[index].value = newLabel to editableStates[index].value.second
+                },
+                onDelete = {
+                    editableStates[index].value = "" to editableStates[index].value.second
+                }
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Value 입력 필드
+            BaseTextField(
+                value = editableStates[index].value.second,
+                labelText = "값",
+                hintText = "값을 입력하세요 (예: Flexion)",
+                singleLine = true,
+                onValueChanged = { newValue ->
+                    editableStates[index].value = editableStates[index].value.first to newValue
+                },
+                onDelete = {
+                    editableStates[index].value = editableStates[index].value.first to ""
+                }
+            )
+
+            if (index < mechanics.size - 1) {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 저장 버튼
+        Button(
+            onClick = {
+                val updatedMechanics = mechanics.mapIndexed { index, mechanic ->
+                    val (newLabel, newValue) = editableStates[index].value
+                    mechanic.copy(
+                        label = newLabel,
+                        value = newValue
+                    )
+                }
+                onSaveClick(updatedMechanics)
             },
             modifier = Modifier
                 .fillMaxWidth()

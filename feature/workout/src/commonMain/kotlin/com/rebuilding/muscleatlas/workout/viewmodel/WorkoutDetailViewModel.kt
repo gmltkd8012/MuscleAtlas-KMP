@@ -188,6 +188,25 @@ class WorkoutDetailViewModel(
             }
         }
     }
+
+    /**
+     * Movement Mechanics 업데이트
+     */
+    fun updateMovementMechanics(mechanics: List<ExerciseMovementMechanic>) {
+        launch {
+            try {
+                reduceState { copy(isLoading = true) }
+                mechanics.forEach { mechanic ->
+                    movementMechanicRepository.updateMovementMechanic(mechanic)
+                }
+                // 업데이트 후 데이터 다시 조회
+                currentExerciseId?.let { loadExerciseDetail(it) }
+            } catch (e: Exception) {
+                Logger.e(TAG, "Movement Mechanics 업데이트 실패", e)
+                reduceState { copy(isLoading = false) }
+            }
+        }
+    }
 }
 
 data class WorkoutDetailState(

@@ -31,7 +31,7 @@ class WorkoutDetailViewModel(
             "ROM 말단 고려",
 
             // 안정화 기전
-            "NMC",
+            "근신경 조절",
             "능동 안정화",
             "특이성",
         )
@@ -40,6 +40,15 @@ class WorkoutDetailViewModel(
         private val MOVEMENT_TYPE_ORDER = listOf(
             "기계적 움직임",
             "안정화 기전",
+        )
+
+        // Detail Category 고정 순선
+        private val DETAIL_CATEGORY_ORDER = listOf(
+            "주요 움직임",
+            "부가 움직임",
+            "근위/원위",
+            "주동근",
+            "길항근",
         )
     }
 

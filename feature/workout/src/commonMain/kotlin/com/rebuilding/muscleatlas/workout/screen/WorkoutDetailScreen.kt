@@ -210,14 +210,14 @@ fun WorkoutDetailScreen(
                     }
 
                     // Tags
-                    item {
-                        ExerciseTagsRow()
-                    }
+//                    item {
+//                        ExerciseTagsRow()
+//                    }
 
                     // Movement Mechanics Section
                     state.groupedDetails["기계적 움직임"]?.let { contractionGroups ->
                         item {
-                            SectionTitle(title = "MOVEMENT MECHANICS")
+                            SectionTitle(title = "움직임 역학(Movement Mechanics)")
                         }
 
                         item {
@@ -242,7 +242,7 @@ fun WorkoutDetailScreen(
 
                     if (!technicalDetails.isNullOrEmpty()) {
                         item {
-                            SectionTitle(title = "TECHNICAL BREAKDOWN")
+                            SectionTitle(title = "기술적 분석(Technical Breakdown)")
                         }
 
                         technicalDetails.forEach { (contractionType, details) ->
@@ -269,7 +269,7 @@ fun WorkoutDetailScreen(
                     // Stabilization & Safety Section
                     state.groupedDetails["안정화 기전"]?.let { stabilizationGroups ->
                         item {
-                            SectionTitle(title = "STABILIZATION & SAFETY")
+                            SectionTitle(title = "안정화(Stabilization)")
                         }
 
                         stabilizationGroups.forEach { (contractionType, details) ->
@@ -683,15 +683,14 @@ private fun PhaseCard(
             items.forEach { item ->
                 Text(
                     text = item.label,
-                    color = colorScheme.onSurfaceVariant,
+                    color = colorScheme.primary,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium,
                 )
                 Text(
                     text = item.value,
-                    color = colorScheme.onBackground,
+                    color = colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -845,31 +844,24 @@ private fun SafetyCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val iconEmoji = when {
-                    title.contains("ROM", ignoreCase = true) -> "⚠️"
-                    title.contains("NMC", ignoreCase = true) -> "🔵"
-                    else -> "ℹ️"
-                }
-                val iconColor = when {
-                    title.contains("ROM", ignoreCase = true) -> colorScheme.tertiary
-                    else -> colorScheme.secondary
-                }
-
                 Box(
                     modifier = Modifier
                         .size(24.dp)
-                        .background(iconColor.copy(alpha = 0.2f), RoundedCornerShape(4.dp)),
+                        .background(
+                            colorScheme.primary.copy(alpha = 0.2f),
+                            RoundedCornerShape(4.dp)
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = iconEmoji,
+                        text = "📋",
                         fontSize = 12.sp,
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = getDisplayTitle(title),
-                    color = colorScheme.onBackground,
+                    text = title,
+                    color = colorScheme.primary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -891,14 +883,6 @@ private fun SafetyCard(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
-    }
-}
-
-private fun getDisplayTitle(title: String): String {
-    return when {
-        title.contains("ROM", ignoreCase = true) -> "ROM End-Range Considerations"
-        title.contains("NMC", ignoreCase = true) -> "Neuromuscular Control (NMC)"
-        else -> title
     }
 }
 

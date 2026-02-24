@@ -783,19 +783,8 @@ private fun TechnicalCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 고정된 순서로 정렬
-            val sortedDetails = details.sortedBy { detail ->
-                when (detail.detailCategory) {
-                    "Primary" -> 0
-                    "Secondary" -> 1
-                    "근위/원위" -> 2
-                    "주동근" -> 3
-                    "길항근" -> 4
-                    else -> 5
-                }
-            }
-
-            sortedDetails.forEach { detail ->
+            // UseCase에서 이미 정렬된 순서대로 표시
+            details.forEach { detail ->
                 detail.detailCategory?.let { category ->
                     Text(
                         text = category,

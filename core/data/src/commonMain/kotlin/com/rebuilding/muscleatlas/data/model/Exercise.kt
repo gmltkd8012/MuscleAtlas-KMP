@@ -65,6 +65,7 @@ data class ExerciseDetail(
     val contractionType: String,
     @SerialName("detail_category")
     val detailCategory: String? = null,
+    @SerialName("description")
     val description: String? = null,
     @SerialName("created_at")
     val createdAt: String? = null,

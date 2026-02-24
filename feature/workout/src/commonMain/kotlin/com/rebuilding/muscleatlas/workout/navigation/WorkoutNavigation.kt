@@ -13,10 +13,12 @@ data object WorkoutRoute : Route
 
 fun NavGraphBuilder.workoutScreen(
     onNavigateToDetail: (exerciseId: String) -> Unit,
+    onNavigateToGroup: (groupId: String) -> Unit,
 ) {
     composable<WorkoutRoute> {
         WorkoutScreen(
             onNavigateToDetail = onNavigateToDetail,
+            onNavigateToGroup = onNavigateToGroup,
         )
     }
 }

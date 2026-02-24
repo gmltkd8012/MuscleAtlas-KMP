@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.rebuilding.muscleatlas.group.navigation.GroupRoute
+import com.rebuilding.muscleatlas.group.navigation.groupScreen
 import com.rebuilding.muscleatlas.login.navigation.LoginRoute
 import com.rebuilding.muscleatlas.login.navigation.loginScreen
 import com.rebuilding.muscleatlas.member.navigation.MemberDetailRoute
@@ -95,6 +97,9 @@ fun MuscleAtlasNavHost(
                 },
                 onNavigateToMemberDetail = { memberId ->
                     navController.navigate(MemberDetailRoute(memberId))
+                },
+                onNavigateToGroup = {
+                    navController.navigate(GroupRoute)
                 }
             )
         }
@@ -143,6 +148,12 @@ fun MuscleAtlasNavHost(
             onNavigateBack = {
                 navController.popBackStack()
             },
+        )
+
+        groupScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            }
         )
     }
 }

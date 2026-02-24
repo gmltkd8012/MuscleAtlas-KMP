@@ -1,5 +1,11 @@
 package com.rebuilding.muscleatlas.data.di
 
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupExerciseRepository
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupExerciseRepositoryImpl
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupRepository
+import com.rebuilding.muscleatlas.data.repository.ExerciseGroupRepositoryImpl
+import com.rebuilding.muscleatlas.data.repository.ExerciseMovementMechanicRepository
+import com.rebuilding.muscleatlas.data.repository.ExerciseMovementMechanicRepositoryImpl
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepository
 import com.rebuilding.muscleatlas.data.repository.ExerciseRepositoryImpl
 import com.rebuilding.muscleatlas.data.repository.MemberExerciseRepository
@@ -22,8 +28,27 @@ val dataModule = module {
             ioDispatcher = get(DispatcherQualifier.Io),
         )
     }
+    single<ExerciseMovementMechanicRepository> {
+        ExerciseMovementMechanicRepositoryImpl(
+            supabaseClient = get(),
+            ioDispatcher = get(DispatcherQualifier.Io),
+        )
+    }
     single<ExerciseRepository> {
         ExerciseRepositoryImpl(
+            supabaseClient = get(),
+            movementMechanicRepository = get(),
+            ioDispatcher = get(DispatcherQualifier.Io),
+        )
+    }
+    single<ExerciseGroupRepository> {
+        ExerciseGroupRepositoryImpl(
+            supabaseClient = get(),
+            ioDispatcher = get(DispatcherQualifier.Io),
+        )
+    }
+    single<ExerciseGroupExerciseRepository> {
+        ExerciseGroupExerciseRepositoryImpl(
             supabaseClient = get(),
             ioDispatcher = get(DispatcherQualifier.Io),
         )

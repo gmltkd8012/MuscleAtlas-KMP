@@ -1,9 +1,8 @@
-package com.rebuilding.muscleatlas.member.component
+package com.rebuilding.muscleatlas.group.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,42 +20,50 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
+import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
 
 /**
- * Member 모듈용 리스트 아이템
- * - 프로필 영역: 동그란 형태 (CircleShape)
- * - 전체 사이즈: 작게 (40dp 프로필, 12dp 패딩)
+ * Group 모듈용 운동 선택 리스트 아이템 (체크박스 포함)
+ * - WorkoutListItem과 동일한 디자인에 체크박스 추가
  */
 @Composable
-fun MemberListItem(
+fun WorkoutInGroupItem(
     title: String,
-    onClick: () -> Unit,
+    imgUrl: String?,
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    profileContent: @Composable (BoxScope.() -> Unit)? = null,
 ) {
     val colorScheme = MaterialTheme.colorScheme
+    val photoBoxState = rememberPhotoBoxState(initialUrl = imgUrl)
 
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .clickable { onCheckedChange(!isChecked) }
+                .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = Modifier
                     .size(64.dp)
-                    .clip(CircleShape)
+                    .clip(RoundedCornerShape(8.dp))
                     .background(colorScheme.surface),
                 contentAlignment = Alignment.Center,
             ) {
-                if (profileContent != null) {
-                    profileContent()
+                if (imgUrl != null) {
+                    PhotoBox(
+                        state = photoBoxState,
+                        modifier = Modifier.size(64.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        enabled = false,
+                    )
                 } else {
                     Text(
                         text = title.firstOrNull()?.uppercase() ?: "",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.titleMedium,
                         color = colorScheme.primary,
                     )
                 }
@@ -67,6 +75,12 @@ fun MemberListItem(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 color = colorScheme.onBackground,
+                modifier = Modifier.weight(1f),
+            )
+
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
             )
         }
 

@@ -4,6 +4,7 @@ import com.rebuilding.muscleatlas.data.model.Exercise
 import com.rebuilding.muscleatlas.data.model.ExerciseDetail
 import com.rebuilding.muscleatlas.data.model.ExerciseDetailInsert
 import com.rebuilding.muscleatlas.data.model.ExerciseInsert
+import com.rebuilding.muscleatlas.data.model.ExerciseMovementMechanicInsert
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,10 +53,16 @@ interface ExerciseRepository {
      * 운동 이미지 URL 업데이트
      */
     suspend fun updateExerciseImageUrl(exerciseId: String, exerciseImg: String?): Exercise
+
+    /**
+     * 운동 삭제
+     */
+    suspend fun deleteExercise(exerciseId: String)
 }
 
 class ExerciseRepositoryImpl(
     private val supabaseClient: SupabaseClient,
+    private val movementMechanicRepository: ExerciseMovementMechanicRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) : ExerciseRepository {
 
@@ -129,11 +136,14 @@ class ExerciseRepositoryImpl(
                 select()
             }
             .decodeSingle<Exercise>()
-        
+
         // 2. 기본 exercise_details 템플릿 생성
         val defaultDetails = createDefaultExerciseDetails(exercise.id)
         insertExerciseDetails(defaultDetails)
-        
+
+        // 3. 기본 movement_mechanics 생성
+        createDefaultMovementMechanics(exercise.id)
+
         exercise
     }
     
@@ -167,35 +177,35 @@ class ExerciseRepositoryImpl(
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Eccentric (하강)",
-                detailCategory = "Primary",
+                contractionType = "하강(Eccentric)",
+                detailCategory = "주요 움직임",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Eccentric (하강)",
-                detailCategory = "Secondary",
+                contractionType = "하강(Eccentric)",
+                detailCategory = "부가 움직임",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Eccentric (하강)",
+                contractionType = "하강(Eccentric)",
                 detailCategory = "근위/원위",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Eccentric (하강)",
+                contractionType = "하강(Eccentric)",
                 detailCategory = "주동근",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Eccentric (하강)",
+                contractionType = "하강(Eccentric)",
                 detailCategory = "길항근",
                 description = null,
             ),
@@ -203,28 +213,35 @@ class ExerciseRepositoryImpl(
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Concentric (상승)",
-                detailCategory = "Primary",
+                contractionType = "상승(Concentric)",
+                detailCategory = "주요 움직임",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Concentric (상승)",
-                detailCategory = "Secondary",
+                contractionType = "상승(Concentric)",
+                detailCategory = "부가 움직임",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Concentric (상승)",
+                contractionType = "상승(Concentric)",
+                detailCategory = "근위/원위",
+                description = null,
+            ),
+            ExerciseDetailInsert(
+                exerciseId = exerciseId,
+                movementType = "기계적 움직임",
+                contractionType = "상승(Concentric)",
                 detailCategory = "주동근",
                 description = null,
             ),
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "기계적 움직임",
-                contractionType = "Concentric (상승)",
+                contractionType = "상승(Concentric)",
                 detailCategory = "길항근",
                 description = null,
             ),
@@ -255,7 +272,7 @@ class ExerciseRepositoryImpl(
             ExerciseDetailInsert(
                 exerciseId = exerciseId,
                 movementType = "안정화 기전",
-                contractionType = "NMC",
+                contractionType = "근신경 조절",
                 detailCategory = null,
                 description = null,
             ),
@@ -276,5 +293,61 @@ class ExerciseRepositoryImpl(
                 description = null,
             ),
         )
+    }
+
+    /**
+     * 새 운동에 대한 기본 movement_mechanics 생성
+     */
+    private suspend fun createDefaultMovementMechanics(exerciseId: String) {
+        val defaultMechanics = listOf(
+            // PHASE 카드
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "PHASE",
+                cardTitle = "동작 구간(Phase)",
+                displayOrder = 0,
+                label = null,
+                value = null,
+            ),
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "PHASE",
+                cardTitle = "동작 구간(Phase)",
+                displayOrder = 1,
+                label = null,
+                value = null,
+            ),
+            // CONTRACTION 카드
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "CONTRACTION",
+                cardTitle = "수축 유형(Contraction)",
+                displayOrder = 0,
+                label = null,
+                value = null,
+            ),
+            ExerciseMovementMechanicInsert(
+                exerciseId = exerciseId,
+                cardType = "CONTRACTION",
+                cardTitle = "수축 유형(Contraction)",
+                displayOrder = 1,
+                label = null,
+                value = null,
+            ),
+        )
+
+        movementMechanicRepository.insertMovementMechanics(defaultMechanics)
+    }
+
+    override suspend fun deleteExercise(exerciseId: String) {
+        withContext(ioDispatcher) {
+            supabaseClient
+                .from(EXERCISES_TABLE)
+                .delete {
+                    filter {
+                        eq("id", exerciseId)
+                    }
+                }
+        }
     }
 }

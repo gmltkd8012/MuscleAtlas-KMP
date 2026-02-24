@@ -1,14 +1,35 @@
 package com.rebuilding.muscleatlas.workout.di
 
 import com.rebuilding.muscleatlas.data.di.dataModule
+import com.rebuilding.muscleatlas.workout.usecase.ExerciseDetailGroupAndSortUseCase
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutDetailViewModel
 import com.rebuilding.muscleatlas.workout.viewmodel.WorkoutViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val workoutModule =
     module {
         includes(dataModule)
-        viewModelOf(::WorkoutViewModel)
-        viewModelOf(::WorkoutDetailViewModel)
+
+        // UseCases
+        factory { ExerciseDetailGroupAndSortUseCase() }
+
+        viewModel {
+            WorkoutViewModel(
+                exerciseRepository = get(),
+                exerciseGroupRepository = get(),
+                exerciseGroupExerciseRepository = get(),
+                memberRepository = get(),
+                memberExerciseRepository = get()
+            )
+        }
+        viewModel {
+            WorkoutDetailViewModel(
+                exerciseRepository = get(),
+                movementMechanicRepository = get(),
+                storageRepository = get(),
+                groupAndSortUseCase = get()
+            )
+        }
     }

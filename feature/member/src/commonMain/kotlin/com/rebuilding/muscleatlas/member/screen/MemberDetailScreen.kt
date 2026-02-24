@@ -27,7 +27,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -64,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
 import com.rebuilding.muscleatlas.designsystem.component.BaseTextField
+import com.rebuilding.muscleatlas.designsystem.component.ConfirmDialog
 import com.rebuilding.muscleatlas.designsystem.component.PhotoBox
 import com.rebuilding.muscleatlas.designsystem.component.rememberPhotoBoxState
 import com.rebuilding.muscleatlas.designsystem.theme.AppColors
@@ -352,40 +352,18 @@ fun MemberDetailScreen(
     
     // 삭제 확인 Dialog
     if (showDeleteDialog) {
-        AlertDialog(
+        ConfirmDialog(
+            title = "회원 삭제",
+            message = "${state.member?.name ?: "회원"}님을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.",
+            confirmText = "삭제",
+            isDestructive = true,
             onDismissRequest = { showDeleteDialog = false },
-            title = {
-                Text(
-                    text = "회원 삭제",
-                    fontWeight = FontWeight.SemiBold,
-                )
+            onConfirm = {
+                showDeleteDialog = false
+                viewModel.deleteMember(memberId)
+                onNavigateBack()
             },
-            text = {
-                Text(
-                    text = "${state.member?.name ?: "회원"}님을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.",
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showDeleteDialog = false
-                        viewModel.deleteMember(memberId)
-                        onNavigateBack()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorScheme.error,
-                    ),
-                ) {
-                    Text("삭제")
-                }
-            },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = { showDeleteDialog = false },
-                ) {
-                    Text("취소")
-                }
-            },
+            onDismiss = { showDeleteDialog = false },
         )
     }
 }

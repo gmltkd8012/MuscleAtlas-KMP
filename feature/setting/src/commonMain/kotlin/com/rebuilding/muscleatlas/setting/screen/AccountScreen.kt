@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -44,6 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rebuilding.muscleatlas.designsystem.component.ConfirmDialog
+import com.rebuilding.muscleatlas.designsystem.component.ConfirmButtonStyle
 import com.rebuilding.muscleatlas.designsystem.theme.AppColors
 import com.rebuilding.muscleatlas.setting.viewmodel.AccountSideEffect
 import com.rebuilding.muscleatlas.setting.viewmodel.AccountViewModel
@@ -75,67 +76,35 @@ fun AccountScreen(
 
     // 회원 탈퇴 확인 다이얼로그
     if (showDeleteConfirmDialog) {
-        AlertDialog(
+        ConfirmDialog(
+            title = "회원 탈퇴",
+            message = "정말로 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.",
+            confirmText = "탈퇴하기",
+            isDestructive = true,
             onDismissRequest = { showDeleteConfirmDialog = false },
-            title = {
-                Text(
-                    text = "회원 탈퇴",
-                    fontWeight = FontWeight.Bold,
-                )
+            onConfirm = {
+                showDeleteConfirmDialog = false
+                viewModel.deleteAccount()
             },
-            text = {
-                Text(
-                    text = "정말로 탈퇴하시겠습니까?\n\n탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다.",
-                    textAlign = TextAlign.Center,
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showDeleteConfirmDialog = false
-                        viewModel.deleteAccount()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                    ),
-                ) {
-                    Text("탈퇴하기")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteConfirmDialog = false }) {
-                    Text("취소")
-                }
-            },
+            onDismiss = { showDeleteConfirmDialog = false },
         )
     }
 
     // 에러 다이얼로그
     if (showDeleteErrorDialog && state.deleteError != null) {
-        AlertDialog(
+        ConfirmDialog(
+            title = "오류",
+            message = state.deleteError ?: "알 수 없는 오류가 발생했습니다.",
+            confirmButtonStyle = ConfirmButtonStyle.Text,
             onDismissRequest = {
                 showDeleteErrorDialog = false
                 viewModel.clearDeleteError()
             },
-            title = {
-                Text(
-                    text = "오류",
-                    fontWeight = FontWeight.Bold,
-                )
+            onConfirm = {
+                showDeleteErrorDialog = false
+                viewModel.clearDeleteError()
             },
-            text = {
-                Text(text = state.deleteError ?: "알 수 없는 오류가 발생했습니다.")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDeleteErrorDialog = false
-                        viewModel.clearDeleteError()
-                    }
-                ) {
-                    Text("확인")
-                }
-            },
+            onDismiss = null, // 취소 버튼 없음
         )
     }
 

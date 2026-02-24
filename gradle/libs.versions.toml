@@ -1,8 +1,8 @@
 [versions]
 
 # App Version
-appVersionCode = "10000"
-appVersionName = "01.00.00"
+appVersionCode = "00001"
+appVersionName = "00.00.01"
 
 # base setting
 agp = "8.9.1"
